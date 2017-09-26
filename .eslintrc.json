@@ -1,0 +1,39 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "node": true,
+        "mocha": true
+    },
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "plugins": [
+        "react"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 7,
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-console": 1
+    }
+}
