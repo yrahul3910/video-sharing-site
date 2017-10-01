@@ -12,10 +12,15 @@ The React components used are below:
 * `Navbar`: The navbar at the top of the site
 * `Sidebar`: The sidebar shown in the homepage
 
-# ESLint Settings
+# Style Guides
+
+## ESLint Configuration
 ESLint is configured for the following rules:
 * Double quotes preferred over single quotes
 * Indents are 4 spaces
 * Line breaks are LF
 * Semicolons are a must
 * Console statements are warnings
+
+## MySQL Style Guide
+The style guide at [this link](http://www.sqlstyle.guide/) is used and followed in this project.
