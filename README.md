@@ -11,6 +11,7 @@ The React components used are below:
 * `App`: The top-level component rendered.
 * `Navbar`: The navbar at the top of the site
 * `Sidebar`: The sidebar shown in the homepage
+* `ThumbnailRow`: A row shown in the home page, with a set of related thumbnails. These could be grouped in various ways--by some channel the user subscribes to, most recently uploaded, etc.
 
 # Style Guides
 
