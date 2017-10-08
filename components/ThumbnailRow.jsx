@@ -26,23 +26,23 @@ class ThumbnailRow extends React.Component {
     render() {
         let innerDivs = this.props.data.thumbnails.map((t) =>
             <div className="col s3" key={t.url}>
-                <div className="row">
+                <div className="row no-gap">
                     <img className="thumbnail" src={t.img} />
                 </div>
-                <div className="row">
+                <div className="row no-gap">
                     <a href={t.url} style={{color: "black"}}>
                         {t.title}
                     </a>
                 </div>
-                <div className="row">
+                <div className="row no-gap">
                     <a className="thumbnail-channel" href={t.channel.url}>
                         {t.channel.title}
                     </a>
                 </div>
-                <div className="row">
-                    <p className="thumbnail-channel">
+                <div className="row no-gap">
+                    <span className="thumbnail-channel">
                         {`${t.views} views • ${t.date}`}
-                    </p>
+                    </span>
                 </div>
             </div>
         );
@@ -51,7 +51,7 @@ class ThumbnailRow extends React.Component {
                 <div className="row">
                     {this.props.data.title}
                 </div>
-                <div className="row">
+                <div className="row" style={{marginRight: "20px"}}>
                     {innerDivs}
                 </div>
             </div>

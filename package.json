@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "npm-run-all --parallel server lint:watch share",
+    "start": "npm-run-all --parallel server lint:watch",
     "server": "babel-node server.js",
     "lint": "esw webpack.config.* src",
     "lint:watch": "npm run lint -- --watch",
