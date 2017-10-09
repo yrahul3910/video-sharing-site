@@ -1,17 +1,21 @@
 # YouTube Clone
-A simple video sharing website, based on Material design, built with React, Sass, Node.js and Express.js
+A simple video sharing website, based on Material design, built with React, React-Router v4, Node.js and Express.js
 
 # Setup
-To use this repository, run either `yarn` or `npm i` to install all required packages. The code uses [jQuery](www.jquery.com) and [Materialize CSS](www.materializecss.com).  
+To use this repository, run `yarn` to install all required packages. The code uses [jQuery](www.jquery.com) and [Materialize CSS](www.materializecss.com).  
 
-This project is configured with Babel and Webpack for transpiling code to vanilla JS.
+This project is configured with Babel and Webpack for transpiling code to vanilla JS.  
+
+React-Router v4's `HashRouter` is used for client-side routing. The server doesn't handle dynamic requests, and only implements the API request handling.
 
 # React Components
 The React components used are below:
-* `App`: The top-level component rendered.
+* `App`: The home page component.
 * `Navbar`: The navbar at the top of the site
 * `Sidebar`: The sidebar shown in the homepage
 * `ThumbnailRow`: A row shown in the home page, with a set of related thumbnails. These could be grouped in various ways--by some channel the user subscribes to, most recently uploaded, etc.
+* `RoutesSwitch`: The top-level component rendered.
+* `Login`: The login page component
 
 # Style Guides
 

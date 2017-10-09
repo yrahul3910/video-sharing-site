@@ -21,8 +21,17 @@ app.use(require("webpack-dev-middleware")(compiler, {
     publicPath: config.output.publicPath
 }));
 
-app.get("/", (req, res) => {
+app.get("/*", (req, res) => {
+    res.writeHead(200, {"Content-Type": "text/html"});
     res.sendFile(path.join(__dirname, "../src/index.html"));
+});
+
+app.post("/api/authenticate", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.end(JSON.stringify({
+        success: false,
+        message: "This isn't ready yet!"
+    }));
 });
 
 app.listen(port, (err) => {
