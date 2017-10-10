@@ -1,4 +1,4 @@
-# YouTube Clone
+# Video Sharing Website
 A simple video sharing website, based on Material design, built with React, React-Router v4, Node.js and Express.js
 
 # Setup
@@ -6,7 +6,16 @@ To use this repository, run `yarn` to install all required packages. The code us
 
 This project is configured with Babel and Webpack for transpiling code to vanilla JS.  
 
-React-Router v4's `HashRouter` is used for client-side routing. The server doesn't handle dynamic requests, and only implements the API request handling.
+React-Router v4's `HashRouter` is used for client-side routing. The server doesn't handle dynamic requests, and only implements the API request handling.  
+
+All database queries are separated into `db.js`. The server uses this to perform queries and get results. `express-session` is used for session management, along with JWTs.  
+
+## Environment Variables
+The `.env` file should contain the following variables:
+* `SESSION_SECRET`: Ideally a random string, used by `express-session` for session management.
+* `DB_USER`: The username of the database user.
+* `DB_PWD`: The database password.
+* `DB_HOST`: The hostname of the database.
 
 # React Components
 The React components used are below:
