@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // Database functions module
 import mysql from "mysql";
 import dotenv from "dotenv";
@@ -32,6 +33,16 @@ exports.authenticate = (username, pwd) => {
             if (!res) return false;
             return results[0];
         });
+    });
+};
+
+exports.register = (username, pwd, name) => {
+    connection.query("INSERT INTO users VALUES(?,?,?,?)", [DEFAULT, name, username, pwd, NULL], (err, results) => {
+        if (err) throw err;
+
+        if (results.length == 0)
+            return result[0];
+
     });
 };
 
