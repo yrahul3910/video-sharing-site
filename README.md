@@ -25,6 +25,7 @@ The React components used are below:
 * `ThumbnailRow`: A row shown in the home page, with a set of related thumbnails. These could be grouped in various ways--by some channel the user subscribes to, most recently uploaded, etc.
 * `RoutesSwitch`: The top-level component rendered.
 * `Login`: The login page component
+* `Register`: The register page component
 
 # Style Guides
 

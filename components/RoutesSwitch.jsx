@@ -3,6 +3,7 @@ import {Switch, Route} from "react-router-dom";
 
 import App from "./App.jsx";
 import Login from "./Login.jsx";
+import Register from "./Register.jsx";
 
 class RoutesSwitch extends React.Component {
     render() {
@@ -10,6 +11,7 @@ class RoutesSwitch extends React.Component {
             <Switch>
                 <Route exact path="/" component={App} />
                 <Route exact path="/login" component={Login} />
+                <Route exact path="/register" component={Register} />
             </Switch>
         );
     }
