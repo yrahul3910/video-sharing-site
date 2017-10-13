@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 // Database functions module
 import mysql from "mysql";
 import dotenv from "dotenv";
@@ -37,12 +36,36 @@ exports.authenticate = (username, pwd) => {
 };
 
 exports.register = (username, pwd, name) => {
-    connection.query("INSERT INTO users VALUES(?,?,?,?)", [DEFAULT, name, username, pwd, NULL], (err, results) => {
+    connection.query("SELECT * FROM users WHERE username = ?", [username], (err, results) => {
+        // First check if user exists already.
         if (err) throw err;
 
-        if (results.length == 0)
-            return result[0];
+        if (!results.length)
+            return {
+                success: false,
+                message: "Username already exists."
+            };
+    });
 
+    // Gotta hash the password first!
+    bcrypt.hash(pwd, 10, (e_, hash) => {
+        if (e_) throw e_;
+
+        connection.query("INSERT INTO users (name, username, pwd) VALUES (?, ?, ?)", [name, username, hash], (err, results) => {
+            if (err) {
+                // Can't simply throw an error here, return an error message instead.
+                return {
+                    success: false,
+                    message: "Unknown error occurred, try again."
+                };
+            }
+
+            // No error, inserted successfully, so return true.
+            return {
+                success: true,
+                message: "Successfully registered!"
+            };
+        });
     });
 };
 

@@ -63,32 +63,31 @@ app.post("/api/authenticate", (req, res) => {
     dbUtils.terminate();
 });
 
-app.post("/register", (req, res) => {
+app.post("/api/register", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
     let {username, password, name} = req.body;
     dbUtils.init();
 
     let regResult = dbUtils.register(username, password, name);
 
-    if (regResult) {
-        let token = jwt.sign(regResult, process.env.SESSION_SECRET, {
+    if (regResult.success) {
+        let user = {
+            username,
+            password,
+            name
+        };
+        let token = jwt.sign(user, process.env.SESSION_SECRET, {
             expiresIn: "1 day"
         });
+
         res.end(JSON.stringify({
-            success: true,
-            message: "Logged in successfully!",
-            user: {
-                name: regResult.name,
-                username: regResult.username,
-                dp: regResult.dp
-            },
+            success: regResult.success,
+            message: regResult.message,
             token
         }));
     } else
-        res.end(JSON.stringify({
-            success: false,
-            message: "Invalid Username."
-        }));
+        res.end(JSON.stringify(regResult));
+
     dbUtils.terminate();
 });
 
