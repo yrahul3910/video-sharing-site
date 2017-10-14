@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import {Link} from "react-router-dom";
+
 class Navbar extends React.Component {
     /*
         props:
@@ -10,7 +12,9 @@ class Navbar extends React.Component {
         return (
             <div style={{zIndex: 1000, position: "fixed", width: "100%", height: "64px"}} className="green lighten-1 row">
                 <div className="col s3">
-                    <h5 href="#" style={{top: "5px", position: "relative", color: "white"}}><b>QTube</b></h5>
+                    <Link to="/">
+                        <h5 href="#" style={{top: "5px", position: "relative", color: "white"}}><b>QTube</b></h5>
+                    </Link>
                 </div>
                 <div className="col s6">
                     <div className="card" style={{position: "absolute", width: "600px", height: "70%"}}>
@@ -20,7 +24,9 @@ class Navbar extends React.Component {
                 </div>
                 <div className="col s3" style={{direction: "rtl"}}>
                     <img src={this.props.dp} className="round nav-dp nav-element" />
-                    <i className="material-icons nav-element white-text" style={{bottom: "8px", position: "relative"}}>file_upload</i>
+                    <Link to="/upload">
+                        <i className="material-icons nav-element white-text" style={{bottom: "8px", position: "relative"}}>file_upload</i>
+                    </Link>
                 </div>
             </div>
         );

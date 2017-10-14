@@ -26,6 +26,7 @@ The React components used are below:
 * `RoutesSwitch`: The top-level component rendered.
 * `Login`: The login page component
 * `Register`: The register page component
+* `Upload`: The page where the user uploads a video to the server
 
 # Style Guides
 

@@ -27,7 +27,6 @@ class Register extends React.Component {
             if (!data.success)
                 $("#message").html(`<span style='color: red'>${data.message}</span>`);
             else {
-                console.log(data);
                 $("#message").html(`<span style='color: green'>${data.message}</span>`);
                 /*this.props.toggleLogin({
                     name,

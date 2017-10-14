@@ -66,7 +66,7 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-    toggleLogin: PropTypes.func
+    toggleLogin: PropTypes.func.isRequired
 };
 
 export default Login;
