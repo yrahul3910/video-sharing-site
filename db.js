@@ -20,51 +20,55 @@ exports.terminate = () => {
     connection.end();
 };
 
-exports.authenticate = (username, pwd) => {
+exports.authenticate = (username, pwd, func) => {
     connection.query("SELECT * FROM users WHERE username = ?", [username], (err, results) => {
-        if (err) throw err;
+        if (err)
+            func(err);
 
-        if (results.length == 0)
-            return false;
+        if (!results.length)
+            func();
 
         bcrypt.compare(pwd, results[0].pwd, (e, res) => {
             if (e) throw e;
-            if (!res) return false;
-            return results[0];
+
+            if (!res) func();
+            func(null, results[0]);
         });
     });
 };
 
-exports.register = (username, pwd, name) => {
+exports.register = (username, pwd, name, func) => {
     connection.query("SELECT * FROM users WHERE username = ?", [username], (err, results) => {
         // First check if user exists already.
-        if (err) throw err;
+        if (err)
+            func(err);
 
-        if (!results.length)
-            return {
+        if (results.length)
+            func(null, {
                 success: false,
                 message: "Username already exists."
-            };
+            });
     });
 
     // Gotta hash the password first!
     bcrypt.hash(pwd, 10, (e_, hash) => {
-        if (e_) throw e_;
+        if (e_)
+            func(e_);
 
-        connection.query("INSERT INTO users (name, username, pwd) VALUES (?, ?, ?)", [name, username, hash], (err, results) => {
+        connection.query("INSERT INTO users (name, username, pwd) VALUES (?, ?, ?)", [name, username, hash], (err) => {
             if (err) {
                 // Can't simply throw an error here, return an error message instead.
-                return {
+                func(null, {
                     success: false,
                     message: "Unknown error occurred, try again."
-                };
+                });
             }
 
             // No error, inserted successfully, so return true.
-            return {
+            func(null, {
                 success: true,
                 message: "Successfully registered!"
-            };
+            });
         });
     });
 };

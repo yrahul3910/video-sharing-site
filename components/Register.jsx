@@ -27,11 +27,12 @@ class Register extends React.Component {
             if (!data.success)
                 $("#message").html(`<span style='color: red'>${data.message}</span>`);
             else {
+                console.log(data);
                 $("#message").html(`<span style='color: green'>${data.message}</span>`);
-                this.props.toggleLogin({
+                /*this.props.toggleLogin({
                     name,
                     username
-                });
+                });*/
 
                 localStorage.setItem("token", data.token);
             }
@@ -71,7 +72,7 @@ class Register extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-md-4 col-md-offset-4">
-                                <a className="btn waves-effect waves-light">SIGN UP</a>
+                                <a onClick={this.click} className="btn waves-effect waves-light">SIGN UP</a>
                             </div>
                         </div>
                     </form>

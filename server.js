@@ -38,29 +38,29 @@ app.get("/*", (req, res) => {
 app.post("/api/authenticate", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
     let {username, password} = req.body;
-    dbUtils.init();
-    let authResult = dbUtils.authenticate(username, password);
 
-    if (authResult) {
-        let token = jwt.sign(authResult, process.env.SESSION_SECRET, {
-            expiresIn: "1 day"
-        });
-        res.end(JSON.stringify({
-            success: true,
-            message: "Logged in successfully!",
-            user: {
-                name: authResult.name,
-                username: authResult.username,
-                dp: authResult.dp
-            },
-            token
-        }));
-    } else
-        res.end(JSON.stringify({
-            success: false,
-            message: "Username and password do not match."
-        }));
-    dbUtils.terminate();
+    dbUtils.init();
+    dbUtils.authenticate(username, password, (err, authResult) => {
+        if (authResult) {
+            let token = jwt.sign({authResult}, process.env.SESSION_SECRET, {
+                expiresIn: "1 day"
+            });
+            res.end(JSON.stringify({
+                success: true,
+                message: "Logged in successfully!",
+                user: {
+                    name: authResult.name,
+                    username: authResult.username,
+                    dp: authResult.dp
+                },
+                token
+            }));
+        } else
+            res.end(JSON.stringify({
+                success: false,
+                message: "Username and password do not match."
+            }));
+    });
 });
 
 app.post("/api/register", (req, res) => {
@@ -68,27 +68,27 @@ app.post("/api/register", (req, res) => {
     let {username, password, name} = req.body;
     dbUtils.init();
 
-    let regResult = dbUtils.register(username, password, name);
+    dbUtils.register(username, password, name, (e, regResult) => {
+        if (e) throw e;
 
-    if (regResult.success) {
-        let user = {
-            username,
-            password,
-            name
-        };
-        let token = jwt.sign(user, process.env.SESSION_SECRET, {
-            expiresIn: "1 day"
-        });
+        if (regResult.success) {
+            let user = {
+                username,
+                password,
+                name
+            };
+            let token = jwt.sign(user, process.env.SESSION_SECRET, {
+                expiresIn: "1 day"
+            });
 
-        res.end(JSON.stringify({
-            success: regResult.success,
-            message: regResult.message,
-            token
-        }));
-    } else
-        res.end(JSON.stringify(regResult));
-
-    dbUtils.terminate();
+            res.end(JSON.stringify({
+                success: regResult.success,
+                message: regResult.message,
+                token
+            }));
+        } else
+            res.end(JSON.stringify(regResult));
+    });
 });
 
 

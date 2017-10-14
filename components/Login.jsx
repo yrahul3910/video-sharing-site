@@ -22,7 +22,7 @@ class Login extends React.Component {
             if (!data.success)
                 $("#message").html(`<span style='color: red'>${data.message}</span>`);
             else {
-                $("#message").html("<span style='color: green'>Success</span>");
+                $("#message").html(`<span style='color: green'>${data.message}</span>`);
 
                 localStorage.setItem("token", data.token);
                 this.props.toggleLogin(data.user);
