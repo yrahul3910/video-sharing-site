@@ -1,6 +1,15 @@
 # Video Sharing Website
 A simple video sharing website, based on Material design, built with React, React-Router v4, Node.js and Express.js
 
+# Table of Contents
+* [Setup](#setup)
+  * [Environment Variables](#environment-variables)
+* [React Components](#react-components)
+* [Style Guides](#style-guides)
+  * [ESLint Configuration](#eslint-configuration)
+  * [MySQL Style Guide](#mysql-style-guide)
+* [Known Issues](#known-issues)
+
 # Setup
 To use this repository, run `yarn` to install all required packages. The code uses [jQuery](www.jquery.com) and [Materialize CSS](www.materializecss.com).  
 
@@ -27,6 +36,8 @@ The React components used are below:
 * `Login`: The login page component
 * `Register`: The register page component
 * `Upload`: The page where the user uploads a video to the server
+* `VideoSelectCard`: A card shown in the upload page to select a video file
+* `VideoUploadCard`: A card shown in the upload page after a file is selected
 
 # Style Guides
 
@@ -40,3 +51,7 @@ ESLint is configured for the following rules:
 
 ## MySQL Style Guide
 The style guide at [this link](http://www.sqlstyle.guide/) is used and followed in this project.
+
+# Known Issues
+The following are the known issues:
+* The checkbox in `VideoUploadCard` cannot be toggled.
