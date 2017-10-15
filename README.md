@@ -54,4 +54,4 @@ The style guide at [this link](http://www.sqlstyle.guide/) is used and followed 
 
 # Known Issues
 The following are the known issues:
-* The checkbox in `VideoUploadCard` cannot be toggled.
+* The `upload` function in `db.js` isn't implemented yet. That should simply update the database.

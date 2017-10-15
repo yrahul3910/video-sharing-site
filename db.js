@@ -39,10 +39,10 @@ exports.authenticate = (username, pwd, func) => {
 
 exports.register = (username, pwd, name, func) => {
     connection.query("SELECT * FROM users WHERE username = ?", [username], (err, results) => {
-        // First check if user exists already.
         if (err)
             func(err);
 
+        // First check if user exists already.
         if (results.length)
             func(null, {
                 success: false,
@@ -71,6 +71,10 @@ exports.register = (username, pwd, name, func) => {
             });
         });
     });
+};
+
+exports.upload = (uid, title, cid, path, thumbnail, date, desc) => {
+    // TODO: Implement this.
 };
 
 module.exports = exports;

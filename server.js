@@ -7,6 +7,8 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import formidable from "formidable";
+import fs from "fs-path";
 
 // Used for transpiling
 import webpack from "webpack";
@@ -35,12 +37,66 @@ app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname, "./src/index.html"));
 });
 
+app.post("/", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    let form = new formidable.IncomingForm();
+    form.parse(req, (err, fields, files) => {
+        let {video, thumbnail} = files;
+        let {title, desc, token, channel} = fields;
+        // Verify file types
+        if (!thumbnail.type.match(/image\/.*/)) {
+            res.end(JSON.stringify({success: false, message: "Thumbnail must be an image."}));
+            return;
+        }
+        if (!video.type.match(/video\/.*/)) {
+            res.end(JSON.stringify({success: false, message: "Upload must be a video type."}));
+            return;
+        }
+        if (!title) {
+            res.end(JSON.stringify({success: false, message: "Title cannot be empty."}));
+            return;
+        }
+        if (token) {
+            jwt.verify(token, process.env.SESSION_SECRET, (e_, decoded) => {
+                if (e_) {
+                    res.end(JSON.stringify({success: false, message: "No token provided."}));
+                    return;
+                }
+                let uid = decoded.authResult.user_id;
+                let path = `./videos/${uid}/${title}`;
+                fs.writeFile(path + `/${video.name}`, video, (e) => {
+                    if (e) {
+                        res.end(JSON.stringify({success: false, message: "Unknown error while saving video."}));
+                        return;
+                    }
+
+                    fs.writeFile(path + `/${thumbnail.name}`, thumbnail, (e) => {
+                        if (e) {
+                            res.end(JSON.stringify({success: false, message: "Unknown error while saving video."}));
+                            return;
+                        }
+
+                        // Write data to database.
+                        dbUtils.init();
+                        dbUtils.upload(uid, title, channel, path + `/${video.name}`,
+                            path + `/${thumbnail.name}`, new Date(), desc);
+
+                        res.end(JSON.stringify({success: true, message: "Successfully uploaded!"}));
+                    });
+                });
+            });
+        }
+    });
+});
+
 app.post("/api/authenticate", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
     let {username, password} = req.body;
-
     dbUtils.init();
     dbUtils.authenticate(username, password, (err, authResult) => {
+        if (err) throw err;
+
         if (authResult) {
             let token = jwt.sign({authResult}, process.env.SESSION_SECRET, {
                 expiresIn: "1 day"

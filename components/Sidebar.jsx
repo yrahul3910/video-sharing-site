@@ -8,7 +8,7 @@ class Sidebar extends React.Component {
 
     render() {
         return (
-            <ul className="side-nav fixed center" style={{transform: "translateX(0%)"}}>
+            <ul className="side-nav fixed center" style={{backgroundColor: "#f5f5f5", transform: "translateX(0%)"}}>
                 <li style={{paddingTop: "100px"}}>
                     <Link to="/">
                         <i className="material-icons">home</i>

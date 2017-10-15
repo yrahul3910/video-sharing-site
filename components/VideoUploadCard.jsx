@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 
 class VideoUploadCard extends React.Component {
@@ -9,7 +10,7 @@ class VideoUploadCard extends React.Component {
                     <span className="card-title">
                         Upload Options
                     </span>
-                    <div className="card-content white-text">
+                    <div className="card-content">
                         <div className="row">
                             <div className="row">
                                 <div className="input-field">
@@ -25,30 +26,26 @@ class VideoUploadCard extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="file-field input-field">
-                                    <div className="btn">
-                                        <span>File</span>
-                                        <input type="file" accept="image/*" />
-                                    </div>
+                                    <input type="file" id="thumbnailUpload" accept="image/*" />
                                     <div className="file-path-wrapper">
-                                        <input className="file-path validate" placeholder="Select a thumbnail" id="thumbnail" type="text" />
+                                        <input className="file-path validate" id="thumbnail" type="text" />
+                                        <label style={{fontFamily: "Roboto", fontSize: "1.25rem"}} htmlFor="thumbnail">Thumbnail</label>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col s6 input-field">
-                                    <input type="checkbox" defaultChecked="checked" className="filled-in" id="allowComments" />
-                                    <label htmlFor="allowComments">Allow Comments</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="card-action">
-                        <Link to="#" className="green-text">Upload</Link>
+                        <a onClick={this.props.submit} className="green-text">Upload</a>
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+VideoUploadCard.propTypes = {
+    submit: PropTypes.func.isRequired
+};
 
 export default VideoUploadCard;

@@ -13,15 +13,17 @@ CREATE TABLE users (
 
 CREATE TABLE videos (
     PRIMARY KEY (video_id),
-    video_id   INT AUTO_INCREMENT,
-    user_id    INT          NOT NULL,
-    title      VARCHAR(20)  NOT NULL,
-    views      INT          NOT NULL,
-               CONSTRAINT views_positive
-               CHECK(views > 0),
-    channel_id INT          NOT NULL,
-    video_path VARCHAR(100) NOT NULL,
-    thumbnail  VARCHAR(200) NOT NULL
+    video_id    INT AUTO_INCREMENT,
+    description VARCHAR(200),
+    upload_date DATE         NOT NULL,
+    user_id     INT          NOT NULL,
+    title       VARCHAR(20)  NOT NULL,
+    views       INT          NOT NULL,
+                CONSTRAINT views_positive
+                CHECK(views > 0),
+    channel_id  INT,
+    video_path  VARCHAR(100) NOT NULL,
+    thumbnail   VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE video_ratings (
