@@ -37,7 +37,7 @@ app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname, "./src/index.html"));
 });
 
-app.post("/", (req, res) => {
+app.post("/api/upload", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
 
     let form = new formidable.IncomingForm();
@@ -80,9 +80,9 @@ app.post("/", (req, res) => {
                         // Write data to database.
                         dbUtils.init();
                         dbUtils.upload(uid, title, channel, path + `/${video.name}`,
-                            path + `/${thumbnail.name}`, new Date(), desc);
-
-                        res.end(JSON.stringify({success: true, message: "Successfully uploaded!"}));
+                            path + `/${thumbnail.name}`, new Date(), desc, () => {
+                                res.end(JSON.stringify({success: true, message: "Successfully uploaded!"}));
+                            });
                     });
                 });
             });
@@ -93,35 +93,34 @@ app.post("/", (req, res) => {
 app.post("/api/authenticate", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
     let {username, password} = req.body;
-    if ( !username || !password ) {
+    if ( !username || !password )
         res.end(JSON.stringify({
             success: false,
             message: "Fields cannot be empty"
         }));
-    }
     else {
         dbUtils.init();
         dbUtils.authenticate(username, password, (err, authResult) => {
             if (err) throw err;
 
-            if (authResult) {
-                let token = jwt.sign({authResult}, process.env.SESSION_SECRET, {
+            if (authResult.success) {
+                let token = jwt.sign({authResult: authResult.results}, process.env.SESSION_SECRET, {
                     expiresIn: "1 day"
                 });
                 res.end(JSON.stringify({
                     success: true,
                     message: "Logged in successfully!",
                     user: {
-                        name: authResult.name,
-                        username: authResult.username,
-                        dp: authResult.dp
+                        name: authResult.results.name,
+                        username: authResult.results.username,
+                        dp: authResult.results.dp
                     },
                     token
                 }));
             } else
                 res.end(JSON.stringify({
                     success: false,
-                    message: "Username and password do not match."
+                    message: authResult.message
                 }));
         });
     }
@@ -130,12 +129,11 @@ app.post("/api/authenticate", (req, res) => {
 app.post("/api/register", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
     let {username, password, name} = req.body;
-    if ( !username || !password || !name ) {
+    if ( !username || !password || !name )
         res.end(JSON.stringify({
             success: false,
             message: "Fields cannot be empty"
         }));
-    }
     else {
         dbUtils.init();
 

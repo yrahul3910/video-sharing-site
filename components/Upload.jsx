@@ -18,7 +18,7 @@ class Upload extends React.Component {
 
     postData() {
         $.ajax({
-            url: "http://localhost:8000",
+            url: "http://localhost:8000/api/upload",
             method: "POST",
             processData: false,
             contentType: false,

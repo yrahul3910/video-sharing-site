@@ -26,13 +26,24 @@ exports.authenticate = (username, pwd, func) => {
             func(err);
 
         if (!results.length)
-            func();
+            func(null, {
+                success: false,
+                message: "User does not exist."
+            });
 
         bcrypt.compare(pwd, results[0].pwd, (e, res) => {
             if (e) throw e;
 
-            if (!res) func();
-            func(null, results[0]);
+            if (!res)
+                func(null, {
+                    success: false,
+                    message: "Username and password do not match."
+                });
+
+            func(null, {
+                success: true,
+                results: results[0]
+            });
         });
     });
 };
@@ -73,8 +84,26 @@ exports.register = (username, pwd, name, func) => {
     });
 };
 
-exports.upload = (uid, title, cid, path, thumbnail, date, desc) => {
-    // TODO: Implement this.
+exports.upload = (uid, title, cid, path, thumbnail, date, desc, func) => {
+    if (cid) {
+        connection.query("INSERT INTO videos (user_id, title, views, channel_id, video_path,\
+            thumbnail, upload_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            [uid, title, 0, cid, path, thumbnail, date, desc], (err) => {
+                if (err) throw err;
+
+                func(); // func takes no arguments, a call indicates success.
+            }
+        );
+    } else {
+        connection.query("INSERT INTO videos (user_id, title, views, video_path,\
+            thumbnail, upload_date, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [uid, title, 0, path, thumbnail, date, desc], (err) => {
+                if (err) throw err;
+
+                func(); // func takes no arguments, a call indicates success.
+            }
+        );
+    }
 };
 
 module.exports = exports;

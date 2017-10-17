@@ -8,7 +8,7 @@ A simple video sharing website, based on Material design, built with React, Reac
 * [Style Guides](#style-guides)
   * [ESLint Configuration](#eslint-configuration)
   * [MySQL Style Guide](#mysql-style-guide)
-* [Known Issues](#known-issues)
+* [Video Directory Structure](#video-directory-structure)
 
 # Setup
 To use this repository, run `yarn` to install all required packages. The code uses [jQuery](www.jquery.com) and [Materialize CSS](www.materializecss.com).  
@@ -52,6 +52,9 @@ ESLint is configured for the following rules:
 ## MySQL Style Guide
 The style guide at [this link](http://www.sqlstyle.guide/) is used and followed in this project.
 
-# Known Issues
-The following are the known issues:
-* The `upload` function in `db.js` isn't implemented yet. That should simply update the database.
+# Video Directory Structure
+All videos are uploaded to the `videos` folder. The database simply stores the paths to these videos and thumbnail images. As of now, the site only supports uploads by individual users, but later should support uploads by channels as well.  
+
+As of now, the directory structure used is `videos/<user_id>/<video_title>/<files>`, where the files include the video file and the thumbnail image.  
+
+A possible solution to saving channel videos is by noticing how channels are created by users. Thus, we could have a folder, `independent_videos`, for videos by a user, and other folders by channel name, all inside the `<user_id>` folder.
