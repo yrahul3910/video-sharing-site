@@ -12,7 +12,7 @@ import fs from "fs-path";
 
 // Used for transpiling
 import webpack from "webpack";
-import config from "./webpack.config";
+import config from "../webpack.config";
 
 import dbUtils from "./db.js";
 
@@ -34,7 +34,7 @@ app.use(require("webpack-dev-middleware")(compiler, {
 }));
 
 app.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "./src/index.html"));
+    res.sendFile(path.join(__dirname, "../src/index.html"));
 });
 
 app.post("/api/upload", (req, res) => {
@@ -93,7 +93,8 @@ app.post("/api/upload", (req, res) => {
 app.post("/api/authenticate", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
     let {username, password} = req.body;
-    if ( !username || !password )
+
+    if (!username || !password)
         res.end(JSON.stringify({
             success: false,
             message: "Fields cannot be empty"

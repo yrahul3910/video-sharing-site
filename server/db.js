@@ -25,11 +25,13 @@ exports.authenticate = (username, pwd, func) => {
         if (err)
             func(err);
 
-        if (!results.length)
+        if (!results.length) {
             func(null, {
                 success: false,
                 message: "User does not exist."
             });
+            return;
+        }
 
         bcrypt.compare(pwd, results[0].pwd, (e, res) => {
             if (e) throw e;
@@ -54,11 +56,13 @@ exports.register = (username, pwd, name, func) => {
             func(err);
 
         // First check if user exists already.
-        if (results.length)
+        if (results.length) {
             func(null, {
                 success: false,
                 message: "Username already exists."
             });
+            return;
+        }
     });
 
     // Gotta hash the password first!
