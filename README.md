@@ -1,4 +1,4 @@
-# Video Sharing Website
+# Video Sharing Website [![NSP Status](https://nodesecurity.io/orgs/dbms-project/projects/6c5f6935-88ec-4d0f-8c05-b30ebb4460f5/badge)](https://nodesecurity.io/orgs/dbms-project/projects/6c5f6935-88ec-4d0f-8c05-b30ebb4460f5)
 A simple video sharing website, based on Material design, built with React, React-Router v4, Node.js and Express.js
 
 # Table of Contents
