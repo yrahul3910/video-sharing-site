@@ -7,7 +7,7 @@
     "start": "npm-run-all --parallel server security-check lint:watch test:watch",
     "server": "babel-node server/server.js",
     "security-check": "nsp check",
-    "pretest": "sleep 8",
+    "pretest": "sleep 6",
     "test": "mocha --reporter progress server/testSetup.js \"server/*.test.js\"",
     "test:watch": "npm test -- --watch",
     "lint": "esw webpack.config.* src",
