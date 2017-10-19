@@ -3,6 +3,7 @@ import express from "express";
 import path from "path";
 import open from "open";
 import compression from "compression";
+import session from "express-session";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
@@ -22,6 +23,7 @@ dotenv.config();
 
 // gzip files
 app.use(compression());
+app.use(session({secret: process.env.SESSION_SECRET}));
 app.use(bodyParser.json());
 app.use(bodyParser({extended: true}));
 app.use(cors());
