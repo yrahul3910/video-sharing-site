@@ -7,13 +7,42 @@ import Register from "./Register.jsx";
 import Upload from "./Upload.jsx";
 
 class RoutesSwitch extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {user: null};
+        this.toggleLogin = this.toggleLogin.bind(this);
+    }
+
+    componentDidMount() {
+        $.post("http://localhost:8000/api/whoami", {token: localStorage.getItem("token")},
+            (data) => {
+                if (data.success) {
+                    // The user is valid, Set state!
+                    this.setState({user: data.user});
+                }
+            }
+        );
+    }
+
+    toggleLogin(user) {
+        this.setState({user});
+    }
+
     render() {
         return (
             <Switch>
-                <Route exact path="/" component={App} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/register" component={Register} />
-                <Route exact path="/upload" component={Upload} />
+                <Route exact path="/" render={() =>
+                    <App user={this.state.user} />
+                } />
+                <Route exact path="/login" render={() =>
+                    <Login user={this.state.user} toggleLogin={this.toggleLogin} />
+                } />
+                <Route exact path="/register" render={() =>
+                    <Register user={this.state.user} toggleLogin={this.toggleLogin} />
+                } />
+                <Route exact path="/upload" render={() =>
+                    <Upload user={this.state.user} />
+                } />
             </Switch>
         );
     }

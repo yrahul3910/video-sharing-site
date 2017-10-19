@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React from "react";
+import {Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
 
 import Navbar from "./Navbar.jsx";
@@ -8,9 +9,11 @@ class Register extends React.Component {
     /*
         props:
             toggleLogin: Function that is called when user is done registering
+            user: User details
     */
     constructor(props) {
         super(props);
+        this.state = {loggedIn: (this.props.user ? true : false)};
         this.click = this.click.bind(this);
     }
 
@@ -28,17 +31,23 @@ class Register extends React.Component {
                 $("#message").html(`<span style='color: red'>${data.message}</span>`);
             else {
                 $("#message").html(`<span style='color: green'>${data.message}</span>`);
-                /*this.props.toggleLogin({
+                this.props.toggleLogin({
                     name,
-                    username
-                });*/
+                    username,
+                    dp: null
+                });
 
                 localStorage.setItem("token", data.token);
+                this.setState({loggedIn: true});
             }
         });
     }
 
     render() {
+        if (this.state.loggedIn)
+            return (
+                <Redirect to="/" />
+            );
         return (
             <div>
                 <Navbar dp="https://d1wn0q81ehzw6k.cloudfront.net/additional/thul/media/0eaa14d11e8930f5?w=400&h=400" />
@@ -82,7 +91,8 @@ class Register extends React.Component {
 }
 
 Register.propTypes = {
-    toggleLogin: PropTypes.func.isRequired
+    toggleLogin: PropTypes.func.isRequired,
+    user: PropTypes.object
 };
 
 export default Register;

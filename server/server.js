@@ -25,6 +25,7 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser({extended: true}));
 app.use(cors());
+app.use(express.static(__dirname + "/public"));
 // Use Webpack middleware
 app.use(require("webpack-dev-middleware")(compiler, {
     noInfo: true,
@@ -160,6 +161,21 @@ app.post("/api/register", (req, res) => {
     }
 });
 
+app.post("/api/whoami", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    let {token} = req.body;
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err)
+            res.end(JSON.stringify({
+                success: false
+            }));
+        else
+            res.end(JSON.stringify({
+                success: true,
+                user: decoded
+            }));
+    });
+});
 
 app.listen(port, (err) => {
     if (err) throw err;

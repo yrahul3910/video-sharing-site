@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React from "react";
+import {Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
 
 import Navbar from "./Navbar.jsx";
@@ -61,6 +62,11 @@ class Upload extends React.Component {
     }
 
     render() {
+        if (this.props.user)
+            return (
+                <Redirect to="/login" />
+            );
+
         let card;
         if (this.state.selected)
             card = <VideoUploadCard submit={this.submitData} />;
@@ -77,5 +83,9 @@ class Upload extends React.Component {
         );
     }
 }
+
+Upload.propTypes = {
+    user: PropTypes.object
+};
 
 export default Upload;

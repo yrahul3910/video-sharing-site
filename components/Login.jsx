@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React from "react";
+import {Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
 
 import Navbar from "./Navbar.jsx";
@@ -7,10 +8,12 @@ import Navbar from "./Navbar.jsx";
 class Login extends React.Component {
     /*
         props:
-            toggleLogin: Function called when user logs in
+            toggleLogin: Function called when user logs in,
+            user: User details
     */
     constructor(props) {
         super(props);
+        this.state = {loggedIn: (this.props.user ? true : false)};
         this.click = this.click.bind(this);
     }
 
@@ -26,11 +29,16 @@ class Login extends React.Component {
 
                 localStorage.setItem("token", data.token);
                 this.props.toggleLogin(data.user);
+                this.setState({loggedIn: true});
             }
         });
     }
 
     render() {
+        if (this.state.loggedIn)
+            return (
+                <Redirect to="/" />
+            );
         return (
             <div>
                 <Navbar dp="https://d1wn0q81ehzw6k.cloudfront.net/additional/thul/media/0eaa14d11e8930f5?w=400&h=400" />
@@ -66,7 +74,8 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-    toggleLogin: PropTypes.func.isRequired
+    toggleLogin: PropTypes.func.isRequired,
+    user: PropTypes.object
 };
 
 export default Login;

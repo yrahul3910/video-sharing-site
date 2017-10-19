@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Navbar from "./Navbar.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -58,8 +59,8 @@ class App extends React.Component {
 
         return (
             <div>
-                <Navbar dp="https://d1wn0q81ehzw6k.cloudfront.net/additional/thul/media/0eaa14d11e8930f5?w=400&h=400" />
-                <Sidebar />
+                <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />
+                <Sidebar loggedIn={this.props.user ? true : false} />
                 <div style={{position: "absolute", marginLeft: "350px", top: "100px"}}>
                     <ThumbnailRow data={d} />
                 </div>
@@ -67,5 +68,9 @@ class App extends React.Component {
         );
     }
 }
+
+App.propTypes = {
+    user: PropTypes.object
+};
 
 export default App;
