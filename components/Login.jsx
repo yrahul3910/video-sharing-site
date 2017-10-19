@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React from "react";
-import {Redirect} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 import PropTypes from "prop-types";
 
 import Navbar from "./Navbar.jsx";
@@ -64,6 +64,14 @@ class Login extends React.Component {
                         <div className="row">
                             <div className="col-md-4 col-md-offset-4">
                                 <a onClick={this.click} className="btn waves-effect waves-light">LOG IN</a>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-4 col-md-offset-4">
+                                Don&rsquo;t have an account?
+                                <Link to="/register">
+                                    Sign up in seconds.
+                                </Link>
                             </div>
                         </div>
                     </form>

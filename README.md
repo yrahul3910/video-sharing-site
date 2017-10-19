@@ -19,8 +19,6 @@ React-Router v4's `HashRouter` is used for client-side routing. The server doesn
 
 All database queries are separated into `db.js`. The server uses this to perform queries and get results. `express-session` is used for session management, along with JWTs.  
 
-Mocha is used as the testing framework, along with Chai as the assertion library. Files used for running tests end in `.test.js`. The `server/testSetup.js` file is used so Mocha can understand the newer ES6 syntax (example: using `import`) 
-
 ## Environment Variables
 The `.env` file should contain the following variables:
 * `SESSION_SECRET`: Ideally a random string, used by `express-session` for session management.
