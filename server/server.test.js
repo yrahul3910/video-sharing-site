@@ -10,7 +10,6 @@ describe("Login", () => {
             password: process.env.KNOWN_PWD
         };
         let options = {
-            method: "POST",
             body: data,
             json: true,
             url: "http://localhost:8000/api/authenticate"
@@ -26,7 +25,7 @@ describe("Login", () => {
         });
 
         it("should have the required fields", (done) => {
-            request(options, (err, res, body) => {
+            request.post(options, (err, res, body) => {
                 if (err) throw err;
 
                 expect(body).to.have.property("success");
