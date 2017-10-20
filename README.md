@@ -52,6 +52,7 @@ The React components used are below:
 * `Upload`: The page where the user uploads a video to the server
 * `VideoSelectCard`: A card shown in the upload page to select a video file
 * `VideoUploadCard`: A card shown in the upload page after a file is selected
+* `Feedback`: The feedback form page, including the navbar
 
 # Style Guides
 
