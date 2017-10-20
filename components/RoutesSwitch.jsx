@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from "react";
 import {Switch, Route} from "react-router-dom";
 
@@ -32,7 +33,7 @@ class RoutesSwitch extends React.Component {
         return (
             <Switch>
                 <Route exact path="/" render={() =>
-                    <App user={this.state.user} />
+                    <App toggleLogin={this.toggleLogin} user={this.state.user} />
                 } />
                 <Route exact path="/login" render={() =>
                     <Login user={this.state.user} toggleLogin={this.toggleLogin} />

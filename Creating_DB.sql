@@ -93,3 +93,9 @@ CREATE TABLE playlist_videos (
     video_index INT NOT NULL
 );
 
+CREATE TABLE feedback (
+    PRIMARY KEY (user_id),
+    user_id INT,
+            FOREIGN KEY(user_id) REFERENCES users(user_id),
+    comment VARCHAR(300) NOT NULL
+);

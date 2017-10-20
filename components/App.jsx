@@ -60,7 +60,7 @@ class App extends React.Component {
         return (
             <div>
                 <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />
-                <Sidebar loggedIn={this.props.user ? true : false} />
+                <Sidebar toggleLogin={this.props.toggleLogin} loggedIn={this.props.user ? true : false} />
                 <div style={{position: "absolute", marginLeft: "350px", top: "100px"}}>
                     <ThumbnailRow data={d} />
                 </div>
@@ -70,7 +70,8 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    user: PropTypes.object
+    user: PropTypes.object,
+    toggleLogin: PropTypes.func.isRequired
 };
 
 export default App;

@@ -5,6 +5,14 @@ import {Link} from "react-router-dom";
 class Sidebar extends React.Component {
     constructor(props) {
         super(props);
+        this.logout = this.logout.bind(this);
+    }
+
+    logout() {
+        if (this.props.loggedIn) {
+            localStorage.removeItem("token");
+            this.props.toggleLogin(null);
+        }
     }
 
     render() {
@@ -19,10 +27,10 @@ class Sidebar extends React.Component {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/">
+                        <a className="waves-effect waves-light" href="#">
                             <i className="material-icons">feedback</i>
-                        Feedback
-                        </Link>
+                            Feedback
+                        </a>
                     </li>
                 </div>
             ) : <div></div>;
@@ -58,7 +66,7 @@ class Sidebar extends React.Component {
                     <Link to="/login">
                         <img style={{float: "left", display: "inline-block", marginTop: "10px"}}
                             src={"http://localhost:8000/" + (this.props.loggedIn ? "logout.png" : "login.png")} />
-                        <span style={{marginLeft: "20px"}}>Log {this.props.loggedIn ? "Out" : "In"}</span>
+                        <span onClick={this.logout} style={{marginLeft: "20px"}}>Log {this.props.loggedIn ? "Out" : "In"}</span>
                     </Link>
                 </li>
             </ul>
@@ -67,7 +75,8 @@ class Sidebar extends React.Component {
 }
 
 Sidebar.propTypes = {
-    loggedIn: PropTypes.bool.isRequired
+    loggedIn: PropTypes.bool.isRequired,
+    toggleLogin: PropTypes.func.isRequired
 };
 
 export default Sidebar;
