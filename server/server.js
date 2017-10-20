@@ -18,6 +18,7 @@ import dbUtils from "./db.js";
 const port = 8000;
 const app = express();
 const compiler = webpack(config);
+const illegalCharsFormat = /[ !@#$%^&*()+\-=[\]{};':"\\|,.<>/?]/;
 dotenv.config();
 
 // gzip files
@@ -130,36 +131,44 @@ app.post("/api/authenticate", (req, res) => {
 app.post("/api/register", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
     let {username, password, name} = req.body;
-    if ( !username || !password || !name )
+    if (!username || !password || !name) {
         res.end(JSON.stringify({
             success: false,
             message: "Fields cannot be empty"
         }));
-    else {
-        dbUtils.init();
-
-        dbUtils.register(username, password, name, (e, regResult) => {
-            if (e) throw e;
-
-            if (regResult.success) {
-                let user = {
-                    username,
-                    name,
-                    dp: null
-                };
-                let token = jwt.sign(user, process.env.SESSION_SECRET, {
-                    expiresIn: "1 day"
-                });
-
-                res.end(JSON.stringify({
-                    success: regResult.success,
-                    message: regResult.message,
-                    token
-                }));
-            } else
-                res.end(JSON.stringify(regResult));
-        });
+        return;
     }
+    if (illegalCharsFormat.test(username) ||
+        illegalCharsFormat.test(name)) {
+        res.end(JSON.stringify({
+            success: false,
+            message: "Special characters aren't allowed in usernames and names."
+        }));
+        return;
+    }
+
+    dbUtils.init();
+    dbUtils.register(username, password, name, (e, regResult) => {
+        if (e) throw e;
+
+        if (regResult.success) {
+            let user = {
+                username,
+                name,
+                dp: null
+            };
+            let token = jwt.sign(user, process.env.SESSION_SECRET, {
+                expiresIn: "1 day"
+            });
+
+            res.end(JSON.stringify({
+                success: regResult.success,
+                message: regResult.message,
+                token
+            }));
+        } else
+            res.end(JSON.stringify(regResult));
+    });
 });
 
 app.post("/api/feedback", (req, res) => {
