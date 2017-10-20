@@ -62,7 +62,7 @@ class Upload extends React.Component {
     }
 
     render() {
-        if (this.props.user)
+        if (!this.props.user)
             return (
                 <Redirect to="/login" />
             );
@@ -77,7 +77,7 @@ class Upload extends React.Component {
                 selectClick={this.selectClick} />;
         return (
             <div>
-                <Navbar dp="https://d1wn0q81ehzw6k.cloudfront.net/additional/thul/media/0eaa14d11e8930f5?w=400&h=400" />
+                <Navbar dp={this.props.user.dp} />
                 {card}
             </div>
         );

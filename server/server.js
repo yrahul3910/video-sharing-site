@@ -62,7 +62,7 @@ app.post("/api/upload", (req, res) => {
                     res.end(JSON.stringify({success: false, message: "No token provided."}));
                     return;
                 }
-                let uid = decoded.authResult.user_id;
+                let uid = decoded.user_id;
                 let path = `./videos/${uid}/${title}`;
                 fs.writeFile(path + `/${video.name}`, video, (e) => {
                     if (e) {
@@ -104,17 +104,18 @@ app.post("/api/authenticate", (req, res) => {
             if (err) throw err;
 
             if (authResult.success) {
-                let token = jwt.sign({authResult: authResult.results}, process.env.SESSION_SECRET, {
+                let user = {
+                    username: authResult.results.username,
+                    name: authResult.results.name,
+                    dp: authResult.results.dp
+                };
+                let token = jwt.sign(user, process.env.SESSION_SECRET, {
                     expiresIn: "1 day"
                 });
                 res.end(JSON.stringify({
                     success: true,
                     message: "Logged in successfully!",
-                    user: {
-                        name: authResult.results.name,
-                        username: authResult.results.username,
-                        dp: authResult.results.dp
-                    },
+                    user,
                     token
                 }));
             } else
@@ -143,8 +144,8 @@ app.post("/api/register", (req, res) => {
             if (regResult.success) {
                 let user = {
                     username,
-                    password,
-                    name
+                    name,
+                    dp: null
                 };
                 let token = jwt.sign(user, process.env.SESSION_SECRET, {
                     expiresIn: "1 day"
@@ -159,6 +160,20 @@ app.post("/api/register", (req, res) => {
                 res.end(JSON.stringify(regResult));
         });
     }
+});
+
+app.post("/api/feedback", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    let {token, feedback} = req.body;
+
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        dbUtils.init();
+        dbUtils.feedback(decoded.username, feedback, (e, result) => {
+            if (e) throw e;
+
+            res.end(JSON.stringify(result));
+        });
+    });
 });
 
 app.post("/api/whoami", (req, res) => {

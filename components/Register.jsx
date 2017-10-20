@@ -50,7 +50,7 @@ class Register extends React.Component {
             );
         return (
             <div>
-                <Navbar dp="https://d1wn0q81ehzw6k.cloudfront.net/additional/thul/media/0eaa14d11e8930f5?w=400&h=400" />
+                <Navbar dp={this.props.user.dp} />
                 <div className="row center" style={{position: "absolute", top: "90px", width: "25%"}}>
                     <div id="message"></div>
                 </div>

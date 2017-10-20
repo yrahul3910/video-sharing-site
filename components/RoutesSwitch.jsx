@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import Login from "./Login.jsx";
 import Register from "./Register.jsx";
 import Upload from "./Upload.jsx";
+import Feedback from "./Feedback.jsx";
 
 class RoutesSwitch extends React.Component {
     constructor(props) {
@@ -43,6 +44,9 @@ class RoutesSwitch extends React.Component {
                 } />
                 <Route exact path="/upload" render={() =>
                     <Upload user={this.state.user} />
+                } />
+                <Route exact path="/feedback" render={() =>
+                    <Feedback user={this.state.user} />
                 } />
             </Switch>
         );

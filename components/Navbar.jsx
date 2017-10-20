@@ -24,9 +24,6 @@ class Navbar extends React.Component {
                 </div>
                 <div className="col s3" style={{direction: "rtl"}}>
                     <img src={this.props.dp ? this.props.dp : "http://localhost:8000/account_circle.png"} className="round nav-dp nav-element" />
-                    <Link to="/upload">
-                        <i className="material-icons nav-element white-text" style={{bottom: "8px", position: "relative"}}>file_upload</i>
-                    </Link>
                 </div>
             </div>
         );

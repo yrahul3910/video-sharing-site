@@ -110,4 +110,29 @@ exports.upload = (uid, title, cid, path, thumbnail, date, desc, func) => {
     }
 };
 
+exports.feedback = (username, feedback, func) => {
+    connection.query("SELECT * FROM feedback WHERE username = ?", [username], (err, results) => {
+        if (err)
+            func(err);
+
+        if (results.length) {
+            func(null, {
+                success: false,
+                message: "You have already submitted feedback!"
+            });
+            return;
+        }
+
+        connection.query("INSERT INTO feedback VALUES (?, ?)", [username, feedback], (err) => {
+            if (err)
+                func(err);
+
+            func(null, {
+                success: true,
+                message: "Thanks for your feedback!"
+            });
+        });
+    });
+};
+
 module.exports = exports;

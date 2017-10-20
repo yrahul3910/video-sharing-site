@@ -23,17 +23,26 @@ class Sidebar extends React.Component {
                     <li>
                         <Link to="/">
                             <i className="material-icons">settings</i>
-                        Settings
+                            Settings
                         </Link>
                     </li>
                     <li>
-                        <a className="waves-effect waves-light" href="#">
+                        <Link to="/feedback">
                             <i className="material-icons">feedback</i>
                             Feedback
-                        </a>
+                        </Link>
                     </li>
                 </div>
             ) : <div></div>;
+
+        let uploadLink = this.props.loggedIn ? (
+            <li>
+                <Link to="/upload">
+                    <i className="material-icons">file_upload</i>
+                    Upload
+                </Link>
+            </li>
+        ) : <div></div>;
 
         return (
             <ul className="side-nav fixed center" style={{backgroundColor: "#f5f5f5", transform: "translateX(0%)"}}>
@@ -55,6 +64,7 @@ class Sidebar extends React.Component {
                         Trending
                     </Link>
                 </li>
+                {uploadLink}
                 <li style={{paddingTop: "50px"}}>
                     <Link to="/">
                         <i className="material-icons">help</i>
