@@ -45,7 +45,7 @@ class Sidebar extends React.Component {
         ) : <div></div>;
 
         return (
-            <ul className="side-nav fixed center" style={{backgroundColor: "#f5f5f5", transform: "translateX(0%)"}}>
+            <ul className="side-nav fixed" style={{backgroundColor: "#f5f5f5", transform: "translateX(0%)"}}>
                 <li style={{paddingTop: "100px"}}>
                     <Link to="/">
                         <i className="material-icons">home</i>
@@ -65,18 +65,12 @@ class Sidebar extends React.Component {
                     </Link>
                 </li>
                 {uploadLink}
-                <li style={{paddingTop: "50px"}}>
-                    <Link to="/">
-                        <i className="material-icons">help</i>
-                        Help
-                    </Link>
-                </li>
                 {userElements}
                 <li>
                     <Link to="/login">
                         <img style={{float: "left", display: "inline-block", marginTop: "10px"}}
                             src={"http://localhost:8000/" + (this.props.loggedIn ? "logout.png" : "login.png")} />
-                        <span onClick={this.logout} style={{marginLeft: "20px"}}>Log {this.props.loggedIn ? "Out" : "In"}</span>
+                        <span onClick={this.logout} style={{marginLeft: "30px"}}>Log {this.props.loggedIn ? "Out" : "In"}</span>
                     </Link>
                 </li>
             </ul>

@@ -43,7 +43,7 @@ app.post("/api/upload", (req, res) => {
     let form = new formidable.IncomingForm();
     form.parse(req, (err, fields, files) => {
         let {video, thumbnail} = files;
-        let {title, desc, token, channel} = fields;
+        let {title, desc, token} = fields;
         // Verify file types
         if (!thumbnail.type.match(/image\/.*/)) {
             res.end(JSON.stringify({success: false, message: "Thumbnail must be an image."}));
@@ -79,7 +79,7 @@ app.post("/api/upload", (req, res) => {
 
                         // Write data to database.
                         dbUtils.init();
-                        dbUtils.upload(uid, title, channel, path + `/${video.name}`,
+                        dbUtils.upload(uid, title, path + `/${video.name}`,
                             path + `/${thumbnail.name}`, new Date(), desc, () => {
                                 res.end(JSON.stringify({success: true, message: "Successfully uploaded!"}));
                             });

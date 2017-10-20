@@ -68,8 +68,6 @@ ESLint is configured for the following rules:
 The style guide at [this link](http://www.sqlstyle.guide/) is used and followed in this project.
 
 # Video Directory Structure
-All videos are uploaded to the `videos` folder. The database simply stores the paths to these videos and thumbnail images. As of now, the site only supports uploads by individual users, but later should support uploads by channels as well.  
+All videos are uploaded to the `videos` folder. The database simply stores the paths to these videos and thumbnail images. To simplify implementation, the site only supports uploads by users, and users can subscribe to other users. This makes certain aspects of implementation easier.  
 
 As of now, the directory structure used is `videos/<user_id>/<video_title>/<files>`, where the files include the video file and the thumbnail image.  
-
-A possible solution to saving channel videos is by noticing how channels are created by users. Thus, we could have a folder, `independent_videos`, for videos by a user, and other folders by channel name, all inside the `<user_id>` folder.

@@ -21,7 +21,6 @@ CREATE TABLE videos (
     views       INT          NOT NULL,
                 CONSTRAINT views_positive
                 CHECK(views > 0),
-    channel_id  INT,
     video_path  VARCHAR(100) NOT NULL,
     thumbnail   VARCHAR(200) NOT NULL
 );
@@ -57,22 +56,13 @@ CREATE TABLE replies (
     reply_text VARCHAR(150) NOT NULL
 );
 
-CREATE TABLE channels (
-    PRIMARY KEY (channel_id),
-    channel_id     INT AUTO_INCREMENT,
-    name           VARCHAR(30) NOT NULL,
-    user_id        INT         NOT NULL,
-                   FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    dp             VARCHAR(200), -- display picture
-    background_pic VARCHAR(200)
-);
-
+/* Users subscribe to other users */
 CREATE TABLE subscriptions (
-    PRIMARY KEY (channel_id, user_id),
-    channel_id INT NOT NULL,
-               FOREIGN KEY(channel_id) REFERENCES channels(channel_id) ON DELETE CASCADE,
-    user_id    INT NOT NULL,
-               FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    PRIMARY KEY (user_id, subscriber_id),
+    user_id       INT NOT NULL,
+                  FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    subscriber_id INT NOT NULL,
+                  FOREIGN KEY(subscriber_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE playlists (

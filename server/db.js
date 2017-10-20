@@ -88,26 +88,15 @@ exports.register = (username, pwd, name, func) => {
     });
 };
 
-exports.upload = (uid, title, cid, path, thumbnail, date, desc, func) => {
-    if (cid) {
-        connection.query("INSERT INTO videos (user_id, title, views, channel_id, video_path,\
-            thumbnail, upload_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            [uid, title, 0, cid, path, thumbnail, date, desc], (err) => {
-                if (err) throw err;
-
-                func(); // func takes no arguments, a call indicates success.
-            }
-        );
-    } else {
-        connection.query("INSERT INTO videos (user_id, title, views, video_path,\
+exports.upload = (uid, title, path, thumbnail, date, desc, func) => {
+    connection.query("INSERT INTO videos (user_id, title, views, video_path,\
             thumbnail, upload_date, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [uid, title, 0, path, thumbnail, date, desc], (err) => {
-                if (err) throw err;
+        [uid, title, 0, path, thumbnail, date, desc], (err) => {
+            if (err) throw err;
 
-                func(); // func takes no arguments, a call indicates success.
-            }
-        );
-    }
+            func(); // func takes no arguments, a call indicates success.
+        }
+    );
 };
 
 exports.feedback = (username, feedback, func) => {
