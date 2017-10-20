@@ -13,6 +13,7 @@ class Login extends React.Component {
     */
     constructor(props) {
         super(props);
+        console.log(this.props.user);
         this.state = {loggedIn: (this.props.user ? true : false)};
         this.click = this.click.bind(this);
     }
@@ -70,7 +71,7 @@ class Login extends React.Component {
                             <div className="col-md-4 col-md-offset-4">
                                 Don&rsquo;t have an account?
                                 <Link to="/register">
-                                    Sign up in seconds.
+                                    {" Sign up in seconds."}
                                 </Link>
                             </div>
                         </div>

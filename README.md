@@ -3,6 +3,11 @@ A simple video sharing website, based on Material design, built with React, Reac
 
 # Table of Contents
 * [Setup](#setup)
+  * [Package Manager](#package-manager)
+  * [Front End Libraries](#front-end-libraries)
+  * [Frameworks](#frameworks)
+  * [Routing](#routing)
+  * [Database](#database)
   * [Environment Variables](#environment-variables)
 * [React Components](#react-components)
 * [Style Guides](#style-guides)
@@ -11,13 +16,22 @@ A simple video sharing website, based on Material design, built with React, Reac
 * [Video Directory Structure](#video-directory-structure)
 
 # Setup
-To use this repository, run `yarn` to install all required packages. The code uses [jQuery](www.jquery.com) and [Materialize CSS](www.materializecss.com).  
+## Package Manager
+Yarn is the package manager of choice. To use this repository, run `yarn` to install all required packages. 
 
-This project is configured with Babel and Webpack for transpiling code to vanilla JS.  
+## Front End Libraries
+The code uses [jQuery](www.jquery.com) and [Materialize CSS](www.materializecss.com).
 
+## Frameworks
+React is used for building the front end. The project is configured with Babel and Webpack for transpiling code to vanilla JS.  
+
+Express is the web server used in the back end, which uses Node.js.
+
+## Routing
 React-Router v4's `HashRouter` is used for client-side routing. The server doesn't handle dynamic requests, and only implements the API request handling.  
 
-All database queries are separated into `db.js`. The server uses this to perform queries and get results. `express-session` is used for session management, along with JWTs.  
+## Database
+MariaDB (MySQL) is used as the database. `Creating_DB.sql` is initially run to set up the database. All database queries are separated into `db.js`. The server uses this to perform queries and get results. 
 
 ## Environment Variables
 The `.env` file should contain the following variables:

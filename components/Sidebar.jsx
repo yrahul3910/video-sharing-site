@@ -55,11 +55,11 @@ class Sidebar extends React.Component {
                 </li>
                 {userElements}
                 <li>
-                    <a href="#">
+                    <Link to="/login">
                         <img style={{float: "left", display: "inline-block", marginTop: "10px"}}
-                            src={"http://localhost:8000/" + this.props.loggedIn ? "logout.png" : "login.png"} />
-                        <span style={{marginLeft: "20px"}}>Log Out</span>
-                    </a>
+                            src={"http://localhost:8000/" + (this.props.loggedIn ? "logout.png" : "login.png")} />
+                        <span style={{marginLeft: "20px"}}>Log {this.props.loggedIn ? "Out" : "In"}</span>
+                    </Link>
                 </li>
             </ul>
         );
