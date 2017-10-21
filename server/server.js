@@ -33,6 +33,20 @@ app.use(require("webpack-dev-middleware")(compiler, {
     publicPath: config.output.publicPath
 }));
 
+app.get("/api/trending", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    // Define trending as videos uploaded in the last 5 days, with maximum views.
+    dbUtils.init();
+    dbUtils.trending((err, videos) => {
+        if (err) throw err;
+        res.end(JSON.stringify({
+            success: true,
+            videos
+        }));
+    });
+});
+
 app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname, "../src/index.html"));
 });
@@ -205,20 +219,6 @@ app.post("/api/whoami", (req, res) => {
                 success: true,
                 user: decoded
             }));
-    });
-});
-
-app.get("/api/trending", (req, res) => {
-    res.writeHead(200, {"Content-Type": "application/json"});
-
-    // Define trending as videos uploaded in the last 5 days, with maximum views.
-    dbUtils.init();
-    dbUtils.trending((err, videos) => {
-        if (err) throw err;
-        res.end({
-            success: true,
-            videos
-        });
     });
 });
 
