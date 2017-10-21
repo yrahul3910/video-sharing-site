@@ -78,8 +78,10 @@ As of now, the directory structure used is `videos/<user_id>/<video_title>/<file
 # TODOs
 * `Trending.jsx: 36`: 
 > This should also render a Link component to link to the actual video.  
+
 Clicking on the title should link to the video, and similarly, clicking the name of the uploader should link to the public profile page.
 
 * `Trending.jsx: 31`:
 > Convert this to string  
+
 The count of views should be converted to more natural representation, like "334K" rather than "334123"
