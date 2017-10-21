@@ -50,7 +50,7 @@ class Register extends React.Component {
             );
         return (
             <div>
-                <Navbar dp={this.props.user.dp} />
+                <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />
                 <div className="row center" style={{position: "absolute", top: "90px", width: "25%"}}>
                     <div id="message"></div>
                 </div>

@@ -18,7 +18,7 @@ import dbUtils from "./db.js";
 const port = 8000;
 const app = express();
 const compiler = webpack(config);
-const illegalCharsFormat = /[ !@#$%^&*()+\-=[\]{};':"\\|,.<>/?]/;
+const illegalCharsFormat = /[!@#$%^&*()+\-=[\]{};':"\\|,.<>/?]/;
 dotenv.config();
 
 // gzip files
@@ -146,6 +146,13 @@ app.post("/api/register", (req, res) => {
         }));
         return;
     }
+    if (username.includes(" ")) {
+        res.end(JSON.stringify({
+            success: false,
+            message: "Spaces aren't allowed in usernames."
+        }));
+        return;
+    }
 
     dbUtils.init();
     dbUtils.register(username, password, name, (e, regResult) => {
@@ -198,6 +205,20 @@ app.post("/api/whoami", (req, res) => {
                 success: true,
                 user: decoded
             }));
+    });
+});
+
+app.get("/api/trending", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    // Define trending as videos uploaded in the last 5 days, with maximum views.
+    dbUtils.init();
+    dbUtils.trending((err, videos) => {
+        if (err) throw err;
+        res.end({
+            success: true,
+            videos
+        });
     });
 });
 

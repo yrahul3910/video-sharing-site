@@ -14,6 +14,7 @@ A simple video sharing website, based on Material design, built with React, Reac
   * [ESLint Configuration](#eslint-configuration)
   * [MySQL Style Guide](#mysql-style-guide)
 * [Video Directory Structure](#video-directory-structure)
+* [TODOs](#todos)
 
 # Setup
 ## Package Manager
@@ -53,6 +54,8 @@ The React components used are below:
 * `VideoSelectCard`: A card shown in the upload page to select a video file
 * `VideoUploadCard`: A card shown in the upload page after a file is selected
 * `Feedback`: The feedback form page, including the navbar
+* `Trending`: The page showing the trending videos
+* `TrendingVideo`: A row showing details of one video in the trending page.
 
 # Style Guides
 
@@ -71,3 +74,12 @@ The style guide at [this link](http://www.sqlstyle.guide/) is used and followed 
 All videos are uploaded to the `videos` folder. The database simply stores the paths to these videos and thumbnail images. To simplify implementation, the site only supports uploads by users, and users can subscribe to other users. This makes certain aspects of implementation easier.  
 
 As of now, the directory structure used is `videos/<user_id>/<video_title>/<files>`, where the files include the video file and the thumbnail image.  
+
+# TODOs
+* `Trending.jsx: 36`: 
+> This should also render a Link component to link to the actual video.
+Clicking on the title should link to the video, and similarly, clicking the name of the uploader should link to the public profile page.
+
+* `Trending.jsx: 31`:
+> Convert this to string
+The count of views should be converted to more natural representation, like "334K" rather than "334123"

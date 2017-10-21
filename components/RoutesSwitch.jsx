@@ -7,6 +7,7 @@ import Login from "./Login.jsx";
 import Register from "./Register.jsx";
 import Upload from "./Upload.jsx";
 import Feedback from "./Feedback.jsx";
+import Trending from "./Trending.jsx";
 
 class RoutesSwitch extends React.Component {
     constructor(props) {
@@ -47,6 +48,9 @@ class RoutesSwitch extends React.Component {
                 } />
                 <Route exact path="/feedback" render={() =>
                     <Feedback user={this.state.user} />
+                } />
+                <Route exact path="/trending" render={() =>
+                    <Trending user={this.state.user} />
                 } />
             </Switch>
         );

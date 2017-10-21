@@ -23,13 +23,13 @@ class Sidebar extends React.Component {
                     <li>
                         <Link to="/">
                             <i className="material-icons">settings</i>
-                            Settings
+                            <span className="sidebar-item">Settings</span>
                         </Link>
                     </li>
                     <li>
                         <Link to="/feedback">
                             <i className="material-icons">feedback</i>
-                            Feedback
+                            <span className="sidebar-item">Feedback</span>
                         </Link>
                     </li>
                 </div>
@@ -39,7 +39,7 @@ class Sidebar extends React.Component {
             <li>
                 <Link to="/upload">
                     <i className="material-icons">file_upload</i>
-                    Upload
+                    <span className="sidebar-item">Upload</span>
                 </Link>
             </li>
         ) : <div></div>;
@@ -49,19 +49,13 @@ class Sidebar extends React.Component {
                 <li style={{paddingTop: "100px"}}>
                     <Link to="/">
                         <i className="material-icons">home</i>
-                        Home
+                        <span className="sidebar-item">Home</span>
                     </Link>
                 </li>
                 <li>
-                    <Link to="/">
-                        <i className="material-icons">add_circle</i>
-                        Browse Channels
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/">
+                    <Link to="/trending">
                         <i className="material-icons">trending_up</i>
-                        Trending
+                        <span className="sidebar-item">Trending</span>
                     </Link>
                 </li>
                 {uploadLink}
@@ -70,7 +64,7 @@ class Sidebar extends React.Component {
                     <Link to="/login">
                         <img style={{float: "left", display: "inline-block", marginTop: "10px"}}
                             src={"http://localhost:8000/" + (this.props.loggedIn ? "logout.png" : "login.png")} />
-                        <span onClick={this.logout} style={{marginLeft: "30px"}}>Log {this.props.loggedIn ? "Out" : "In"}</span>
+                        <span onClick={this.logout} style={{marginLeft: "80px"}}>Log {this.props.loggedIn ? "Out" : "In"}</span>
                     </Link>
                 </li>
             </ul>

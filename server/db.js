@@ -124,4 +124,17 @@ exports.feedback = (username, feedback, func) => {
     });
 };
 
+exports.trending = (func) => {
+    let sql = "SELECT *, DATEDIFF(?, upload_date) AS age \
+         FROM videos \
+        WHERE DATEDIFF(?, upload_date) < 6 \
+        ORDER BY views DESC";
+    let date = new Date().toISOString();
+    connection.query(sql, [date, date], (err, results) => {
+        if (err)
+            func(err);
+        func(null, results);
+    });
+};
+
 module.exports = exports;

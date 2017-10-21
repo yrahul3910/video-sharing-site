@@ -16,7 +16,8 @@ CREATE TABLE videos (
     video_id    INT AUTO_INCREMENT,
     description VARCHAR(200),
     upload_date DATE         NOT NULL,
-    user_id     INT          NOT NULL,
+    username    INT          NOT NULL,
+                FOREIGN KEY(username) REFERENCES users(name),
     title       VARCHAR(20)  NOT NULL,
     views       INT          NOT NULL,
                 CONSTRAINT views_positive
