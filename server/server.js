@@ -77,8 +77,8 @@ app.post("/api/upload", (req, res) => {
                     res.end(JSON.stringify({success: false, message: "No token provided."}));
                     return;
                 }
-                let uid = decoded.user_id;
-                let path = `./videos/${uid}/${title}`;
+                let username = decoded.username;
+                let path = `./videos/${username}/${title}`;
                 fs.writeFile(path + `/${video.name}`, video, (e) => {
                     if (e) {
                         res.end(JSON.stringify({success: false, message: "Unknown error while saving video."}));
@@ -93,7 +93,7 @@ app.post("/api/upload", (req, res) => {
 
                         // Write data to database.
                         dbUtils.init();
-                        dbUtils.upload(uid, title, path + `/${video.name}`,
+                        dbUtils.upload(username, title, path + `/${video.name}`,
                             path + `/${thumbnail.name}`, new Date(), desc, () => {
                                 res.end(JSON.stringify({success: true, message: "Successfully uploaded!"}));
                             });

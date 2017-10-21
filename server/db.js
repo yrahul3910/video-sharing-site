@@ -88,10 +88,10 @@ exports.register = (username, pwd, name, func) => {
     });
 };
 
-exports.upload = (uid, title, path, thumbnail, date, desc, func) => {
-    connection.query("INSERT INTO videos (user_id, title, views, video_path,\
+exports.upload = (username, title, path, thumbnail, date, desc, func) => {
+    connection.query("INSERT INTO videos (username, title, views, video_path,\
             thumbnail, upload_date, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        [uid, title, 0, path, thumbnail, date, desc], (err) => {
+        [username, title, 0, path, thumbnail, date, desc], (err) => {
             if (err) throw err;
 
             func(); // func takes no arguments, a call indicates success.
