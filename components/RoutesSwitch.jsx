@@ -50,7 +50,7 @@ class RoutesSwitch extends React.Component {
                     <Feedback user={this.state.user} />
                 } />
                 <Route exact path="/trending" render={() =>
-                    <Trending user={this.state.user} />
+                    <Trending user={this.state.user} toggleLogin={this.toggleLogin} />
                 } />
             </Switch>
         );

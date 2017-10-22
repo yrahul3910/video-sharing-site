@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 import Navbar from "./Navbar.jsx";
 import TrendingVideo from "./TrendingVideo.jsx";
+import Sidebar from "./Sidebar.jsx";
 
 class Trending extends React.Component {
     constructor(props) {
@@ -38,7 +39,8 @@ class Trending extends React.Component {
         return (
             <div>
                 <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />
-                <div className="row" style={{position: "absolute", top: "100px", width: "25%"}}>
+                <Sidebar toggleLogin={this.props.toggleLogin} loggedIn={this.props.user ? true : false} />
+                <div className="row" style={{position: "absolute", marginLeft: "350px", top: "100px", width: "25%"}}>
                     {content}
                 </div>
             </div>
@@ -47,7 +49,8 @@ class Trending extends React.Component {
 }
 
 Trending.propTypes = {
-    user: PropTypes.object
+    user: PropTypes.object,
+    toggleLogin: PropTypes.func.isRequired
 };
 
 export default Trending;
