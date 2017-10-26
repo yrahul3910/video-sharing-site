@@ -5,10 +5,11 @@ USE video_sharing;
 CREATE TABLE users (
     PRIMARY KEY (user_id),
     user_id  INT AUTO_INCREMENT,
-    name     VARCHAR(30)  NOT NULL,
-    username VARCHAR(30)  NOT NULL,
-    pwd      VARCHAR(100) NOT NULL,
-    dp       VARCHAR(200) -- display picture
+    name       VARCHAR(30)  NOT NULL,
+    username   VARCHAR(30)  NOT NULL,
+    pwd        VARCHAR(100) NOT NULL,
+    dp         VARCHAR(200), -- display picture
+    background VARCHAR(200), -- background picture of profile page
 );
 
 CREATE TABLE videos (
