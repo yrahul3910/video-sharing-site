@@ -8,6 +8,7 @@ import Register from "./Register.jsx";
 import Upload from "./Upload.jsx";
 import Feedback from "./Feedback.jsx";
 import Trending from "./Trending.jsx";
+import PublicProfile from "./PublicProfile.jsx";
 
 class RoutesSwitch extends React.Component {
     constructor(props) {
@@ -51,6 +52,13 @@ class RoutesSwitch extends React.Component {
                 } />
                 <Route exact path="/trending" render={() =>
                     <Trending user={this.state.user} toggleLogin={this.toggleLogin} />
+                } />
+                <Route exact path="/profile" render={() =>
+                    <PublicProfile profile={{name: "TaylorSwiftVEVO",
+                        dp: "http://localhost:8000/dp.jpg",
+                        background: "http://localhost:8000/back.png"}}
+                    user={{dp: "http://localhost:8000/dp.jpg"}}
+                    toggleLogin={this.toggleLogin} subscribers={"25,521,913"} />
                 } />
             </Switch>
         );

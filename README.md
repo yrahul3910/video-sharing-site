@@ -56,6 +56,7 @@ The React components used are below:
 * `Feedback`: The feedback form page, including the navbar
 * `Trending`: The page showing the trending videos
 * `TrendingVideo`: A row showing details of one video in the trending page.
+* `PublicProfile`: The publicly visible profile page for a user.
 
 # Style Guides
 
@@ -85,3 +86,8 @@ Clicking on the title should link to the video, and similarly, clicking the name
 > Convert this to string  
 
 The count of views should be converted to more natural representation, like "334K" rather than "334123"
+
+* `PublicProfile.jsx:30`:
+> Subscribers should be formatted to a string.  
+
+The count of subscribers should be displayed with comma separators.
