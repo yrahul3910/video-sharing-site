@@ -82,12 +82,7 @@ As of now, the directory structure used is `videos/<user_id>/<video_title>/<file
 
 Clicking on the title should link to the video, and similarly, clicking the name of the uploader should link to the public profile page.
 
-* `Trending.jsx: 31`:
-> Convert this to string  
+* `PublicProfile.jsx:50`:
+> The data sent from user should have name, background, dp and subscribers as fields.
 
-The count of views should be converted to more natural representation, like "334K" rather than "334123"
-
-* `PublicProfile.jsx:30`:
-> Subscribers should be formatted to a string.  
-
-The count of subscribers should be displayed with comma separators.
+The server should handle GET requests to the URL, and send these as properties of the object.

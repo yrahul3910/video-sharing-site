@@ -53,12 +53,9 @@ class RoutesSwitch extends React.Component {
                 <Route exact path="/trending" render={() =>
                     <Trending user={this.state.user} toggleLogin={this.toggleLogin} />
                 } />
-                <Route exact path="/profile" render={() =>
-                    <PublicProfile profile={{name: "TaylorSwiftVEVO",
-                        dp: "http://localhost:8000/dp.jpg",
-                        background: "http://localhost:8000/back.png"}}
-                    user={{dp: "http://localhost:8000/dp.jpg"}}
-                    toggleLogin={this.toggleLogin} subscribers={"25,521,913"} />
+                <Route exact path="/profile/:user" render={() =>
+                    <PublicProfile user={this.state.user}
+                        toggleLogin={this.toggleLogin} />
                 } />
             </Switch>
         );

@@ -11,10 +11,11 @@ class ThumbnailRow extends React.Component {
                     "thumbnails": [
                         {
                             url: (string) URL of the video,
-                            img: (string) base64 encoding of thumbnail,
+                            img: (string) thumbnail source,
                             title: (string) Title of video,
                             views: (string) views of the video,
                             channel: {
+                                // This is a user now since channel support is removed
                                 title: "Name of the channel",
                                 url: "Link to channel"
                             },

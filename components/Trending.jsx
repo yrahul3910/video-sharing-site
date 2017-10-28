@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React from "react";
 import PropTypes from "prop-types";
+import numeral from "numeral";
 
 import Navbar from "./Navbar.jsx";
 import TrendingVideo from "./TrendingVideo.jsx";
@@ -29,7 +30,7 @@ class Trending extends React.Component {
                     thumbnail={element.thumbnail}
                     title={element.title}
                     user={element.username}
-                    views={element.views} // TODO: Convert this to string
+                    views={numeral(element.views).format("0.0a")}
                     age={element.age} // This is also present in the SELECT query
                     desc={element.description} />;
             });
