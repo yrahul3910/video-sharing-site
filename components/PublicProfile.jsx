@@ -26,7 +26,7 @@ class PublicProfile extends React.Component {
                 let chunks = chunk(data.videos, 4);
                 let rows = chunks.map((val, i) =>
                     <ThumbnailRow key={i} data={{
-                        title="",
+                        title: "",
                         thumbnails: val.map((video) => {
                             return {
                                 url: "/watch/" + video.video_id,

@@ -13,7 +13,7 @@ import PublicProfile from "./PublicProfile.jsx";
 class RoutesSwitch extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {user: null};
+        this.state = {user: {}};
         this.toggleLogin = this.toggleLogin.bind(this);
     }
 
@@ -23,7 +23,8 @@ class RoutesSwitch extends React.Component {
                 if (data.success) {
                     // The user is valid, Set state!
                     this.setState({user: data.user});
-                }
+                } else
+                    this.setState({user: null});
             }
         );
     }

@@ -61,10 +61,10 @@ class Sidebar extends React.Component {
                 {uploadLink}
                 {userElements}
                 <li>
-                    <Link to="/login">
+                    <Link to="/login" onClick={this.logout}>
                         <img style={{float: "left", display: "inline-block", marginTop: "10px"}}
                             src={"http://localhost:8000/" + (this.props.loggedIn ? "logout.png" : "login.png")} />
-                        <span onClick={this.logout} style={{marginLeft: "80px"}}>Log {this.props.loggedIn ? "Out" : "In"}</span>
+                        <span style={{marginLeft: "80px"}}>Log {this.props.loggedIn ? "Out" : "In"}</span>
                     </Link>
                 </li>
             </ul>
