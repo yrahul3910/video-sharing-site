@@ -14,7 +14,7 @@ class Upload extends React.Component {
         this.changeClick = this.changeClick.bind(this);
         this.postData = this.postData.bind(this);
         this.submitData = this.submitData.bind(this);
-        this.state = {selected: false, firstClick: true, form_data: null};
+        this.state = {selected: false, firstClick: true, form_data: null, uploadComplete: false};
     }
 
     postData() {
@@ -24,7 +24,11 @@ class Upload extends React.Component {
             processData: false,
             contentType: false,
             dataType: "json",
-            data: this.state.form_data
+            data: this.state.form_data,
+            success: (data) => {
+                Materialize.toast("Video successfully uploaded!", 3000, "rounded");
+                this.setState({uploadComplete: true});
+            }
         });
     }
 
@@ -65,6 +69,10 @@ class Upload extends React.Component {
         if (!this.props.user)
             return (
                 <Redirect to="/login" />
+            );
+        if (this.state.uploadComplete)
+            return (
+                <Redirect to="/" />
             );
 
         let card;

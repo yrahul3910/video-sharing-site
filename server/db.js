@@ -70,7 +70,7 @@ exports.register = (username, pwd, name, func) => {
         if (e_)
             func(e_);
 
-        connection.query("INSERT INTO users (name, username, pwd) VALUES (?, ?, ?)", [name, username, hash], (err) => {
+        connection.query("INSERT INTO users (name, username, pwd) VALUES (?, ?, ?)", [name, username, hash], (err, results) => {
             if (err) {
                 // Can't simply throw an error here, return an error message instead.
                 func(null, {
@@ -82,7 +82,8 @@ exports.register = (username, pwd, name, func) => {
             // No error, inserted successfully, so return true.
             func(null, {
                 success: true,
-                message: "Successfully registered!"
+                message: "Successfully registered!",
+                id: results.insertId
             });
         });
     });
@@ -91,10 +92,10 @@ exports.register = (username, pwd, name, func) => {
 exports.upload = (username, title, path, thumbnail, date, desc, func) => {
     connection.query("INSERT INTO videos (username, title, views, video_path,\
             thumbnail, upload_date, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        [username, title, 0, path, thumbnail, date, desc], (err) => {
+        [username, title, 0, path, thumbnail, date, desc], (err, results) => {
             if (err) throw err;
 
-            func(); // func takes no arguments, a call indicates success.
+            func(null, results.insertId); // func takes no arguments, a call indicates success.
         }
     );
 };

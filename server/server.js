@@ -14,7 +14,8 @@ import helmet from "helmet";
 import webpack from "webpack";
 import config from "../webpack.config";
 
-import dbUtils from "./db.js";
+import dbUtils from "./db";
+import searchUtils from "./search";
 
 const port = 8000;
 const app = express();
@@ -96,7 +97,16 @@ app.post("/api/upload", (req, res) => {
                         // Write data to database.
                         dbUtils.init();
                         dbUtils.upload(username, title, path + `/${video.name}`,
-                            path + `/${thumbnail.name}`, new Date(), desc, () => {
+                            path + `/${thumbnail.name}`, new Date(), desc, (err, id) => {
+                                // Upload successful, so now add it to index.
+                                searchUtils.index("qtube", "video", {
+                                    title,
+                                    username,
+                                    thumbnail,
+                                    description: desc,
+                                    video_id: id
+                                });
+
                                 res.end(JSON.stringify({success: true, message: "Successfully uploaded!"}));
                             });
                     });
@@ -182,6 +192,13 @@ app.post("/api/register", (req, res) => {
             };
             let token = jwt.sign(user, process.env.SESSION_SECRET, {
                 expiresIn: "1 day"
+            });
+
+            // Registration successful, add to index and then end response.
+            searchUtils.index("qtube", "user", {
+                name,
+                username,
+                user_id: regResult.id
             });
 
             res.end(JSON.stringify({

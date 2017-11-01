@@ -4,78 +4,60 @@ const esClient = new elasticsearch.Client({
     log: "error"
 });
 
-//index
-function index(_index,_type, data) {
-    if(_type == "user") {
+// Index new object to ElasticSearch
+exports.index = (index, type, data) => {
+    if(type == "user") {
         esClient.index({
-            index: _index,
-            type: _type,
+            index,
+            type,
             id: data.user_id,
             body: {
                 name: data.name,
-                username: data.username,
+                username: data.username
             }
-        },function (error, response) {
-            console.log(error);
+        }, (error) => {
+            throw error;
         });
     }
     else {
         esClient.index({
-            index: _index,
-            type: _type,
+            index,
+            type,
             id: data.video_id,
             body: {
                 description: data.description,
                 title: data.title,
+                username: data.username,
+                thumbnail: data.thumbnail
             }
-        },function (error, response) {
-            console.log(error);
+        }, (error) => {
+            throw error;
         });
-
     }
-}
-//in the call send index name, type and JSON object with user_id,name,username
-/*index("clone",
-    "user",
-    { "user_id": "4",
-        "name": "ABCDEF",
-        "username": "AB11"});
-//in the call send index name, type and JSON object with video_id, description, title
-index("clone",
-    "video",
-    { "video_id": "4",
-        "description": "DESCRIBES COFFEE",
-        "title": "VIDEO ON COLLEGE COFFEE"});
-*/
+};
 
-//indices
-//to check if the data is indexed properly
-const indices = function indices() {
+// Get all the indices from ElasticSearch
+exports.indices = () => {
     return esClient.cat.indices({v: true})
-        .then(console.log)
-        .catch(err => console.error(`Error connecting to the es client: ${err}`));
+        .then(console.log) // eslint-disable-line no-console
+        .catch(err => {
+            throw err;
+        });
 };
-/*const test = function test() {
-    console.log("elasticsearch indices information:");
-    indices();
-};
-test();*/
 
-//delete
-function deleteDoc(_index, _type, _id) {
+// Delete document from index
+exports.deleteDoc = (index, type, id) => {
     esClient.delete({
-    index: _index,
-    type: _type,
-    id: _id
-    }, function (error, response) {
-            console.log(error);
+        index,
+        type,
+        id
+    }, (error) => {
+        throw error;
     });
-}
-//deleteDoc('clone', 'user', 4);
+};
 
-
-//search
-const search = function search(index, body) {
+// Search for documents
+exports.search = (index, body) => {
     return esClient.search({index: index, body: body});
 
 };
@@ -108,8 +90,5 @@ const test = function test(str) {
 test('ABCDEF');
 */
 
-export default index;
-export default indices;
-export default deleteDoc;
-export default search;
+module.exports = exports;
 
