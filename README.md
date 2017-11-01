@@ -32,14 +32,20 @@ Express is the web server used in the back end, which uses Node.js.
 React-Router v4's `HashRouter` is used for client-side routing. The server doesn't handle dynamic requests, and only implements the API request handling.  
 
 ## Database
-MariaDB (MySQL) is used as the database. `Creating_DB.sql` is initially run to set up the database. All database queries are separated into `db.js`. The server uses this to perform queries and get results. 
+MariaDB (MySQL) is used as the database. `Creating_DB.sql` is initially run to set up the database. All database queries are separated into `db.js`. The server uses this to perform queries and get results.  
+
+## Search
+ElasticSearch is used for search functionality. The `search.js` file provides an abstraction to all searching functions, like indexing new documents, searching, and deleting indices.
 
 ## Environment Variables
 The `.env` file should contain the following variables:
-* `SESSION_SECRET`: Ideally a random string, used by `express-session` for session management.
+* `SESSION_SECRET`: Ideally a random string, used by JWTs for session management.
 * `DB_USER`: The username of the database user.
 * `DB_PWD`: The database password.
 * `DB_HOST`: The hostname of the database.
+
+## Security
+Node Security Platform (NSP) is used to check for vulnerabilities in the package dependencies. Helmet.js is used to prevent XSS attacks.
 
 # React Components
 The React components used are below:
