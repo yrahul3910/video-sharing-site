@@ -21,7 +21,7 @@ exports.terminate = () => {
 };
 
 exports.authenticate = (username, pwd, func) => {
-    connection.query("SELECT * FROM users WHERE username = ?", [username], (err, results) => {
+    connection.query("SELECT * FROM users WHERE BINARY username = ?", [username], (err, results) => {
         if (err)
             func(err);
 
@@ -51,7 +51,7 @@ exports.authenticate = (username, pwd, func) => {
 };
 
 exports.register = (username, pwd, name, func) => {
-    connection.query("SELECT * FROM users WHERE username = ?", [username], (err, results) => {
+    connection.query("SELECT * FROM users WHERE BINARY username = ?", [username], (err, results) => {
         if (err)
             func(err);
 
@@ -100,7 +100,7 @@ exports.upload = (username, title, path, thumbnail, date, desc, func) => {
 };
 
 exports.feedback = (username, feedback, func) => {
-    connection.query("SELECT * FROM feedback WHERE username = ?", [username], (err, results) => {
+    connection.query("SELECT * FROM feedback WHERE BINARY username = ?", [username], (err, results) => {
         if (err)
             func(err);
 
