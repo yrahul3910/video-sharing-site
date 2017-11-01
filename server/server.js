@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import formidable from "formidable";
 import fs from "fs-path";
+import helmet from "helmet";
 
 // Used for transpiling
 import webpack from "webpack";
@@ -22,6 +23,7 @@ const illegalCharsFormat = /[!@#$%^&*()+\-=[\]{};':"\\|,.<>/?]/;
 dotenv.config();
 
 // gzip files
+app.use(helmet());
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser({extended: true}));
