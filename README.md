@@ -99,4 +99,4 @@ The server should handle GET requests to the URL, and send these as properties o
 * `SearchResults.jsx:31`:
 > Figure out a way to get this  
 
-Currently, the views and age are statically shown as 0, but it should get this data from the server and show the right value.
+Currently, the views and age are statically shown as 0, but it should get this data from the server and show the right value. Also, the thumbnail must be changed to the value from the search. This is part of #8.
