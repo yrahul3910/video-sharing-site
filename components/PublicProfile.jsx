@@ -91,6 +91,7 @@ class PublicProfile extends React.Component {
 
 PublicProfile.propTypes = {
     user: PropTypes.object.isRequired,
+    profile: PropTypes.object.isRequired,
     toggleLogin: PropTypes.func.isRequired,
     match: PropTypes.object.isRequired
 };

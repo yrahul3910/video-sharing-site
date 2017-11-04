@@ -65,6 +65,7 @@ The React components used are below:
 * `Trending`: The page showing the trending videos
 * `TrendingVideo`: A row showing details of one video in the trending page.
 * `PublicProfile`: The publicly visible profile page for a user.
+* `SearchResults`: The search results page.
 
 # Style Guides
 
@@ -94,3 +95,8 @@ Clicking on the title should link to the video, and similarly, clicking the name
 > The data sent from user should have name, background, dp and subscribers as fields.
 
 The server should handle GET requests to the URL, and send these as properties of the object.
+
+* `SearchResults.jsx:31`:
+> Figure out a way to get this  
+
+Currently, the views and age are statically shown as 0, but it should get this data from the server and show the right value.

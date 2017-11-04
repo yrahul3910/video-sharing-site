@@ -16,7 +16,8 @@ exports.index = (index, type, data) => {
                 username: data.username
             }
         }, (error) => {
-            throw error;
+            if (error)
+                throw error;
         });
     }
     else {
@@ -31,7 +32,8 @@ exports.index = (index, type, data) => {
                 thumbnail: data.thumbnail
             }
         }, (error) => {
-            throw error;
+            if (error)
+                throw error;
         });
     }
 };
@@ -52,14 +54,14 @@ exports.deleteDoc = (index, type, id) => {
         type,
         id
     }, (error) => {
-        throw error;
+        if (error)
+            throw error;
     });
 };
 
 // Search for documents
 exports.search = (index, body) => {
-    return esClient.search({index: index, body: body});
-
+    return esClient.search({index, body});
 };
 /*
 //put the following function in the server calling search

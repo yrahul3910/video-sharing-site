@@ -138,4 +138,15 @@ exports.trending = (func) => {
     });
 };
 
+exports.details = (id, func) => {
+    let sql = "SELECT views, DATEDIFF(?, upload_date) AS age \
+         FROM videos \
+        WHERE video_id = ?";
+    connection.query(sql, [new Date().toISOString(), id], (err, results) => {
+        if (err)
+            func(err);
+        func(null, results);
+    });
+};
+
 module.exports = exports;

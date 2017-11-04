@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 import formidable from "formidable";
 import fs from "fs-path";
 import helmet from "helmet";
+import numeral from "numeral";
 
 // Used for transpiling
 import webpack from "webpack";
@@ -237,6 +238,50 @@ app.post("/api/whoami", (req, res) => {
             res.end(JSON.stringify({
                 success: true,
                 user: decoded
+            }));
+    });
+});
+
+app.post("/api/search", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    let queryString = req.body.query;
+    let body = {
+        size: 10, // Number of results
+        from: 0, // Start index of results returned
+        query: {
+            multi_match: {
+                query: queryString,
+                fields: ["username", "name", "description", "title"],
+                minimum_should_match: 1,
+                fuzziness: 2
+            }
+        }
+    };
+    searchUtils.search("qtube", body).then(results => {
+        let response = {
+            time: results.took,
+            results: results.hits.hits
+        };
+
+        res.end(JSON.stringify(response));
+    });
+});
+
+app.post("/api/video/details", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    let {id} = req.body;
+
+    dbUtils.init();
+    dbUtils.details(id, (err, results) => {
+        if (err)
+            res.end(JSON.stringify({
+                success: false
+            }));
+        else
+            res.end(JSON.stringify({
+                success: true,
+                age: results[0].age,
+                views: numeral(results[0].views).format("0.0a")
             }));
     });
 });
