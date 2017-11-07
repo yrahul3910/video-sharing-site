@@ -5,6 +5,9 @@ import bcrypt from "bcrypt";
 
 let connection;
 
+/**
+ * Establishes a connection to the database.
+ */
 exports.init = () => {
     dotenv.config();
     connection = mysql.createConnection({
@@ -16,10 +19,19 @@ exports.init = () => {
     connection.connect();
 };
 
+/**
+ * Terminates connection to the database.
+ */
 exports.terminate = () => {
     connection.end();
 };
 
+/**
+ * Checks if the user has entered the right set of authentication details.
+ * @param {string} username - The username entered
+ * @param {string} pwd - The plaintext password entered
+ * @param {Function} func - The callback function
+ */
 exports.authenticate = (username, pwd, func) => {
     connection.query("SELECT * FROM users WHERE BINARY username = ?", [username], (err, results) => {
         if (err)
@@ -50,6 +62,14 @@ exports.authenticate = (username, pwd, func) => {
     });
 };
 
+/**
+ * Registers a user by adding the details to the users table. Also adds user to
+ * subscriptions table, since by default, every user subscribes to him/herself.
+ * @param {string} username - The username of the new user
+ * @param {string} pwd - The plaintext password of the user. This will be hashed.
+ * @param {string} name - The user's name
+ * @param {Function} func - The callback function
+ */
 exports.register = (username, pwd, name, func) => {
     connection.query("SELECT * FROM users WHERE BINARY username = ?", [username], (err, results) => {
         if (err)
@@ -96,6 +116,17 @@ exports.register = (username, pwd, name, func) => {
     });
 };
 
+/**
+ * Inserts the parameters of the video into the videos table. The actual
+ * uploading must be done by the server.
+ * @param {string} username - The uploader username
+ * @param {string} title - The video title
+ * @param {string} path - The path to the video file in the disk
+ * @param {string} thumbnail - The path to the thumbnail file on disk
+ * @param {Date} date - Date of uploading
+ * @param {string} desc - Video description
+ * @param {Function} func - The callback function
+ */
 exports.upload = (username, title, path, thumbnail, date, desc, func) => {
     connection.query("INSERT INTO videos (username, title, views, video_path,\
             thumbnail, upload_date, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -107,6 +138,12 @@ exports.upload = (username, title, path, thumbnail, date, desc, func) => {
     );
 };
 
+/**
+ * Submits feedback by adding to the feedback table
+ * @param {string} username - The username of the person submitting the feedback
+ * @param {string} feedback - The submitted feedback
+ * @param {Function} func - The callback function
+ */
 exports.feedback = (username, feedback, func) => {
     connection.query("SELECT * FROM feedback WHERE BINARY username = ?", [username], (err, results) => {
         if (err)
@@ -132,6 +169,10 @@ exports.feedback = (username, feedback, func) => {
     });
 };
 
+/**
+ * Gives a list of trending videos
+ * @param {Function} func - The callback function
+ */
 exports.trending = (func) => {
     let sql = "SELECT *, DATEDIFF(?, upload_date) AS age \
          FROM videos \
@@ -145,6 +186,11 @@ exports.trending = (func) => {
     });
 };
 
+/**
+ * Returns the views and age of a video.
+ * @param {number} id - The video id in the database
+ * @param {Function} func - The callback function
+ */
 exports.details = (id, func) => {
     let sql = "SELECT views, DATEDIFF(?, upload_date) AS age \
          FROM videos \

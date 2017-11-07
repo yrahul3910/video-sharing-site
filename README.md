@@ -101,6 +101,11 @@ Clicking on the title should link to the video, and similarly, clicking the name
 
 Currently, the views and age are statically shown as 0, but it should get this data from the server and show the right value. Also, the thumbnail must be changed to the value from the search. This is part of #8.
 
+* `PublicProfile.jsx:25`:
+> Implement /api/videos  
+
+There's no handler for `/api/videos` yet. This must be created.
+
 * `PublicProfile.jsx:77`:
 > Handle this click event  
 
