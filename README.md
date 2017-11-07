@@ -106,7 +106,7 @@ Currently, the views and age are statically shown as 0, but it should get this d
 
 There's no handler for `/api/videos` yet. This must be created.
 
-* `PublicProfile.jsx:77`:
+* `PublicProfile.jsx:94`:
 > Handle this click event  
 
 Handle the click event for the Subscribe button. If the user has already subscribed, it should stay in a disabled state.
