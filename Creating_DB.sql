@@ -4,12 +4,12 @@ USE video_sharing;
 
 CREATE TABLE users (
     PRIMARY KEY (user_id),
-    user_id  INT AUTO_INCREMENT,
+    user_id    INT AUTO_INCREMENT,
     name       VARCHAR(30)  NOT NULL,
     username   VARCHAR(30)  NOT NULL,
     pwd        VARCHAR(100) NOT NULL,
     dp         VARCHAR(200), -- display picture
-    background VARCHAR(200), -- background picture of profile page
+    background VARCHAR(200)  -- background picture of profile page
 );
 
 CREATE TABLE videos (
@@ -96,7 +96,7 @@ CREATE TRIGGER before_users_insert
     BEFORE INSERT ON users
     FOR EACH ROW
 BEGIN
-    IF NEW.user REGEXP '[]!@#$%^&*()+\=[\{};\':"\\|,.<>/?-]' OR NEW.username REGEXP '[]!@#$%^&*()+\=[\{};\':"\\|,.<>/?-]' THEN
+    IF NEW.name REGEXP '[]!@#$%^&*()+\=[\{};\':"\\|,.<>/?-]' OR NEW.username REGEXP '[]!@#$%^&*()+\=[\{};\':"\\|,.<>/?-]' THEN
         SIGNAL SQLSTATE '45000' set message_text="Special characters aren't allowed in usernames and names.";
     END IF;
 END;
