@@ -51,6 +51,24 @@ app.get("/api/trending", (req, res) => {
     });
 });
 
+app.get("/api/user/:username", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    dbUtils.init();
+    dbUtils.userDetails(req.params.username, (err, results) => {
+        if (err)
+            res.end(JSON.stringify({
+                success: false,
+                message: "Username does not exist."
+            }));
+        else
+            res.end(JSON.stringify({
+                success: true,
+                data: results[0]
+            }));
+    });
+});
+
 app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname, "../src/index.html"));
 });
@@ -135,7 +153,8 @@ app.post("/api/authenticate", (req, res) => {
                 let user = {
                     username: authResult.results.username,
                     name: authResult.results.name,
-                    dp: authResult.results.dp
+                    dp: authResult.results.dp,
+                    background: authResult.results.background
                 };
                 let token = jwt.sign(user, process.env.SESSION_SECRET, {
                     expiresIn: "1 day"
@@ -189,7 +208,8 @@ app.post("/api/register", (req, res) => {
             let user = {
                 username,
                 name,
-                dp: null
+                dp: null,
+                background: null
             };
             let token = jwt.sign(user, process.env.SESSION_SECRET, {
                 expiresIn: "1 day"

@@ -149,4 +149,25 @@ exports.details = (id, func) => {
     });
 };
 
+/**
+ * Returns details of user with given username
+ * @param {string} username - The username whose details are required.
+ * @param {Function} func - The callback function
+ */
+exports.userDetails = (username, func) => {
+    let sql = "SELECT name, username, dp, background, COUNT(subscriber_id) AS subscribers \
+         FROM users, subscriptions \
+        WHERE username = ?";
+    connection.query(sql, [username], (err, results) => {
+        if (err)
+            func(err);
+        if (!results.length) {
+            // Username doesn't exist
+            func(new Error("Username does not exist."));
+        }
+
+        func(null, results);
+    });
+};
+
 module.exports = exports;

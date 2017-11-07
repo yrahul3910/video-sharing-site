@@ -10,6 +10,7 @@ import Feedback from "./Feedback.jsx";
 import Trending from "./Trending.jsx";
 import PublicProfile from "./PublicProfile.jsx";
 import SearchResults from "./SearchResults.jsx";
+import SettingsPage from "./SettingsPage.jsx";
 
 class RoutesSwitch extends React.Component {
     constructor(props) {
@@ -59,9 +60,13 @@ class RoutesSwitch extends React.Component {
                     <PublicProfile user={this.state.user}
                         toggleLogin={this.toggleLogin} {...props} />
                 } />
-                <Route path="/search/:q" render={(props) =>
+                <Route exact path="/search/:q" render={(props) =>
                     <SearchResults user={this.state.user}
                         toggleLogin={this.toggleLogin} {...props} />
+                } />
+                <Route exact path="/me" render={() =>
+                    <SettingsPage user={this.state.user}
+                        toggleLogin={this.toggleLogin} />
                 } />
             </Switch>
         );

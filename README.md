@@ -15,6 +15,7 @@ A simple video sharing website, based on Material design, built with React, Reac
 * [Style Guides](#style-guides)
   * [ESLint Configuration](#eslint-configuration)
   * [MySQL Style Guide](#mysql-style-guide)
+  * [Documentation Guide](#documentation-guide)
 * [Video Directory Structure](#video-directory-structure)
 * [TODOs](#todos)
 
@@ -66,6 +67,7 @@ The React components used are below:
 * `TrendingVideo`: A row showing details of one video in the trending page.
 * `PublicProfile`: The publicly visible profile page for a user.
 * `SearchResults`: The search results page.
+* `SettingsPage`: The personal profile page of a user where he can change his DP/background, delete videos.
 
 # Style Guides
 
@@ -80,6 +82,9 @@ ESLint is configured for the following rules:
 ## MySQL Style Guide
 The style guide at [this link](http://www.sqlstyle.guide/) is used and followed in this project.
 
+## Documentation Guide
+Functionality that is abstracted, such as in `search.js`, should have JSDoc comments for each function. Any React components used must be added in the `React Components` section above. Block-level comments are preferred, but not required if the code is trivial. For non-trivial logic, comments should be added briefly describing the working of the code.
+
 # Video Directory Structure
 All videos are uploaded to the `videos` folder. The database simply stores the paths to these videos and thumbnail images. To simplify implementation, the site only supports uploads by users, and users can subscribe to other users. This makes certain aspects of implementation easier.  
 
@@ -91,12 +96,12 @@ As of now, the directory structure used is `videos/<user_id>/<video_title>/<file
 
 Clicking on the title should link to the video, and similarly, clicking the name of the uploader should link to the public profile page.
 
-* `PublicProfile.jsx:50`:
-> The data sent from user should have name, background, dp and subscribers as fields.
-
-The server should handle GET requests to the URL, and send these as properties of the object.
-
 * `SearchResults.jsx:31`:
 > Figure out a way to get this  
 
 Currently, the views and age are statically shown as 0, but it should get this data from the server and show the right value. Also, the thumbnail must be changed to the value from the search. This is part of #8.
+
+* `PublicProfile.jsx:77`:
+> Handle this click event  
+
+Handle the click event for the Subscribe button. If the user has already subscribed, it should stay in a disabled state.

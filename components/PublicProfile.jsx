@@ -47,8 +47,6 @@ class PublicProfile extends React.Component {
         });
 
         $.get("http://localhost:8000/api/user/" + this.props.match.params.user, (data) => {
-            // TODO: The data sent from user should have name, background, dp and subscribers
-            // as fields.
             this.setState({profile: data});
         });
     }
@@ -76,6 +74,7 @@ class PublicProfile extends React.Component {
                                 </div>
                             </div>
                             <div className="col s4">
+                                {/* TODO: Handle this click event */}
                                 <a className="waves-effect waves-light btn red">Subscribe</a>
                             </div>
                         </div>
