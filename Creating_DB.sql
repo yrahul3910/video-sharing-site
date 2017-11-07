@@ -102,5 +102,5 @@ BEGIN
 END;
 //
 
-DElIMITER ;
+DELIMITER ;
 
