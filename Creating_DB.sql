@@ -90,3 +90,17 @@ CREATE TABLE feedback (
             FOREIGN KEY(user_id) REFERENCES users(user_id),
     comment VARCHAR(300) NOT NULL
 );
+
+DELIMITER //
+CREATE TRIGGER before_users_insert
+    BEFORE INSERT ON users
+    FOR EACH ROW
+BEGIN
+    IF NEW.user REGEXP '[]!@#$%^&*()+\=[\{};\':"\\|,.<>/?-]' OR NEW.username REGEXP '[]!@#$%^&*()+\=[\{};\':"\\|,.<>/?-]' THEN
+        SIGNAL SQLSTATE '45000' set message_text="Special characters aren't allowed in usernames and names.";
+    END IF;
+END;
+//
+
+DElIMITER ;
+
