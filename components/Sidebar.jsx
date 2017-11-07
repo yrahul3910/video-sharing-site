@@ -21,7 +21,7 @@ class Sidebar extends React.Component {
             (
                 <div>
                     <li>
-                        <Link to="/">
+                        <Link to="/me">
                             <i className="material-icons">settings</i>
                             <span className="sidebar-item">Settings</span>
                         </Link>

@@ -79,11 +79,18 @@ exports.register = (username, pwd, name, func) => {
                 });
             }
 
-            // No error, inserted successfully, so return true.
-            func(null, {
-                success: true,
-                message: "Successfully registered!",
-                id: results.insertId
+            connection.query("INSERT INTO subscriptions VALUES (?, ?)", [results.insertId, results.insertId], (e) => {
+                if (e)
+                    func(null, {
+                        success: false,
+                        message: "Unknown error occurred, try again."
+                    });
+                // No error, inserted successfully, so return true.
+                func(null, {
+                    success: true,
+                    message: "Successfully registered!",
+                    id: results.insertId
+                });
             });
         });
     });
@@ -157,7 +164,7 @@ exports.details = (id, func) => {
 exports.userDetails = (username, func) => {
     let sql = "SELECT name, username, dp, background, COUNT(subscriber_id) AS subscribers \
          FROM users, subscriptions \
-        WHERE username = ?";
+        WHERE BINARY username = ?";
     connection.query(sql, [username], (err, results) => {
         if (err)
             func(err);
