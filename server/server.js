@@ -121,7 +121,7 @@ app.post("/api/upload", (req, res) => {
                                 searchUtils.index("qtube", "video", {
                                     title,
                                     username,
-                                    thumbnail,
+                                    thumbnail: path + `/${thumbnail.name}`,
                                     description: desc,
                                     video_id: id
                                 });
