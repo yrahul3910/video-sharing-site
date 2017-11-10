@@ -7,7 +7,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import formidable from "formidable";
-import fs from "fs-path";
+import fs from "fs";
 import helmet from "helmet";
 import numeral from "numeral";
 
@@ -102,14 +102,23 @@ app.post("/api/upload", (req, res) => {
                     return;
                 }
                 let username = decoded.username;
+
+                if (!fs.existsSync("./videos")) {
+                    fs.mkdirSync("./videos");
+                    fs.mkdirSync(`./videos/${username}`);
+                } else if (!fs.existsSync(`./videos/${username}`)) {
+                    fs.mkdirSync(`./videos/${username}`);
+                }
+
                 let path = `./videos/${username}/${title}`;
-                fs.writeFile(path + `/${video.name}`, video, (e) => {
+                fs.mkdirSync(path);
+                fs.rename(video.path, path + `/${video.name}`, (e) => {
                     if (e) {
                         res.end(JSON.stringify({success: false, message: "Unknown error while saving video."}));
                         return;
                     }
 
-                    fs.writeFile(path + `/${thumbnail.name}`, thumbnail, (e) => {
+                    fs.rename(thumbnail.path, path + `/${thumbnail.name}`, (e) => {
                         if (e) {
                             res.end(JSON.stringify({success: false, message: "Unknown error while saving video."}));
                             return;
