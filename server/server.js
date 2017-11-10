@@ -31,6 +31,8 @@ app.use(bodyParser.json());
 app.use(bodyParser({extended: true}));
 app.use(cors());
 app.use(express.static(__dirname + "/public"));
+app.use("/videos", express.static(__dirname + "/../videos"));
+
 // Use Webpack middleware
 app.use(require("webpack-dev-middleware")(compiler, {
     noInfo: true,
@@ -64,7 +66,7 @@ app.get("/api/user/:username", (req, res) => {
         else
             res.end(JSON.stringify({
                 success: true,
-                data: results[0]
+                data: results
             }));
     });
 });

@@ -210,16 +210,26 @@ exports.details = (id, func) => {
 exports.userDetails = (username, func) => {
     let sql = "SELECT name, username, dp, background, COUNT(subscriber_id) AS subscribers \
          FROM users, subscriptions \
-        WHERE BINARY username = ?";
+        WHERE BINARY users.username = ?";
     connection.query(sql, [username], (err, results) => {
         if (err)
             func(err);
-        if (!results.length) {
-            // Username doesn't exist
-            func(new Error("Username does not exist."));
-        }
 
-        func(null, results);
+        if (!results.length)
+            func(new Error("Username does not exist."));
+
+        sql = "SELECT * \
+             FROM videos \
+            WHERE username = ?";
+        connection.query(sql, [username], (e, r) => {
+            if (err)
+                func(err);
+
+            func(null, {
+                user: results,
+                videos: r
+            });
+        });
     });
 };
 

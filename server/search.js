@@ -63,34 +63,6 @@ exports.deleteDoc = (index, type, id) => {
 exports.search = (index, body) => {
     return esClient.search({index, body});
 };
-/*
-//put the following function in the server calling search
-const test = function test(str) {
-    let body = {
-            size: 10,
-            from: 0,
-            query: {
-                    multi_match: {
-                    query: str,
-                    fields: ['username', 'name', 'description', 'title'],
-                    minimum_should_match: 1,//3
-                    fuzziness: 1
-                    }
-            }
-    };
-
-    console.log(`retrieving documents whose title or authors match '${body.query.multi_match.query}' (displaying ${body.size} items at a time)...`);
-    search('clone' , body)
-    .then(results => {
-    console.log(`found ${results.hits.total} items in ${results.took}ms`);
-    if (results.hits.total > 0) console.log(`returned titles:`);
-            results.hits.hits.forEach((hit,index) => console.log(hit));
-    })
-    .catch(console.error);
-};
-
-test('ABCDEF');
-*/
 
 module.exports = exports;
 

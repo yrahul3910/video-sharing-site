@@ -22,15 +22,10 @@ class PublicProfile extends React.Component {
     }
 
     componentDidMount() {
-        // TODO: Implement /api/videos
-        $.post("http://localhost:8000/api/videos", {
-            token: localStorage.getItem("token"),
-            user: this.props.match.params.user
-        }, (data) => {
-            if (!data.success)
-                Materialize.toast(data.message);
-            else {
-                let chunks = chunk(data.videos, 4);
+        $.get("http://localhost:8000/api/user/" + this.props.match.params.user, (data) => {
+            if (data.success) {
+                let chunks = chunk(data.data.videos, 4);
+                console.log(chunks);
                 let rows = chunks.map((val, i) =>
                     <ThumbnailRow key={i} data={{
                         title: "",
@@ -49,13 +44,8 @@ class PublicProfile extends React.Component {
                         })
                     }} />
                 );
-                this.setState({rows});
+                this.setState({rows, profile: data.data.user[0]});
             }
-        });
-
-        $.get("http://localhost:8000/api/user/" + this.props.match.params.user, (data) => {
-            if (data.success)
-                this.setState({profile: data.data});
             else {
                 this.setState({invalid: true});
                 Materialize.toast(data.message, 4000, "rounded");
@@ -86,7 +76,8 @@ class PublicProfile extends React.Component {
                                 <div className="row">
                                     <h5>{this.state.profile.name}</h5><br style={{display: "none"}} />
                                     <p className="profile-subscribers">
-                                        {this.state.profile.subscribers + " subscribers"}
+                                        {this.state.profile.subscribers + " subscriber" +
+                                            (this.state.profile.subscribers > 1 ? " s" : "")}
                                     </p>
                                 </div>
                             </div>
@@ -96,7 +87,7 @@ class PublicProfile extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div style={{marginLeft: "50px"}}>
                         {this.state.rows}
                     </div>
                 </div>
@@ -106,7 +97,7 @@ class PublicProfile extends React.Component {
 }
 
 PublicProfile.propTypes = {
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object,
     toggleLogin: PropTypes.func.isRequired,
     match: PropTypes.object.isRequired
 };

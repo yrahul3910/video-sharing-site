@@ -2,20 +2,47 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
+import chunk from "lodash.chunk";
 
 import Navbar from "./Navbar.jsx";
 import Sidebar from "./Sidebar.jsx";
+import ThumbnailRow from "./ThumbnailRow.jsx";
 
 class SettingsPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {subscribers: 0};
+        this.state = {subscribers: 0, rows: null};
     }
 
     componentDidMount() {
         $.get("http://localhost:8000/api/user/" + this.props.user.username,
             (data) => {
-                this.setState({subscribers: data.data.subscribers});
+                if (!data.success)
+                    Materialize.toast(data.message);
+                else {
+                    this.setState({subscribers: data.data.subscribers});
+
+                    let chunks = chunk(data.videos, 4);
+                    let rows = chunks.map((val, i) =>
+                        <ThumbnailRow key={i} data={{
+                            title: "",
+                            thumbnails: val.map((video) => {
+                                return {
+                                    url: "/watch/" + video.video_id,
+                                    img: video.thumbnail,
+                                    title: video.title,
+                                    views: numeral(video.views).format("0.0a"),
+                                    channel: {
+                                        title: video.username,
+                                        url: "/profile/" + video.username
+                                    },
+                                    date: moment(new Date()).fromNow()
+                                };
+                            })
+                        }} />
+                    );
+                    this.setState({rows});
+                }
             }
         );
     }
@@ -46,6 +73,12 @@ class SettingsPage extends React.Component {
                                         {this.state.subscribers + (this.state.subscribers > 1 ? " subscribers" : " subscriber")}
                                     </p>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <h4>Your Videos</h4>
+                            <div className="row">
+
                             </div>
                         </div>
                     </div>
