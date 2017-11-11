@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 class TrendingVideo extends React.Component {
     render() {
         return (
-            <div style={{width: "calc(100vw - 350px);", marginTop: "10px", display: "flex"}}>
+            <div style={{width: "calc(100vw - 350px)", marginTop: "10px", display: "flex"}}>
                 <div>
                     <img style={{width: 246, height: 138}} src={this.props.thumbnail} />
                 </div>

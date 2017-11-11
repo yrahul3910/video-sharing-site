@@ -3,10 +3,12 @@ import React from "react";
 import {Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
 import chunk from "lodash.chunk";
+import numeral from "numeral";
+import moment from "moment";
 
 import Navbar from "./Navbar.jsx";
 import Sidebar from "./Sidebar.jsx";
-import ThumbnailRow from "./ThumbnailRow.jsx";
+import TrendingVideo from "./TrendingVideo.jsx";
 
 class SettingsPage extends React.Component {
     constructor(props) {
@@ -20,27 +22,25 @@ class SettingsPage extends React.Component {
                 if (!data.success)
                     Materialize.toast(data.message);
                 else {
-                    this.setState({subscribers: data.data.subscribers});
+                    this.setState({subscribers: data.data.user[0].subscribers});
 
-                    let chunks = chunk(data.videos, 4);
-                    let rows = chunks.map((val, i) =>
-                        <ThumbnailRow key={i} data={{
-                            title: "",
-                            thumbnails: val.map((video) => {
-                                return {
-                                    url: "/watch/" + video.video_id,
-                                    img: video.thumbnail,
-                                    title: video.title,
-                                    views: numeral(video.views).format("0.0a"),
-                                    channel: {
-                                        title: video.username,
-                                        url: "/profile/" + video.username
-                                    },
-                                    date: moment(new Date()).fromNow()
-                                };
-                            })
-                        }} />
+                    let {videos} = data.data;
+                    let rows = videos.map((vid, i) =>
+                        <div key={i} style={{display: "flex"}}>
+                            <div style={{width: "60%"}}>
+                                <TrendingVideo thumbnail={vid.thumbnail}
+                                    title={vid.title}
+                                    user={vid.username}
+                                    views={numeral(vid.views).format("0.0a")}
+                                    age={parseInt(moment(vid.upload_date).fromNow().split(" ")[0])}
+                                    desc={vid.description} />
+                            </div>
+                            <div style={{width: "30%"}}>
+                                <a style={{width: "50%"}} className="btn waves-effect waves-light red">Delete</a>
+                            </div>
+                        </div>
                     );
+
                     this.setState({rows});
                 }
             }
@@ -78,7 +78,7 @@ class SettingsPage extends React.Component {
                         <div className="row">
                             <h4>Your Videos</h4>
                             <div className="row">
-
+                                {this.state.rows}
                             </div>
                         </div>
                     </div>

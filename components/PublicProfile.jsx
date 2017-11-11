@@ -25,7 +25,6 @@ class PublicProfile extends React.Component {
         $.get("http://localhost:8000/api/user/" + this.props.match.params.user, (data) => {
             if (data.success) {
                 let chunks = chunk(data.data.videos, 4);
-                console.log(chunks);
                 let rows = chunks.map((val, i) =>
                     <ThumbnailRow key={i} data={{
                         title: "",
