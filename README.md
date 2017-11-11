@@ -105,3 +105,8 @@ Currently, the views and age are statically shown as 0, but it should get this d
 > Handle this click event  
 
 Handle the click event for the Subscribe button. If the user has already subscribed, it should stay in a disabled state.
+
+* `SettingsPage.jsx:39`;
+> Implement this click handler  
+
+Handle the click event for the delete button.

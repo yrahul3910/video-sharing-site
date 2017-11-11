@@ -36,6 +36,7 @@ class SettingsPage extends React.Component {
                                     desc={vid.description} />
                             </div>
                             <div style={{width: "30%"}}>
+                                {/* TODO: Implement this click handler */}
                                 <a style={{width: "50%"}} className="btn waves-effect waves-light red">Delete</a>
                             </div>
                         </div>
