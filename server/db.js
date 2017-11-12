@@ -286,4 +286,25 @@ exports.deleteVideo = (username, id, func) => {
     });
 };
 
+exports.deleteUser = (username, func) => {
+    let sql = "DELETE FROM videos WHERE username = ?";
+    connection.query(sql, [username], (err) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        func();
+    });
+    sql = "DELETE FROM users WHERE username = ?";
+    connection.query(sql, [username], (err) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        func();
+    });
+};
+
 module.exports = exports;
