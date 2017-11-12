@@ -283,35 +283,6 @@ exports.deleteVideo = (username, id, func) => {
                 func();
             });
         }
-exports.views = (video_id, func) => {
-    let sql = "SELECT views \
-         FROM videos \
-        WHERE video_id = ?";
-    connection.query(sql, [video_id], (err, results) => {
-        if (err)
-            func(err);
-        if (!results.length) {
-            // Video doesn't exist
-            func(new Error("Video does not exist."));
-        }
-
-        func(null, results);
-    });
-};
-
-exports.age = (video_id, func) => {
-    let sql = "SELECT DATEDIFF(?, upload_date) AS age \
-         FROM videos \
-        WHERE video_id = ?";
-    connection.query(sql, [new Date().toISOString(), video_id], (err, results) => {
-        if (err)
-            func(err);
-        if (!results.length) {
-            // Video doesn't exist
-            func(new Error("Video does not exist."));
-        }
-
-        func(null, results);
     });
 };
 
