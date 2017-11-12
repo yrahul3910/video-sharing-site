@@ -68,6 +68,7 @@ The React components used are below:
 * `PublicProfile`: The publicly visible profile page for a user.
 * `SearchResults`: The search results page.
 * `SettingsPage`: The personal profile page of a user where he can change his DP/background, delete videos.
+* `ConfirmDelete`: The page where the user confirms deletion of his account
 
 # Style Guides
 
@@ -105,8 +106,3 @@ Currently, the views and age are statically shown as 0, but it should get this d
 > Handle this click event  
 
 Handle the click event for the Subscribe button. If the user has already subscribed, it should stay in a disabled state.
-
-* `SettingsPage.jsx:39`;
-> Implement this click handler  
-
-Handle the click event for the delete button.

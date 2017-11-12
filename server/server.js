@@ -317,6 +317,40 @@ app.post("/api/video/details", (req, res) => {
     });
 });
 
+app.delete("/api/video/:id", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    jwt.verify(req.body.token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err)
+            res.end({success: false});
+        else {
+            dbUtils.init();
+            dbUtils.deleteVideo(decoded.username, req.params.id, (err) => {
+                if (err)
+                    res.end(JSON.stringify({
+                        success: false,
+                        message: "Couldn't delete the video."
+                    }));
+                else {
+                    // Now delete the video from search index
+                    searchUtils.deleteDoc("qtube", "video", parseInt(req.params.id), (e) => {
+                        if (e) throw e;
+                        res.end(JSON.stringify({success: true}));
+                    });
+                }
+            });
+        }
+    });
+});
+
+app.delete("/api/user", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    let {token, pwd} = req.body;
+    /* Decode the user from the token, and verify the password. If it's right,
+        delete the user account, as well as all the user's content. */
+});
+
 app.listen(port, (err) => {
     if (err) throw err;
     open("http://localhost:" + port);

@@ -34,8 +34,10 @@ exports.terminate = () => {
  */
 exports.authenticate = (username, pwd, func) => {
     connection.query("SELECT * FROM users WHERE BINARY username = ?", [username], (err, results) => {
-        if (err)
+        if (err) {
             func(err);
+            return;
+        }
 
         if (!results.length) {
             func(null, {
@@ -72,8 +74,10 @@ exports.authenticate = (username, pwd, func) => {
  */
 exports.register = (username, pwd, name, func) => {
     connection.query("SELECT * FROM users WHERE BINARY username = ?", [username], (err, results) => {
-        if (err)
+        if (err) {
             func(err);
+            return;
+        }
 
         // First check if user exists already.
         if (results.length) {
@@ -87,8 +91,10 @@ exports.register = (username, pwd, name, func) => {
 
     // Gotta hash the password first!
     bcrypt.hash(pwd, 10, (e_, hash) => {
-        if (e_)
+        if (e_) {
             func(e_);
+            return;
+        }
 
         connection.query("INSERT INTO users (name, username, pwd) VALUES (?, ?, ?)", [name, username, hash], (err, results) => {
             if (err) {
@@ -97,14 +103,17 @@ exports.register = (username, pwd, name, func) => {
                     success: false,
                     message: "Unknown error occurred, try again."
                 });
+                return;
             }
 
             connection.query("INSERT INTO subscriptions VALUES (?, ?)", [results.insertId, results.insertId], (e) => {
-                if (e)
+                if (e) {
                     func(null, {
                         success: false,
                         message: "Unknown error occurred, try again."
                     });
+                    return;
+                }
                 // No error, inserted successfully, so return true.
                 func(null, {
                     success: true,
@@ -146,8 +155,10 @@ exports.upload = (username, title, path, thumbnail, date, desc, func) => {
  */
 exports.feedback = (username, feedback, func) => {
     connection.query("SELECT * FROM feedback WHERE BINARY username = ?", [username], (err, results) => {
-        if (err)
+        if (err) {
             func(err);
+            return;
+        }
 
         if (results.length) {
             func(null, {
@@ -158,8 +169,10 @@ exports.feedback = (username, feedback, func) => {
         }
 
         connection.query("INSERT INTO feedback VALUES (?, ?)", [username, feedback], (err) => {
-            if (err)
+            if (err) {
                 func(err);
+                return;
+            }
 
             func(null, {
                 success: true,
@@ -180,8 +193,10 @@ exports.trending = (func) => {
         ORDER BY views DESC";
     let date = new Date().toISOString();
     connection.query(sql, [date, date], (err, results) => {
-        if (err)
+        if (err) {
             func(err);
+            return;
+        }
         func(null, results);
     });
 };
@@ -196,8 +211,10 @@ exports.details = (id, func) => {
          FROM videos \
         WHERE video_id = ?";
     connection.query(sql, [new Date().toISOString(), id], (err, results) => {
-        if (err)
+        if (err) {
             func(err);
+            return;
+        }
         func(null, results);
     });
 };
@@ -212,8 +229,10 @@ exports.userDetails = (username, func) => {
          FROM users, subscriptions \
         WHERE BINARY users.username = ?";
     connection.query(sql, [username], (err, results) => {
-        if (err)
+        if (err) {
             func(err);
+            return;
+        }
 
         if (!results.length)
             func(new Error("Username does not exist."));
@@ -230,6 +249,40 @@ exports.userDetails = (username, func) => {
                 videos: r
             });
         });
+    });
+};
+
+/**
+ * Delete a video with the given video_id. Make sure the video was uploaded by
+ * the user with the given username.
+ * @param {string} username - The user's username
+ * @param {number} id - The video_id to delete
+ * @param {Function} func - The callback function, taking only one argument.
+ */
+exports.deleteVideo = (username, id, func) => {
+    // First verify if the username is right
+    let sql = "SELECT BINARY username = ? AS valid \
+                 FROM videos \
+                WHERE video_id = ?";
+    connection.query(sql, [username, id], (err, results) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        if (results[0].valid != "1")
+            func(new Error("Authorization failed."));
+        else {
+            sql = "DELETE FROM videos WHERE video_id = ?";
+            connection.query(sql, [id], (err) => {
+                if (err) {
+                    func(err);
+                    return;
+                }
+
+                func();
+            });
+        }
     });
 };
 

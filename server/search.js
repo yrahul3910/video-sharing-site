@@ -48,7 +48,7 @@ exports.indices = () => {
 };
 
 // Delete document from index
-exports.deleteDoc = (index, type, id) => {
+exports.deleteDoc = (index, type, id, func) => {
     esClient.delete({
         index,
         type,
@@ -56,6 +56,7 @@ exports.deleteDoc = (index, type, id) => {
     }, (error) => {
         if (error)
             throw error;
+        func();
     });
 };
 
