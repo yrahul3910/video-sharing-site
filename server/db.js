@@ -293,6 +293,11 @@ exports.deleteVideo = (username, id, func) => {
     });
 };
 
+/**
+ * Deletes a user and all relevant information.
+ * @param {string} username - The username whose details must be deleted
+ * @param {Function} func - The callback function
+ */
 exports.deleteUser = (username, func) => {
     let sql = "SELECT video_id \
                  FROM videos \
@@ -303,8 +308,9 @@ exports.deleteUser = (username, func) => {
             return;
         }
 
-        results.forEach(function(id) {
-            search.deleteDoc("qtube", "video", id, (err) => {
+        // First delete all search indices
+        results.forEach((result) => {
+            search.deleteDoc("qtube", "video", result.video_id, (err) => {
                 if(err) {
                     func(err);
                     return;
@@ -312,6 +318,11 @@ exports.deleteUser = (username, func) => {
             });
         });
 
+        /* Not sure if following part is required anymore, since
+            DB now uses username as a foreign key attribute. This
+            must be confirmed before removing the code. */
+
+        /*
         let sql = "DELETE FROM videos WHERE username = ?";
         connection.query(sql, [username], (err) => {
             if (err) {
@@ -320,41 +331,27 @@ exports.deleteUser = (username, func) => {
             }
 
             func();
-        });
+        }); */
 
-        func();
-    });
-
-    sql = "SELECT user_id \
-             FROM users \
-             WHERE username = ?";
-    connection.query(sql, [username], (err,results) => {
-        if (err) {
-            func(err);
-            return;
-        }
-
-        let id = results[0];
-        search.deleteDoc("qtube", "user", id, (err) => {
+        // Delete search index for the user
+        search.deleteDoc("qtube", "user", username, (err) => {
             if(err) {
                 func(err);
                 return;
             }
+
+            // Delete the user from the database
+            sql = "DELETE FROM users WHERE username = ?";
+            connection.query(sql, [username], (err) => {
+                if (err) {
+                    func(err);
+                    return;
+                }
+
+                func();
+            });
         });
-
-        sql = "DELETE FROM users WHERE username = ?";
-        connection.query(sql, [username], (err) => {
-            if (err) {
-                func(err);
-                return;
-            }
-
-            func();
-        });
-
-        func();
     });
-
 };
 
 module.exports = exports;
