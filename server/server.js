@@ -229,8 +229,7 @@ app.post("/api/register", (req, res) => {
             // Registration successful, add to index and then end response.
             searchUtils.index("qtube", "user", {
                 name,
-                username,
-                user_id: regResult.id
+                username
             });
 
             res.end(JSON.stringify({

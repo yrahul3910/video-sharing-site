@@ -106,7 +106,7 @@ exports.register = (username, pwd, name, func) => {
                 return;
             }
 
-            connection.query("INSERT INTO subscriptions VALUES (?, ?)", [results.insertId, results.insertId], (e) => {
+            connection.query("INSERT INTO subscriptions VALUES (?, ?)", [username, username], (e) => {
                 if (e) {
                     func(null, {
                         success: false,
@@ -118,7 +118,7 @@ exports.register = (username, pwd, name, func) => {
                 func(null, {
                     success: true,
                     message: "Successfully registered!",
-                    id: results.insertId
+                    username
                 });
             });
         });

@@ -10,7 +10,7 @@ exports.index = (index, type, data) => {
         esClient.index({
             index,
             type,
-            id: data.user_id,
+            id: data.username,
             body: {
                 name: data.name,
                 username: data.username
