@@ -2,6 +2,7 @@
 import mysql from "mysql";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import search from "search.js";
 
 let connection;
 
@@ -279,6 +280,12 @@ exports.deleteVideo = (username, id, func) => {
                     func(err);
                     return;
                 }
+                search.deleteDoc("qtube", "video", id, (err) => {
+                    if(err) {
+                        func(err);
+                        return;
+                    }
+                });
 
                 func();
             });
@@ -287,24 +294,67 @@ exports.deleteVideo = (username, id, func) => {
 };
 
 exports.deleteUser = (username, func) => {
-    let sql = "DELETE FROM videos WHERE username = ?";
-    connection.query(sql, [username], (err) => {
+    let sql = "SELECT video_id \
+                 FROM videos \
+                 WHERE username = ?";
+    connection.query(sql, [username], (err, results) => {
         if (err) {
             func(err);
             return;
         }
 
+        results.forEach(function(id) {
+            search.deleteDoc("qtube", "video", id, (err) => {
+                if(err) {
+                    func(err);
+                    return;
+                }
+            });
+        });
+
+        let sql = "DELETE FROM videos WHERE username = ?";
+        connection.query(sql, [username], (err) => {
+            if (err) {
+                func(err);
+                return;
+            }
+
+            func();
+        });
+
         func();
     });
-    sql = "DELETE FROM users WHERE username = ?";
-    connection.query(sql, [username], (err) => {
+
+    sql = "SELECT user_id \
+             FROM users \
+             WHERE username = ?";
+    connection.query(sql, [username], (err,results) => {
         if (err) {
             func(err);
             return;
         }
 
+        let id = results[0];
+        search.deleteDoc("qtube", "user", id, (err) => {
+            if(err) {
+                func(err);
+                return;
+            }
+        });
+
+        sql = "DELETE FROM users WHERE username = ?";
+        connection.query(sql, [username], (err) => {
+            if (err) {
+                func(err);
+                return;
+            }
+
+            func();
+        });
+
         func();
     });
+
 };
 
 module.exports = exports;
