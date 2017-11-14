@@ -348,6 +348,41 @@ app.delete("/api/user", (req, res) => {
     let {token, pwd} = req.body;
     /* Decode the user from the token, and verify the password. If it's right,
         delete the user account, as well as all the user's content. */
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err) throw err;
+
+        let {username} = decoded;
+        dbUtils.authenticate(username, pwd, (e, authResult) => {
+            if (e) throw e;
+            if (authResult.success) {
+                dbUtils.init();
+                dbUtils.deleteUser(username, (e_) => {
+                    if (e_) throw e_;
+
+                    res.end(JSON.stringify({success: true}));
+                });
+            } else
+                res.end(JSON.stringify({
+                    success: false,
+                    message: "Incorrect password"
+                }));
+        });
+    });
+});
+
+app.post("/api/video", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    let {id} = req.body;
+    dbUtils.init();
+    dbUtils.videoDetails(id, (err, results) => {
+        if (err)
+            throw err;
+        res.end(JSON.stringify({
+            success: true,
+            details: results
+        }));
+    });
 });
 
 app.listen(port, (err) => {

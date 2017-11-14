@@ -28,7 +28,7 @@ class ConfirmDelete extends React.Component {
                     Materialize.toast("Your account has been deleted.", 2500, "rounded");
                     this.setState({confirmed: true});
                 } else
-                    Materialize.toast("We couldn't delete your account. Please check your password.", 4000, "rounded");
+                    Materialize.toast(data.message, 4000, "rounded");
             }
         });
     }
