@@ -74,8 +74,8 @@ class RoutesSwitch extends React.Component {
                     <ConfirmDelete user={this.state.user}
                         toggleLogin={this.toggleLogin} />
                 } />
-                <Route exact path="/test" render={() =>
-                    <WatchPage />
+                <Route exact path="/watch/:id" render={(props) =>
+                    <WatchPage {...props} />
                 } />
             </Switch>
         );
