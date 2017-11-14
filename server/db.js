@@ -2,7 +2,8 @@
 import mysql from "mysql";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-import search from "search.js";
+import search from "./search.js";
+import { Object } from "core-js/library/web/timers";
 
 let connection;
 
@@ -97,7 +98,7 @@ exports.register = (username, pwd, name, func) => {
             return;
         }
 
-        connection.query("INSERT INTO users (name, username, pwd) VALUES (?, ?, ?)", [name, username, hash], (err, results) => {
+        connection.query("INSERT INTO users (name, username, pwd) VALUES (?, ?, ?)", [name, username, hash], (err) => {
             if (err) {
                 // Can't simply throw an error here, return an error message instead.
                 func(null, {
@@ -138,9 +139,9 @@ exports.register = (username, pwd, name, func) => {
  * @param {Function} func - The callback function
  */
 exports.upload = (username, title, path, thumbnail, date, desc, func) => {
-    connection.query("INSERT INTO videos (username, title, views, video_path,\
-            thumbnail, upload_date, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        [username, title, 0, path, thumbnail, date, desc], (err, results) => {
+    connection.query("INSERT INTO videos (username, title, video_path,\
+            thumbnail, upload_date, description) VALUES (?, ?, ?, ?, ?, ?)",
+        [username, title, path, thumbnail, date, desc], (err, results) => {
             if (err) throw err;
 
             func(null, results.insertId); // func takes no arguments, a call indicates success.
@@ -208,10 +209,11 @@ exports.trending = (func) => {
  * @param {Function} func - The callback function
  */
 exports.details = (id, func) => {
-    let sql = "SELECT views, DATEDIFF(?, upload_date) AS age \
-         FROM videos \
-        WHERE video_id = ?";
-    connection.query(sql, [new Date().toISOString(), id], (err, results) => {
+    let sql = "SELECT COUNT(video_views.username) AS views, DATEDIFF(?, upload_date) AS age \
+         FROM videos, video_views \
+        WHERE videos.video_id = ? \
+          AND video_views.video_id = ?";
+    connection.query(sql, [new Date().toISOString(), id, id], (err, results) => {
         if (err) {
             func(err);
             return;
@@ -287,7 +289,14 @@ exports.deleteVideo = (username, id, func) => {
                     }
                 });
 
-                func();
+                sql = "DELETE FROM video_views WHERE video_id = ?";
+                connection.query(sql, [id], (e) => {
+                    if (e) {
+                        func(e);
+                        return;
+                    }
+                    func();
+                });
             });
         }
     });
@@ -318,21 +327,6 @@ exports.deleteUser = (username, func) => {
             });
         });
 
-        /* Not sure if following part is required anymore, since
-            DB now uses username as a foreign key attribute. This
-            must be confirmed before removing the code. */
-
-        /*
-        let sql = "DELETE FROM videos WHERE username = ?";
-        connection.query(sql, [username], (err) => {
-            if (err) {
-                func(err);
-                return;
-            }
-
-            func();
-        }); */
-
         // Delete search index for the user
         search.deleteDoc("qtube", "user", username, (err) => {
             if(err) {
@@ -349,6 +343,46 @@ exports.deleteUser = (username, func) => {
                 }
 
                 func();
+            });
+        });
+    });
+};
+
+/**
+ * Gets all video details
+ * @param {number} id - The video_id
+ * @param {Function} func - The callback function
+ */
+exports.videoDetails = (id, func) => {
+    let sql = "SELECT v.*, u.name AS name, u.dp AS dp, COUNT(vv.username) AS views \
+                 FROM videos v, users u, video_views vv \
+                WHERE v.username = u.username \
+                  AND vv.username = u.username \
+                  AND v.video_id = ?";
+    connection.query(sql, [id], (err, results) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        sql = "SELECT COUNT(*) AS ? \
+                 FROM video_ratings \
+                WHERE rating = ?";
+        connection.query(sql, ["upvotes", 1], (e, r) => {
+            if (e) {
+                func(e);
+                return;
+            }
+
+            connection.query(sql, ["downvotes", -1], (e_, r_) => {
+                if (e_) {
+                    func(e_);
+                    return;
+                }
+
+                // Merge the properties of all the results (ES6)
+                let finalResults = Object.assign({}, results[0], r[0], r_[0]);
+                func(null, finalResults);
             });
         });
     });

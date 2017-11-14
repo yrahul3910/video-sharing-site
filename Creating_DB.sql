@@ -19,9 +19,6 @@ CREATE TABLE videos (
     username    VARCHAR(30)  NOT NULL,
                 FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
     title       VARCHAR(20)  NOT NULL,
-    views       INT          NOT NULL,
-                CONSTRAINT views_positive
-                CHECK(views > 0),
     video_path  VARCHAR(100) NOT NULL,
     thumbnail   VARCHAR(200) NOT NULL
 );
@@ -59,11 +56,11 @@ CREATE TABLE replies (
 
 /* Users subscribe to other users */
 CREATE TABLE subscriptions (
-    PRIMARY KEY (user_id, subscriber_id),
+    PRIMARY KEY (username, subscriber),
     username      VARCHAR(30) NOT NULL,
                   FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
-    subscriber_id INT NOT NULL,
-                  FOREIGN KEY(subscriber_id) REFERENCES users(user_id) ON DELETE CASCADE
+    subscriber    VARCHAR(30) NOT NULL,
+                  FOREIGN KEY(subscriber) REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE playlists (
@@ -85,10 +82,18 @@ CREATE TABLE playlist_videos (
 );
 
 CREATE TABLE feedback (
-    PRIMARY KEY (user_id),
+    PRIMARY KEY (username),
     username VARCHAR(30),
              FOREIGN KEY(username) REFERENCES users(username),
     comment  VARCHAR(300) NOT NULL
+);
+
+CREATE TABLE video_views (
+    PRIMARY KEY (username, video_id),
+    username VARCHAR(30),
+             FOREIGN KEY(username) REFERENCES users(username),
+    video_id INT,
+             FOREIGN KEY(video_id) REFERENCES videos(video_id)
 );
 
 DELIMITER //
