@@ -385,6 +385,19 @@ app.post("/api/video", (req, res) => {
     });
 });
 
+app.post("/api/comments", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    let {id} = req.body;
+    dbUtils.init();
+    dbUtils.comments(id, (err, result) => {
+        if (err)
+            res.end(JSON.stringify({success: false}));
+        else
+            res.end(JSON.stringify({success: true, data: result}));
+    });
+});
+
 app.listen(port, (err) => {
     if (err) throw err;
     open("http://localhost:" + port);

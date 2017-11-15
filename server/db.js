@@ -388,4 +388,39 @@ exports.videoDetails = (id, func) => {
     });
 };
 
+/**
+ * Gets the details of all comments and videos on a video.
+ * @param {number} video_id - The video_id whose comment details are required.
+ * @param {Function} func - The callback function.
+ */
+exports.comments = (video_id, func) => {
+    let sql = "SELECT u.name, u.username, u.dp, c.comment_date, c.comment \
+                 FROM users AS u \
+                      NATURAL JOIN comments AS c \
+                WHERE video_id = ?";
+    connection.query(sql, [video_id], (err, results) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        sql = "SELECT u.name, u.username, u.dp, r.reply_date, r.reply_text \
+                 FROM users AS u \
+                      NATURAL JOIN comments AS c \
+                      \
+                      JOIN replies AS r \
+                      ON r.comment_id = c.comment_id \
+                WHERE c.video_id = ?";
+        connection.query(sql, [video_id], (e, r) => {
+            if (e) {
+                func(e);
+                return;
+            }
+
+            let finalResult = {comments: results, replies: r};
+            func(null, finalResult);
+        });
+    });
+};
+
 module.exports = exports;

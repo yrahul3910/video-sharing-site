@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 import React from "react";
 import PropTypes from "prop-types";
-import {Redirect} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 import numeral from "numeral";
-import moment from "moment";
 
 import Navbar from "./Navbar.jsx";
+import Comments from "./Comments.jsx";
 
 class WatchPage extends React.Component {
     constructor(props) {
@@ -51,6 +51,19 @@ class WatchPage extends React.Component {
                                 </div>
                             </div>
                             <hr style={{width: "100%"}} />
+                            <div style={{display: "flex"}}>
+                                <img src={this.state.video.dp ? this.state.video.dp : "http://localhost:8000/account_circle.png"}
+                                    className="round" style={{width: "50px", height: "50px", marginRight: "15px"}} />
+                                <div style={{display: "flex", flexDirection: "column"}}>
+                                    <Link style={{color: "black"}} to={"/profile/" + this.state.video.username}>
+                                        <b>{this.state.video.name}</b>
+                                    </Link>
+                                    <p style={{color: "#212121", marginTop: "0"}}>Published on {new Date(this.state.video.upload_date).toDateString()}</p>
+                                    <p>{this.state.video.description}</p>
+                                </div>
+                            </div>
+                            <hr style={{width: "100%"}} />
+                            <Comments video_id={this.props.match.params.id} />
                         </div>
                         <div style={{display: "flex", flexDirection: "column", width: "30%", marginLeft: "3.75%"}}>
                         </div>

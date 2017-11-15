@@ -36,12 +36,13 @@ CREATE TABLE video_ratings (
 
 CREATE TABLE comments (
     PRIMARY KEY (comment_id),
-    comment_id INT AUTO_INCREMENT,
-    username   VARCHAR(30)  NOT NULL,
-               FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
-    video_id   INT          NOT NULL,
-               FOREIGN KEY(video_id) REFERENCES videos(video_id) ON DELETE CASCADE,
-    comment    VARCHAR(150) NOT NULL
+    comment_id   INT AUTO_INCREMENT,
+    username     VARCHAR(30)  NOT NULL,
+                 FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
+    video_id     INT          NOT NULL,
+                 FOREIGN KEY(video_id) REFERENCES videos(video_id) ON DELETE CASCADE,
+    comment      VARCHAR(150) NOT NULL,
+    comment_date DATE NOT NULL
 );
 
 CREATE TABLE replies (
@@ -51,7 +52,8 @@ CREATE TABLE replies (
                FOREIGN KEY(comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
     username   VARCHAR(30)  NOT NULL,
                FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
-    reply_text VARCHAR(150) NOT NULL
+    reply_text VARCHAR(150) NOT NULL,
+    reply_date DATE NOT NULL
 );
 
 /* Users subscribe to other users */
