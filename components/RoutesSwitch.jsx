@@ -75,7 +75,7 @@ class RoutesSwitch extends React.Component {
                         toggleLogin={this.toggleLogin} />
                 } />
                 <Route exact path="/watch/:id" render={(props) =>
-                    <WatchPage {...props} />
+                    <WatchPage user={this.state.user} {...props} />
                 } />
             </Switch>
         );

@@ -11,6 +11,7 @@ class WatchPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {video: {}, error: false};
+        this.submitComment = this.submitComment.bind(this);
     }
 
     componentDidMount() {
@@ -25,10 +26,30 @@ class WatchPage extends React.Component {
         });
     }
 
+    submitComment() {
+
+    }
+
     render() {
         if (this.state.error)
             return <Redirect to="/" />;
 
+        let commentBox = this.props.user ? (
+            <div>
+                <div style={{display: "flex"}}>
+                    <img src={this.props.user.dp ? this.props.user.dp : "http://localhost:8000/account_circle.png"}
+                        className="round" style={{width: "50px", height: "50px", marginRight: "15px"}} />
+                    <div className="input-field" style={{width: "100%"}}>
+                        <textarea id="comment" className="materialize-textarea"></textarea>
+                        <label htmlFor="comment">Add a public comment...</label>
+                    </div>
+                </div>
+                <a onClick={this.submitComment} className="btn waves-effect waves-light green"
+                    style={{marginBottom: "20px", marginLeft: "50px"}}>
+                    COMMENT
+                </a>
+            </div>
+        ) : <div></div>;
         return (
             <div>
                 <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />
@@ -36,7 +57,7 @@ class WatchPage extends React.Component {
                     <div style={{display: "flex"}}>
                         <div style={{display: "flex", flexDirection: "column", width: "62.5%", marginLeft: "3.75%"}}>
                             <video controls="true" preload="metadata" poster={this.state.video.thumbnail}
-                                src={this.state.video.video_path} style={{height: "calc(62.5% - 64px)", outline: "none"}}>
+                                className="responsive-video" src={this.state.video.video_path} style={{outline: "none"}}>
                             </video>
                             <div style={{display: "flex", justifyContent: "space-between", alignItems: "baseline"}}>
                                 <div style={{width: "25%"}}>
@@ -50,7 +71,7 @@ class WatchPage extends React.Component {
                                     <span style={{verticalAlign: "middle"}}>{" " + numeral(this.state.video.downvotes).format("0a")}</span>
                                 </div>
                             </div>
-                            <hr style={{width: "100%"}} />
+                            <hr style={{width: "100%", color: "#212121"}} />
                             <div style={{display: "flex"}}>
                                 <img src={this.state.video.dp ? this.state.video.dp : "http://localhost:8000/account_circle.png"}
                                     className="round" style={{width: "50px", height: "50px", marginRight: "15px"}} />
@@ -62,7 +83,9 @@ class WatchPage extends React.Component {
                                     <p>{this.state.video.description}</p>
                                 </div>
                             </div>
-                            <hr style={{width: "100%"}} />
+                            <hr style={{width: "100%", color: "#212121"}} />
+                            <p style={{fontSize: "18px"}}>Comments</p>
+                            {commentBox}
                             <Comments video_id={this.props.match.params.id} />
                         </div>
                         <div style={{display: "flex", flexDirection: "column", width: "30%", marginLeft: "3.75%"}}>
