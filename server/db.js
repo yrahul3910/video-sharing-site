@@ -191,8 +191,7 @@ exports.feedback = (username, feedback, func) => {
 exports.trending = (func) => {
     let sql = "SELECT *, DATEDIFF(?, upload_date) AS age \
          FROM videos \
-        WHERE DATEDIFF(?, upload_date) < 6 \
-        ORDER BY views DESC";
+        WHERE DATEDIFF(?, upload_date) < 6";
     let date = new Date().toISOString();
     connection.query(sql, [date, date], (err, results) => {
         if (err) {
@@ -228,9 +227,9 @@ exports.details = (id, func) => {
  * @param {Function} func - The callback function
  */
 exports.userDetails = (username, func) => {
-    let sql = "SELECT name, username, dp, background, COUNT(subscriber_id) AS subscribers \
-         FROM users, subscriptions \
-        WHERE BINARY users.username = ?";
+    let sql = "SELECT u.name, u.username, u.dp, u.background, COUNT(subscriber) AS subscribers \
+         FROM users AS u, subscriptions AS s \
+        WHERE BINARY u.username = ?";
     connection.query(sql, [username], (err, results) => {
         if (err) {
             func(err);

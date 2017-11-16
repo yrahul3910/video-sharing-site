@@ -98,6 +98,7 @@ class WatchPage extends React.Component {
                             <Comments video_id={this.props.match.params.id} />
                         </div>
                         <div style={{display: "flex", flexDirection: "column", width: "30%", marginLeft: "3.75%"}}>
+                            <p style={{fontSize: "18px"}}>Recommended for you</p>
                         </div>
                     </div>
                 </div>

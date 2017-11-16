@@ -31,7 +31,8 @@ class SearchResults extends React.Component {
                 user={result._source.username}
                 views={"0"} // TODO: Figure out a way to get this
                 age={0}
-                desc={result._source.description} />;
+                desc={result._source.description}
+                video_id={result._id} />;
         }) : <div></div>;
 
         return (

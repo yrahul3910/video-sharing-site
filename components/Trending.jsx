@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import React from "react";
 import PropTypes from "prop-types";
-import numeral from "numeral";
 
 import Navbar from "./Navbar.jsx";
 import TrendingVideo from "./TrendingVideo.jsx";
@@ -26,17 +25,16 @@ class Trending extends React.Component {
             content = <h5>Loading...</h5>;
         else {
             content = this.state.videos.map((element, index) => {
-                <TrendingVideo key={index}
+                return <TrendingVideo key={index}
                     thumbnail={element.thumbnail}
                     title={element.title}
                     user={element.username}
-                    views={numeral(element.views).format("0.0a")}
-                    age={element.age} // This is also present in the SELECT query
-                    desc={element.description} />;
+                    views={"0"}
+                    age={element.age}
+                    desc={element.description}
+                    video_id={element.video_id} />;
             });
         }
-        // TODO: This should also render a Link component to link to the
-        // actual video.
         return (
             <div>
                 <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />

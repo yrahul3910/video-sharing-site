@@ -94,11 +94,6 @@ All videos are uploaded to the `videos` folder. The database simply stores the p
 As of now, the directory structure used is `videos/<user_id>/<video_title>/<files>`, where the files include the video file and the thumbnail image.  
 
 # TODOs
-* `Trending.jsx: 36`: 
-> This should also render a Link component to link to the actual video.  
-
-Clicking on the title should link to the video, and similarly, clicking the name of the uploader should link to the public profile page.
-
 * `SearchResults.jsx:31`:
 > Figure out a way to get this  
 

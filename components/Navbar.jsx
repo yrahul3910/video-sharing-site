@@ -28,7 +28,8 @@ class Navbar extends React.Component {
             <div style={{zIndex: 1000, position: "fixed", width: "100%", height: "64px"}} className="green lighten-1 row">
                 <div className="col s3">
                     <Link to="/">
-                        <h5 href="#" style={{top: "5px", position: "relative", color: "white"}}><b>QTube</b></h5>
+                        <p href="#" style={{bottom: "25px", fontSize: "32px", fontWeight: "lighter",
+                            position: "relative", color: "white"}}>OpenVideo</p>
                     </Link>
                 </div>
                 <div className="col s6">

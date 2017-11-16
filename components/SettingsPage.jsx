@@ -70,7 +70,8 @@ class SettingsPage extends React.Component {
                         user={vid.username}
                         views={numeral(vid.views).format("0.0a")}
                         age={parseInt(moment(vid.upload_date).fromNow().split(" ")[0])}
-                        desc={vid.description} />
+                        desc={vid.description}
+                        video_id={vid.video_id} />
                 </div>
                 <div style={{width: "30%"}}>
                     <a id={vid.video_id} onClick={this.deleteVideo} style={{width: "50%"}}
