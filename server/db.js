@@ -394,7 +394,7 @@ exports.videoDetails = (id, func) => {
  * @param {Function} func - The callback function.
  */
 exports.comments = (video_id, func) => {
-    let sql = "SELECT u.name, u.username, u.dp, c.comment_date, c.comment \
+    let sql = "SELECT u.name, u.username, u.dp, c.comment_date, c.comment, c.comment_id \
                  FROM users AS u \
                       NATURAL JOIN comments AS c \
                 WHERE video_id = ?";
@@ -404,7 +404,7 @@ exports.comments = (video_id, func) => {
             return;
         }
 
-        sql = "SELECT u.name, u.username, u.dp, r.reply_date, r.reply_text \
+        sql = "SELECT u.name, u.username, u.dp, r.reply_date, r.reply_text, r.comment_id \
                  FROM users AS u \
                       NATURAL JOIN comments AS c \
                       \
@@ -420,6 +420,26 @@ exports.comments = (video_id, func) => {
             let finalResult = {comments: results, replies: r};
             func(null, finalResult);
         });
+    });
+};
+
+/**
+ * Adds a comment on the given video
+ * @param {number} video_id
+ * @param {string} comment
+ * @param {string} username
+ * @param {Function} func
+ */
+exports.addComment = (video_id, comment, username, func) => {
+    let sql = "INSERT INTO comments (username, video_id, comment, comment_date) \
+               VALUES (?, ?, ?, ?";
+    connection.query(sql, [username, video_id, comment, new Date()], (err) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        func();
     });
 };
 

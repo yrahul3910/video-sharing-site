@@ -398,6 +398,21 @@ app.post("/api/comments", (req, res) => {
     });
 });
 
+app.post("/api/comment", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    let {token, comment, video_id} = req.body;
+
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        dbUtils.init();
+        dbUtils.addComment(video_id, comment, decoded.username, (e) => {
+            if (e)
+                res.end(JSON.stringify({success: false}));
+            else
+                res.end(JSON.stringify({success: true}));
+        });
+    });
+});
+
 app.listen(port, (err) => {
     if (err) throw err;
     open("http://localhost:" + port);
