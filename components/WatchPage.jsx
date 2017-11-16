@@ -6,11 +6,12 @@ import numeral from "numeral";
 
 import Navbar from "./Navbar.jsx";
 import Comments from "./Comments.jsx";
+import TrendingVideo from "./TrendingVideo.jsx";
 
 class WatchPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {video: {}, error: false};
+        this.state = {video: {}, error: false, recommendations: []};
         this.submitComment = this.submitComment.bind(this);
     }
 
@@ -22,6 +23,10 @@ class WatchPage extends React.Component {
                 this.setState({error: true});
             } else {
                 this.setState({video: data.details});
+
+                $.get("http://localhost:8000/api/user/" + data.details.username, (result) => {
+                    this.setState({recommendations: result.data.videos});
+                });
             }
         });
     }
@@ -59,6 +64,17 @@ class WatchPage extends React.Component {
                 </a>
             </div>
         ) : <div></div>;
+
+        let recommendDiv = this.state.recommendations ? this.state.recommendations.map((val, i) =>
+            <div style={{overflowX: "hidden"}} className="shrink" key={i}>
+                <TrendingVideo thumbnail={val.thumbnail}
+                    title={val.title}
+                    user={val.username}
+                    views={numeral(val.views).format("0a")}
+                    video_id={val.video_id} />
+            </div>
+        ) : <div></div>;
+
         return (
             <div>
                 <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />
@@ -98,7 +114,8 @@ class WatchPage extends React.Component {
                             <Comments video_id={this.props.match.params.id} />
                         </div>
                         <div style={{display: "flex", flexDirection: "column", width: "30%", marginLeft: "3.75%"}}>
-                            <p style={{fontSize: "18px"}}>Recommended for you</p>
+                            <p style={{fontSize: "18px"}}>Videos by this user</p>
+                            {recommendDiv}
                         </div>
                     </div>
                 </div>

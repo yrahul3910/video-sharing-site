@@ -20,13 +20,15 @@ class TrendingVideo extends React.Component {
                     <div className="video">
                         <Link to={"/profile/" + this.props.user}>
                             <p style={{color: "#6d6d6d"}}>
-                                {this.props.user + " • " + this.props.views + " views • " + this.props.age + " days ago"}
+                                {this.props.user +
+                                    (this.props.views ? (" • " + this.props.views + " views") : "") +
+                                    (this.props.age ? (" • " + this.props.age + " days ago") : "")}
                             </p>
                         </Link>
                     </div>
                     <div className="video">
                         <p className="video-desc" style={{color: "#6d6d6d"}}>
-                            {this.props.desc}
+                            {this.props.desc ? this.props.desc : ""}
                         </p>
                     </div>
                 </div>
