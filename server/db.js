@@ -144,7 +144,13 @@ exports.upload = (username, title, path, thumbnail, date, desc, func) => {
         [username, title, path, thumbnail, date, desc], (err, results) => {
             if (err) throw err;
 
-            func(null, results.insertId); // func takes no arguments, a call indicates success.
+            connection.query("INSERT INTO video_views VALUES (?, 0)", [results.insertId],
+                (err) => {
+                    if (err) throw err;
+
+                    func(null, results.insertId); // func takes no arguments, a call indicates success.
+                }
+            );
         }
     );
 };
@@ -354,10 +360,10 @@ exports.deleteUser = (username, func) => {
  * @param {Function} func - The callback function
  */
 exports.videoDetails = (username, id, func) => {
-    let sql = "SELECT v.*, u.name AS name, u.dp AS dp, COUNT(vv.username) AS views \
+    let sql = "SELECT v.*, u.name AS name, u.dp AS dp, vv.views AS views \
                  FROM videos v, users u, video_views vv \
                 WHERE v.username = u.username \
-                  AND vv.username = u.username \
+                  AND vv.video_id = v.video_id \
                   AND v.video_id = ?";
     connection.query(sql, [id], (err, results) => {
         if (err) {
@@ -577,6 +583,25 @@ exports.addReply = (comment_id, username, reply, func) => {
     let sql = "INSERT INTO replies (comment_id, username, reply_text, reply_date) \
                VALUES (?, ?, ?, ?)";
     connection.query(sql, [comment_id, username, reply, new Date()], (err) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        func();
+    });
+};
+
+/**
+ * Increments the views for a video
+ * @param {number} video_id - The id of the video
+ * @param {Function} func - The callback function. Accepts only one argument
+ */
+exports.incrementViews = (video_id, func) => {
+    let sql = "UPDATE video_views \
+                  SET views = views + 1 \
+                WHERE video_id = ?";
+    connection.query(sql, [video_id], (err) => {
         if (err) {
             func(err);
             return;

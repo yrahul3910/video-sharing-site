@@ -28,6 +28,7 @@ dotenv.config();
 app.use(helmet());
 app.use(compression());
 app.use(bodyParser.json());
+app.use(bodyParser({extended: true}));
 app.use(cors());
 app.use(express.static(__dirname + "/public"));
 app.use("/videos", express.static(__dirname + "/../videos"));
@@ -511,6 +512,18 @@ app.post("/api/reply", (req, res) => {
 
             res.end(JSON.stringify({success: true}));
         });
+    });
+});
+
+app.post("/api/video/add_view", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    let {video_id} = req.body;
+    dbUtils.init();
+    dbUtils.incrementViews(video_id, (err) => {
+        if (err) throw err;
+
+        res.end(JSON.stringify({success: true}));
     });
 });
 

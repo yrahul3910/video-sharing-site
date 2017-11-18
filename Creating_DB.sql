@@ -91,11 +91,10 @@ CREATE TABLE feedback (
 );
 
 CREATE TABLE video_views (
-    PRIMARY KEY (username, video_id),
-    username VARCHAR(30),
-             FOREIGN KEY(username) REFERENCES users(username),
+    PRIMARY KEY (video_id),
     video_id INT,
-             FOREIGN KEY(video_id) REFERENCES videos(video_id)
+             FOREIGN KEY(video_id) REFERENCES videos(video_id),
+    views    INT NOT NULL
 );
 
 DELIMITER //

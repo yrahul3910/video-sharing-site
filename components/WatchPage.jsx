@@ -15,6 +15,7 @@ class WatchPage extends React.Component {
         this.submitComment = this.submitComment.bind(this);
         this.submitUpvote = this.submitUpvote.bind(this);
         this.submitDownvote = this.submitDownvote.bind(this);
+        this.addView = this.addView.bind(this);
     }
 
     componentDidMount() {
@@ -148,6 +149,12 @@ class WatchPage extends React.Component {
         this.setState({video: details});
     }
 
+    addView() {
+        $.post("http://localhost:8000/api/video/add_view", {
+            video_id: this.props.match.params.id
+        }, () => {});
+    }
+
     submitComment() {
         $.post("http://localhost:8000/api/comment", {
             video_id: this.props.match.params.id,
@@ -201,7 +208,8 @@ class WatchPage extends React.Component {
                     <div style={{display: "flex"}}>
                         <div style={{display: "flex", flexDirection: "column", width: "62.5%", marginLeft: "3.75%"}}>
                             <video controls="true" preload="metadata" poster={this.state.video.thumbnail}
-                                className="responsive-video" src={this.state.video.video_path} style={{outline: "none"}}>
+                                className="responsive-video" src={this.state.video.video_path}
+                                style={{outline: "none"}} onEnded={this.addView}>
                             </video>
                             <div style={{display: "flex", justifyContent: "space-between", alignItems: "baseline"}}>
                                 <div style={{width: "25%"}}>
