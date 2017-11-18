@@ -466,6 +466,34 @@ app.post("/api/votes", (req, res) => {
     });
 });
 
+app.post("/api/toggle_subscription", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    let {token, profile} = req.body;
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err) {
+            res.end(JSON.stringify({
+                success: false,
+                message: err.message
+            }));
+            return;
+        }
+
+        let {username} = decoded;
+        dbUtils.init();
+        dbUtils.toggleSubscription(username, profile, (e) => {
+            if (e) {
+                res.end(JSON.stringify({
+                    success: false,
+                    message: err.message
+                }));
+                return;
+            } else
+                res.end(JSON.stringify({success: true}));
+        });
+    });
+});
+
 app.listen(port, (err) => {
     if (err) throw err;
     open("http://localhost:" + port);

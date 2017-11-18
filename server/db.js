@@ -518,4 +518,52 @@ exports.removeVote = (video_id, username, func) => {
     });
 };
 
+/**
+ * Toggles the subscription status of a user to another.
+ * @param {string} username - The user who is subscribing or unsubscribing
+ * @param {string} subscriber - The user to who the first argument user is subscribing
+ * @param {Function} func - The callback function. Only accepts one argument
+ */
+exports.toggleSubscription = (username, subscriber, func) => {
+    let sql = "SELECT COUNT(*) AS count \
+                 FROM subscriptions \
+                WHERE username = ? \
+                  AND subscriber = ?";
+    connection.query(sql, (err, results) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        let count = results[0].count;
+        if (count == 1) {
+            // Remove the subscriptions
+            sql = "DELETE \
+                     FROM subscriptions \
+                    WHERE username = ? \
+                      AND subscriber = ?";
+            connection.query(sql, (e) => {
+                if (e) {
+                    func(e);
+                    return;
+                }
+
+                func();
+            });
+        } else {
+            // Subscribe the user
+            sql = "INSERT INTO subscriptions \
+                   VALUES (?, ?)";
+            connection.query(sql, (e) => {
+                if (e) {
+                    func(e);
+                    return;
+                }
+
+                func();
+            });
+        }
+    });
+};
+
 module.exports = exports;

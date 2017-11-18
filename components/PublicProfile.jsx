@@ -18,7 +18,8 @@ class PublicProfile extends React.Component {
             dp: "",
             name: "Unknown",
             subscribers: 0
-        }, invalid: false};
+        }, invalid: false, subscribed: false};
+        this.toggleSubscription = this.toggleSubscription.bind(this);
     }
 
     componentDidMount() {
@@ -50,6 +51,29 @@ class PublicProfile extends React.Component {
                 Materialize.toast(data.message, 4000, "rounded");
             }
         });
+        $.post("http://localhost:8000/api/check_subscription", {
+            token: localStorage.getItem("token"),
+            profile: this.props.match.params.user
+        }, (data) => {
+            if (data.subscribed)
+                this.setState({subscribed: true});
+        });
+    }
+
+    toggleSubscription() {
+        if (!this.props.user)
+            Materialize.toast("You need to be logged in to subscribe.", 2000, "rounded");
+        else {
+            $.post("http://localhost:8000/api/toggle_subscription", {
+                token: localStorage.getItem("token"),
+                profile: this.props.match.params.user
+            }, (data) => {
+                if (data.success)
+                    Materialize.toast("Subscription successful!", 2000, "rounded");
+                else
+                    Materialize.toast(data.message, 2000, "rounded");
+            });
+        }
     }
 
     render() {
@@ -81,8 +105,10 @@ class PublicProfile extends React.Component {
                                 </div>
                             </div>
                             <div className="col s2">
-                                {/* TODO: Handle this click event */}
-                                <a className="waves-effect waves-light btn red">Subscribe</a>
+                                <a onClick={this.toggleSubscription}
+                                    className="waves-effect waves-light btn red">
+                                    {"Subscribe" + (this.state.subscribed ? "d" : "")}
+                                </a>
                             </div>
                         </div>
                     </div>
