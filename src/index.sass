@@ -85,3 +85,22 @@ body
 
 .link
     cursor: pointer
+
+#search-bar
+    margin-top: 10px
+    background: rgba(0, 0, 0, 0.4) !important
+    border-radius: 4px !important
+    transition: background 100ms ease-in
+    border: 1px solid rgba(0, 0, 0, 0) !important
+
+    &:focus-within
+        border: 1px solid rgba(0, 0, 0, 0.12) !important
+        background: rgba(255, 255, 255, 1) !important
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24) !important
+
+    #search
+        border: none !important
+        outline: none !important
+        background: transparent !important
+        transition: background 100ms ease-in
+

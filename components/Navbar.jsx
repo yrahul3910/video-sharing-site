@@ -33,10 +33,10 @@ class Navbar extends React.Component {
                     </Link>
                 </div>
                 <div className="col s6">
-                    <div className="card" style={{position: "absolute", width: "600px", height: "70%"}}>
-                        <input id="search" placeholder="Search" className="no-material search-bar" />
+                    <form id="search-bar" style={{position: "absolute", width: "600px", height: "70%"}}>
+                        <input id="search" placeholder="Search" type="text" className="no-material search-bar" />
                         <i className="material-icons" onClick={this.search} style={{position: "fixed", marginRight: "10px", paddingTop: "10px"}}>search</i>
-                    </div>
+                    </form>
                 </div>
                 <div className="col s3" style={{direction: "rtl"}}>
                     <img src={this.props.dp ? this.props.dp : "http://localhost:8000/account_circle.png"} className="round nav-dp nav-element" />
