@@ -349,10 +349,11 @@ exports.deleteUser = (username, func) => {
 
 /**
  * Gets all video details
+ * @param {string} username - The user's username
  * @param {number} id - The video_id
  * @param {Function} func - The callback function
  */
-exports.videoDetails = (id, func) => {
+exports.videoDetails = (username, id, func) => {
     let sql = "SELECT v.*, u.name AS name, u.dp AS dp, COUNT(vv.username) AS views \
                  FROM videos v, users u, video_views vv \
                 WHERE v.username = u.username \
@@ -379,9 +380,22 @@ exports.videoDetails = (id, func) => {
                     return;
                 }
 
-                // Merge the properties of all the results (ES6)
-                let finalResults = Object.assign({}, results[0], r[0], r_[0]);
-                func(null, finalResults);
+                // And finally, get details of whether the user has voted on this or not.
+                sql = "SELECT COUNT(*) AS count_, rating AS user_rating \
+                         FROM users AS u \
+                              NATURAL JOIN video_ratings \
+                        WHERE video_id = ? \
+                          AND username = ?";
+                connection.query(sql, [id, username], (_e, _r) => {
+                    if (_e) {
+                        func(_e);
+                        return;
+                    }
+
+                    // Merge the properties of all the results (ES6)
+                    let finalResults = Object.assign({}, results[0], r[0], r_[0], _r[0]);
+                    func(null, finalResults);
+                });
             });
         });
     });
@@ -424,15 +438,77 @@ exports.comments = (video_id, func) => {
 
 /**
  * Adds a comment on the given video
- * @param {number} video_id
- * @param {string} comment
- * @param {string} username
- * @param {Function} func
+ * @param {number} video_id - The video_id of the video
+ * @param {string} comment - The comment to add
+ * @param {string} username - The user's username
+ * @param {Function} func - The callback function. Accepts only one argument, the error.
  */
 exports.addComment = (video_id, comment, username, func) => {
     let sql = "INSERT INTO comments (username, video_id, comment, comment_date) \
                VALUES (?, ?, ?, ?";
     connection.query(sql, [username, video_id, comment, new Date()], (err) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        func();
+    });
+};
+
+/**
+ * Adds a new upvote to the video_ratings table
+ * @param {number} video_id - The video_id of the video
+ * @param {string} username - The user who's voting
+ * @param {number} vote - The vote to add to the table
+ * @param {Function} func - The callback function. Accepts only one argument.
+ */
+exports.addVote = (video_id, username, vote, func) => {
+    let sql = "INSERT INTO video_ratings \
+               VALUES (?, ?, ?)";
+    connection.query(sql, [username, video_id, vote], (err) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        func();
+    });
+};
+
+/**
+ * Swap the upvote with a downvote or vice versa
+ * @param {number} video_id - The video_id of the video
+ * @param {string} username - The username of the user
+ * @param {Function} func - The callback function. Accepts only one argument.
+ */
+exports.swapVote = (video_id, username, func) => {
+    let sql = "UPDATE video_ratings \
+                  SET rating = IF (rating = 1, -1, 1) \
+                WHERE username = ? \
+                  AND video_id = ?";
+    connection.query(sql, [username, video_id], (err) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        func();
+    });
+};
+
+/**
+ *
+ * @param {number} video_id - The video_id of the video
+ * @param {string} username - The username of the user
+ * @param {Function} func - The callback function. Accepts only one argument.
+ */
+exports.removeVote = (video_id, username, func) => {
+    let sql = "DELETE \
+                 FROM video_ratings \
+                WHERE video_id = ? \
+                  AND username = ?";
+    connection.query(sql, [video_id, username], (err) => {
         if (err) {
             func(err);
             return;

@@ -42,8 +42,8 @@ TrendingVideo.propTypes = {
     title: PropTypes.string.isRequired,
     user: PropTypes.string.isRequired, // this is the username
     views: PropTypes.string.isRequired,
-    age: PropTypes.number.isRequired,
-    desc: PropTypes.string.isRequired,
+    age: PropTypes.number,
+    desc: PropTypes.string,
     video_id: PropTypes.number.isRequired
 };
 

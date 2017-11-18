@@ -106,8 +106,6 @@ BEGIN
     IF NEW.name REGEXP '[]!@#$%^&*()+\=[\{};\':"\\|,.<>/?-]' OR NEW.username REGEXP '[]!@#$%^&*()+\=[\{};\':"\\|,.<>/?-]' THEN
         SIGNAL SQLSTATE '45000' set message_text="Special characters aren't allowed in usernames and names.";
     END IF;
-END;
-//
+END //
 
 DELIMITER ;
-

@@ -373,9 +373,18 @@ app.delete("/api/user", (req, res) => {
 app.post("/api/video", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
 
-    let {id} = req.body;
+    let {id, token} = req.body;
+    let username;
+
     dbUtils.init();
-    dbUtils.videoDetails(id, (err, results) => {
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err) {
+            // User can still watch the video.
+            username = null;
+        } else
+            username = decoded.username;
+    });
+    dbUtils.videoDetails(username, id, (err, results) => {
         if (err)
             throw err;
         res.end(JSON.stringify({
@@ -410,6 +419,50 @@ app.post("/api/comment", (req, res) => {
             else
                 res.end(JSON.stringify({success: true}));
         });
+    });
+});
+
+app.post("/api/votes", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    let {token, action, video_id, vote} = req.body;
+
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err) {
+            res.end(JSON.stringify({success: false}));
+            return;
+        }
+
+        let {username} = decoded;
+        dbUtils.init();
+        switch (action) {
+        case "add":
+            dbUtils.addVote(video_id, username, vote, (err) => {
+                if (err) {
+                    res.end(JSON.stringify({success: false}));
+                    return;
+                }
+            });
+            break;
+
+        case "update":
+            dbUtils.swapVote(video_id, username, (err) => {
+                if (err) {
+                    res.end(JSON.stringify({success: false}));
+                    return;
+                }
+            });
+            break;
+
+        case "remove":
+            dbUtils.removeVote(video_id, username, (err) => {
+                if (err) {
+                    res.end(JSON.stringify({success: false}));
+                    return;
+                }
+            });
+            break;
+        }
+        res.end(JSON.stringify({success: true}));
     });
 });
 

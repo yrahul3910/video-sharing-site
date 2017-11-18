@@ -13,22 +13,139 @@ class WatchPage extends React.Component {
         super(props);
         this.state = {video: {}, error: false, recommendations: []};
         this.submitComment = this.submitComment.bind(this);
+        this.submitUpvote = this.submitUpvote.bind(this);
+        this.submitDownvote = this.submitDownvote.bind(this);
     }
 
     componentDidMount() {
         let id = this.props.match.params.id;
-        $.post("http://localhost:8000/api/video", {id}, (data) => {
+        $.post("http://localhost:8000/api/video", {id, token: localStorage.getItem("token")}, (data) => {
             if (!data.success) {
                 Materialize.toast("Couldn't load the video.", 2500, "rounded");
                 this.setState({error: true});
             } else {
                 this.setState({video: data.details});
+                let userRating = data.details.user_rating;
+                if (userRating == 1)
+                    $("#upvote").css("color", "green");
+                else if (userRating == -1)
+                    $("#downvote").css("color", "green");
 
                 $.get("http://localhost:8000/api/user/" + data.details.username, (result) => {
                     this.setState({recommendations: result.data.videos});
                 });
             }
         });
+    }
+
+    submitUpvote() {
+        let userRating = this.state.video.user_rating;
+        let details = this.state.video;
+        if (userRating == 1) {
+            // Remove the upvote
+            $.post("http://localhost:8000/api/votes", {
+                token: localStorage.getItem("token"),
+                video_id: details.video_id,
+                action: "remove",
+            }, (data) => {
+                if (data.success) {
+                    $("#upvote").css("color", "black");
+                    details.user_rating = 0;
+                    details.upvotes -= 1;
+                } else {
+                    Materialize.toast("You need to be logged in to vote.", 2000, "rounded");
+                }
+            });
+        } else if (userRating == -1) {
+            // Remote downvote and add upvote
+            $.post("http://localhost:8000/api/votes", {
+                token: localStorage.getItem("token"),
+                video_id: details.video_id,
+                action: "update"
+            }, (data) => {
+                if (data.success) {
+                    $("#upvote").css("color", "green");
+                    $("#downvote").css("color", "black");
+                    details.user_rating = 1;
+                    details.upvotes += 1;
+                    details.downvotes -= 1;
+                } else {
+                    Materialize.toast("You need to be logged in to vote.", 2000, "rounded");
+                }
+            });
+        } else {
+            // Add a new upvote
+            $.post("http://localhost:8000/api/votes", {
+                token: localStorage.getItem("token"),
+                video_id: details.video_id,
+                action: "add",
+                vote: 1
+            }, (data) => {
+                if (data.success) {
+                    $("#upvote").css("color", "green");
+                    details.upvotes += 1;
+                    details.user_rating = 1;
+                } else {
+                    Materialize.toast("You need to be logged in to vote.", 2000, "rounded");
+                }
+            });
+        }
+        this.setState({video: details});
+    }
+
+    submitDownvote() {
+        let userRating = this.state.video.user_rating;
+        let details = this.state.video;
+        if (userRating == 1) {
+            // Remove the upvote and add downvote
+            $.post("http://localhost:8000/api/votes", {
+                token: localStorage.getItem("token"),
+                video_id: details.video_id,
+                action: "update",
+            }, (data) => {
+                if (data.success) {
+                    $("#upvote").css("color", "black");
+                    $("#downvote").css("color", "green");
+                    details.user_rating = -1;
+                    details.upvotes -= 1;
+                    details.downvotes += 1;
+                } else {
+                    Materialize.toast("You need to be logged in to vote.", 2000, "rounded");
+                }
+            });
+        } else if (userRating == -1) {
+            // Remote downvote
+            $.post("http://localhost:8000/api/votes", {
+                token: localStorage.getItem("token"),
+                video_id: details.video_id,
+                action: "remove"
+            }, (data) => {
+                if (data.success) {
+                    $("#downvote").css("color", "black");
+                    details.user_rating = 0;
+                    details.downvotes -= 1;
+                } else {
+                    Materialize.toast("You need to be logged in to vote.", 2000, "rounded");
+                }
+            });
+        } else {
+            // Add a new downvote
+            $.post("http://localhost:8000/api/votes", {
+                token: localStorage.getItem("token"),
+                video_id: details.video_id,
+                action: "add",
+                vote: -1
+            }, (data) => {
+                if (data.success) {
+                    $("#downvote").css("color", "green");
+                    details.downvotes += 1;
+                    details.user_rating = -1;
+                } else {
+                    Materialize.toast("You need to be logged in to vote.", 2000, "rounded");
+                }
+            });
+        }
+        this.setState({video: details});
     }
 
     submitComment() {
@@ -86,13 +203,26 @@ class WatchPage extends React.Component {
                             </video>
                             <div style={{display: "flex", justifyContent: "space-between", alignItems: "baseline"}}>
                                 <div style={{width: "25%"}}>
-                                    <p style={{fontSize: "20px", marginBottom: "0"}}>{this.state.video.title}</p>
-                                    <p style={{color: "#212121", fontSize: "18px", fontWeight: "lighter", marginTop: "0"}}>{this.state.video.views + " views"}</p>
+                                    <p style={{fontSize: "20px", marginBottom: "0"}}>
+                                        {this.state.video.title}
+                                    </p>
+                                    <p style={{color: "#212121", fontSize: "18px",
+                                        fontWeight: "lighter", marginTop: "0"}}>
+                                        {this.state.video.views + " views"}
+                                    </p>
                                 </div>
                                 <div style={{width: "25%", display: "flex", alignItems: "center"}}>
-                                    <i style={{marginRight: "10px"}} className="material-icons">thumb_up</i>
-                                    <span style={{verticalAlign: "middle"}}>{numeral(this.state.video.upvotes).format("0a")}</span>
-                                    <i style={{marginRight: "10px", marginLeft: "20px"}} className="material-icons">thumb_down</i>
+                                    <i style={{marginRight: "10px"}} onClick={this.submitUpvote}
+                                        id="upvote" className="link material-icons">
+                                        thumb_up
+                                    </i>
+                                    <span style={{verticalAlign: "middle"}}>
+                                        {numeral(this.state.video.upvotes).format("0a")}
+                                    </span>
+                                    <i style={{marginRight: "10px", marginLeft: "20px"}}
+                                        onClick={this.submitDownvote} id="downvote" className="link material-icons">
+                                        thumb_down
+                                    </i>
                                     <span style={{verticalAlign: "middle"}}>{" " + numeral(this.state.video.downvotes).format("0a")}</span>
                                 </div>
                             </div>
