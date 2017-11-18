@@ -28,7 +28,6 @@ dotenv.config();
 app.use(helmet());
 app.use(compression());
 app.use(bodyParser.json());
-app.use(bodyParser({extended: true}));
 app.use(cors());
 app.use(express.static(__dirname + "/public"));
 app.use("/videos", express.static(__dirname + "/../videos"));
@@ -490,6 +489,27 @@ app.post("/api/toggle_subscription", (req, res) => {
                 return;
             } else
                 res.end(JSON.stringify({success: true}));
+        });
+    });
+});
+
+app.post("/api/reply", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    let {comment_id, text, token} = req.body;
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err) {
+            res.end(JSON.stringify({success: false}));
+            return;
+        }
+
+        let {username} = decoded;
+        dbUtils.init();
+        dbUtils.addReply(comment_id, username, text, (e) => {
+            if (e)
+                throw e;
+
+            res.end(JSON.stringify({success: true}));
         });
     });
 });

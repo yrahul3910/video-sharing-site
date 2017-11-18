@@ -156,8 +156,10 @@ class WatchPage extends React.Component {
         }, (data) => {
             if (!data.success)
                 Materialize.toast("Failed to submit comment.", 2000, "rounded");
-            else
+            else {
                 Materialize.toast("Comment successfully added!", 2000, "rounded");
+                $("#comment").val("");
+            }
         });
     }
 
@@ -175,9 +177,9 @@ class WatchPage extends React.Component {
                         <label htmlFor="comment">Add a public comment...</label>
                     </div>
                 </div>
-                <a onClick={this.submitComment} className="btn waves-effect waves-light green"
-                    style={{marginBottom: "20px", marginLeft: "50px"}}>
-                    COMMENT
+                <a onClick={this.submitComment} className="btn-flat waves-effect waves-light"
+                    style={{marginBottom: "20px", marginLeft: "50px", color: "gray"}}>
+                    <b>COMMENT</b>
                 </a>
             </div>
         ) : <div></div>;
@@ -241,7 +243,7 @@ class WatchPage extends React.Component {
                             <hr style={{width: "100%", color: "#212121"}} />
                             <p style={{fontSize: "18px"}}>Comments</p>
                             {commentBox}
-                            <Comments video_id={this.props.match.params.id} />
+                            <Comments user={this.props.user} video_id={this.props.match.params.id} />
                         </div>
                         <div style={{display: "flex", flexDirection: "column", width: "30%", marginLeft: "3.75%"}}>
                             <p style={{fontSize: "18px"}}>Videos by this user</p>

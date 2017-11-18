@@ -8,12 +8,40 @@ class Comments extends React.Component {
     constructor(props) {
         super(props);
         this.state = {data: []};
+        this.submitReply = this.submitReply.bind(this);
     }
 
     componentDidMount() {
         $.post("http://localhost:8000/api/comments", {id: this.props.video_id}, (data) => {
             if (data.success) {
                 this.setState({data: data.data});
+            }
+        });
+    }
+
+    submitReply(e) {
+        let comment_id = e.currentTarget.id.split("addReply")[1];
+        let text = $("#reply" + comment_id).val();
+        $.post("http://localhost:8000/api/reply", {
+            comment_id,
+            text,
+            token: localStorage.getItem("token")
+        }, (data) => {
+            if (data.success) {
+                let reply = {
+                    name: this.props.user.name,
+                    username: this.props.user.username,
+                    dp: this.props.user.dp,
+                    reply_date: moment(new Date()).fromNow(),
+                    reply_text: text,
+                    comment_id
+                };
+
+                let currentData = this.state.data.replies;
+                currentData.push(reply);
+                this.setState({data: currentData});
+                Materialize.toast("Reply added!", 2000, "rounded");
+                $("#reply" + comment_id).val("");
             }
         });
     }
@@ -27,18 +55,18 @@ class Comments extends React.Component {
             let replyDiv = replies.filter((rep) => {
                 return rep.comment_id == val.comment_id;
             }).map((reply, j) =>
-                <div key={j} style={{display: "flex"}}>
-                    <img style={{width: "30px", height: "30px", marginRight: "15px"}} src={reply.dp ? reply.dp : "http://localhost:8000/account_circle.png"} />
-                    <div style={{display: "flex", flexDirection: "column"}}>
-                        <div style={{display: "flex"}}>
+                <div key={j} style={{display: "flex", flexDirection: "column"}}>
+                    <div style={{display: "flex"}}>
+                        <img style={{width: "30px", height: "30px", marginRight: "15px"}} src={reply.dp ? reply.dp : "http://localhost:8000/account_circle.png"} />
+                        <div style={{display: "flex", flexDirection: "column"}}>
                             <Link style={{color: "black"}} to={"/profile/" + reply.username}>
                                 <b>{reply.name}</b>
                             </Link>
-                            <span style={{color: "#212121", marginTop: "0", marginLeft: "10px"}}>
+                            <span style={{color: "gray", marginTop: "0", marginLeft: "10px"}}>
                                 {moment(reply.reply_date).fromNow()}
                             </span>
+                            <p style={{marginTop: "0"}}>{reply.reply_text}</p>
                         </div>
-                        <p style={{marginTop: "0"}}>{reply.reply_text}</p>
                     </div>
                 </div>
             );
@@ -52,13 +80,29 @@ class Comments extends React.Component {
                             <Link style={{color: "black"}} to={"/profile/" + val.username}>
                                 <b>{val.name}</b>
                             </Link>
-                            <span style={{color: "#212121", marginTop: "0", marginLeft: "10px"}}>
+                            <span style={{color: "gray", marginTop: "0", marginLeft: "10px"}}>
                                 {moment(val.comment_date).fromNow()}
                             </span>
                         </div>
                         <p style={{marginTop: "0"}}>{val.comment}</p>
 
                         {/* Load the replies now */}
+                        {this.props.user ? (
+                            <div style={{display: "flex"}}>
+                                <img src={this.props.user.dp ? this.props.user.dp : "http://localhost:8000/account_circle.png"}
+                                    className="round" style={{width: "30px", height: "30px", marginRight: "15px"}} />
+                                <div style={{display: "flex"}}>
+                                    <div className="input-field" style={{width: "100%"}}>
+                                        <input type="text" id={"reply" + val.comment_id} />
+                                        <label htmlFor={"reply" + val.comment_id}>Add a reply...</label>
+                                    </div>
+                                    <a id={"addReply" + val.comment_id} onClick={this.submitReply} className="btn waves-effect waves-light green"
+                                        style={{marginBottom: "20px", marginLeft: "20px"}}>
+                                        Reply
+                                    </a>
+                                </div>
+                            </div>
+                        ) : <div></div>}
                         {replyDiv}
                     </div>
                 </div>
@@ -74,7 +118,8 @@ class Comments extends React.Component {
 }
 
 Comments.propTypes = {
-    video_id: PropTypes.string.isRequired
+    video_id: PropTypes.string.isRequired,
+    user: PropTypes.object
 };
 
 export default Comments;

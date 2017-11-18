@@ -445,7 +445,7 @@ exports.comments = (video_id, func) => {
  */
 exports.addComment = (video_id, comment, username, func) => {
     let sql = "INSERT INTO comments (username, video_id, comment, comment_date) \
-               VALUES (?, ?, ?, ?";
+               VALUES (?, ?, ?, ?)";
     connection.query(sql, [username, video_id, comment, new Date()], (err) => {
         if (err) {
             func(err);
@@ -563,6 +563,26 @@ exports.toggleSubscription = (username, subscriber, func) => {
                 func();
             });
         }
+    });
+};
+
+/**
+ * Adds a reply to the specified comment on the given video
+ * @param {number} comment_id - The comment id which is being replied to
+ * @param {string} username - The user adding the reply
+ * @param {string} reply - The reply text
+ * @param {Function} func - The callback function. Accepts only one argument
+ */
+exports.addReply = (comment_id, username, reply, func) => {
+    let sql = "INSERT INTO replies (comment_id, username, reply_text, reply_date) \
+               VALUES (?, ?, ?, ?)";
+    connection.query(sql, [comment_id, username, reply, new Date()], (err) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        func();
     });
 };
 
