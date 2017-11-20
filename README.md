@@ -98,10 +98,3 @@ As of now, the directory structure used is `videos/<user_id>/<video_title>/<file
 > Figure out a way to get this  
 
 Currently, the views and age are statically shown as 0, but it should get this data from the server and show the right value. Also, the thumbnail must be changed to the value from the search. This is part of #8.
-
-* `PublicProfile.jsx:94`:
-> Handle this click event  
-
-Handle the click event for the Subscribe button. If the user has already subscribed, it should stay in a disabled state.
-
-* In `WatchPage.jsx`, the thumbs up and down buttons must update the `video_ratings` table, and similarly,watching the video must automatically update the `video_views` table.
