@@ -164,8 +164,7 @@ app.post("/api/authenticate", (req, res) => {
                 let user = {
                     username: authResult.results.username,
                     name: authResult.results.name,
-                    dp: authResult.results.dp,
-                    background: authResult.results.background
+                    dp: authResult.results.dp
                 };
                 let token = jwt.sign(user, process.env.SESSION_SECRET, {
                     expiresIn: "1 day"
@@ -219,8 +218,7 @@ app.post("/api/register", (req, res) => {
             let user = {
                 username,
                 name,
-                dp: null,
-                background: null
+                dp: null
             };
             let token = jwt.sign(user, process.env.SESSION_SECRET, {
                 expiresIn: "1 day"
@@ -524,6 +522,29 @@ app.post("/api/video/add_view", (req, res) => {
         if (err) throw err;
 
         res.end(JSON.stringify({success: true}));
+    });
+});
+
+app.post("/api/change_dp", (req, res) => {
+    res.writeHead(200, {"Content-Type": "application/json"});
+
+    let {token, dp} = req.body;
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err) {
+            res.end(JSON.stringify({success: false}));
+            return;
+        }
+
+        let {username} = decoded;
+        dbUtils.init();
+        dbUtils.updateDp(username, dp, (e) => {
+            if (e) {
+                res.end(JSON.stringify({success: false}));
+                return;
+            }
+
+            res.end(JSON.stringify({success: true}));
+        });
     });
 });
 

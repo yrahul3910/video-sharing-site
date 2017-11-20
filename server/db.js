@@ -233,7 +233,7 @@ exports.details = (id, func) => {
  * @param {Function} func - The callback function
  */
 exports.userDetails = (username, func) => {
-    let sql = "SELECT u.name, u.username, u.dp, u.background, COUNT(subscriber) AS subscribers \
+    let sql = "SELECT u.name, u.username, u.dp, COUNT(subscriber) AS subscribers \
          FROM users AS u, subscriptions AS s \
         WHERE BINARY u.username = ?";
     connection.query(sql, [username], (err, results) => {
@@ -602,6 +602,26 @@ exports.incrementViews = (video_id, func) => {
                   SET views = views + 1 \
                 WHERE video_id = ?";
     connection.query(sql, [video_id], (err) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        func();
+    });
+};
+
+/**
+ * Updates the DP of a user.
+ * @param {string} username - The username of the user
+ * @param {string} dp - The new DP, in base64
+ * @param {Function} func - The callback function. Only accepts one argument.
+ */
+exports.updateDp = (username, dp, func) => {
+    let sql = "UPDATE users \
+                  SET dp = ? \
+                WHERE username = ?";
+    connection.query(sql, [dp, username], (err) => {
         if (err) {
             func(err);
             return;

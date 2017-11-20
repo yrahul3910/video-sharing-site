@@ -7,8 +7,7 @@ CREATE TABLE users (
     username   VARCHAR(30)  NOT NULL,
     name       VARCHAR(30)  NOT NULL,
     pwd        VARCHAR(100) NOT NULL,
-    dp         VARCHAR(200), -- display picture
-    background VARCHAR(200)  -- background picture of profile page
+    dp         VARCHAR(200) -- display picture
 );
 
 CREATE TABLE videos (
@@ -63,24 +62,6 @@ CREATE TABLE subscriptions (
                   FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
     subscriber    VARCHAR(30) NOT NULL,
                   FOREIGN KEY(subscriber) REFERENCES users(username) ON DELETE CASCADE
-);
-
-CREATE TABLE playlists (
-    PRIMARY KEY (playlist_id),
-    playlist_id INT AUTO_INCREMENT,
-    username    VARCHAR(30) NOT NULL,
-                FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
-    name        VARCHAR(30) NOT NULL
-);
-
-/* A table storing the index of a video in a playlist. */
-CREATE TABLE playlist_videos (
-    PRIMARY KEY (playlist_id, video_id),
-    playlist_id INT NOT NULL,
-                FOREIGN KEY(playlist_id) REFERENCES playlists(playlist_id) ON DELETE CASCADE,
-    video_id    INT NOT NULL,
-                FOREIGN KEY(video_id) REFERENCES videos(video_id) ON DELETE CASCADE,
-    video_index INT NOT NULL
 );
 
 CREATE TABLE feedback (

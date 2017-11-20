@@ -14,7 +14,6 @@ class PublicProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {rows: null, profile: {
-            background: "",
             dp: "",
             name: "Unknown",
             subscribers: 0
@@ -87,9 +86,6 @@ class PublicProfile extends React.Component {
                 <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />
                 <Sidebar toggleLogin={this.props.toggleLogin} loggedIn={this.props.user ? true : false} />
                 <div style={{position: "absolute", marginLeft: "300px", top: "64px", width: "100%"}}>
-                    <div>
-                        <img src={this.state.profile.background} className="user-background" />
-                    </div>
                     <div style={{marginLeft: "50px", marginTop: "20px"}}>
                         <div className="row">
                             <div className="col s1">

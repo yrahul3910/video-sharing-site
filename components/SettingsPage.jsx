@@ -15,6 +15,7 @@ class SettingsPage extends React.Component {
         this.state = {subscribers: 0, videos: [], redirect: false};
         this.deleteVideo = this.deleteVideo.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
+        this.setDp = this.setDp.bind(this);
     }
 
     componentDidMount() {
@@ -30,6 +31,30 @@ class SettingsPage extends React.Component {
                 }
             }
         );
+    }
+
+    changeDp() {
+        $("#dpInput").click();
+    }
+
+    setDp() {
+        // From https://stackoverflow.com/a/20285053
+        let file = $("#dpInput").files[0];
+        let reader = new FileReader();
+        reader.onloadend = () => {
+            $.post("http://localhost:8000/api/change_dp", {
+                token: localStorage.getItem("token"),
+                dp: reader.result
+            }, (data) => {
+                if (data.success) {
+                    $("#dp").attr("src", reader.result);
+                    Materialize.toast("DP was successfully updated. Please refresh.", 2000, "rounded");
+                } else {
+                    Materialize.toast("There was an error updating your profile picture.", 2000, "rounded");
+                }
+            });
+        };
+        reader.readAsDataURL(file);
     }
 
     deleteVideo(e) {
@@ -92,13 +117,10 @@ class SettingsPage extends React.Component {
                 <Navbar dp={this.props.user.dp} />
                 <Sidebar toggleLogin={this.props.toggleLogin} loggedIn={this.props.user ? true : false} />
                 <div style={{position: "absolute", marginLeft: "300px", top: "64px", width: "100%"}}>
-                    <div>
-                        <img src={this.props.user.background} className="user-background" />
-                    </div>
                     <div style={{marginLeft: "50px", marginTop: "20px"}}>
-                        <div className="row">
+                        <div className="row" style={{marginBottom: "0"}}>
                             <div className="col s1">
-                                <img src={this.props.user.dp ? this.props.user.dp : "http://localhost:8000/account_circle.png"} className="profile-dp" />
+                                <img id="dp" src={this.props.user.dp ? this.props.user.dp : "http://localhost:8000/account_circle.png"} className="profile-dp" />
                             </div>
                             <div className="col s6" style={{marginLeft: "20px"}}>
                                 <div className="row">
@@ -108,6 +130,13 @@ class SettingsPage extends React.Component {
                                     </p>
                                 </div>
                             </div>
+                        </div>
+                        <input type="file" accept="image/*" onChange={this.setDp} hidden id="dpInput" />
+                        <div className="row">
+                            <a onClick={this.changeDp} className="waves-effect waves-green btn-flat"
+                                style={{color: "gray"}}>
+                                <b>CHANGE DP</b>
+                            </a>
                         </div>
                         <div className="row">
                             <h4>Your Videos</h4>
