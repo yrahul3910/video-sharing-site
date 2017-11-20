@@ -3,6 +3,7 @@ import mysql from "mysql";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import search from "./search.js";
+import groupBy from "lodash.groupby";
 import { Object } from "core-js/library/web/timers";
 
 let connection;
@@ -628,6 +629,30 @@ exports.updateDp = (username, dp, func) => {
         }
 
         func();
+    });
+};
+
+/**
+ * Gets all the videos uploaded by users that the subscriber has subscribed to.
+ * @param {string} subscriber
+ * @param {Function} func
+ */
+exports.getSubscribedVideos = (subscriber, func) => {
+    let sql = "SELECT * \
+                 FROM videos AS v \
+                      NATURAL JOIN video_views AS vv \
+                WHERE username IN (SELECT username \
+                                     FROM subscriptions \
+                                    WHERE subscriber = ?) \
+                ORDER BY vv.views";
+    connection.query(sql, [subscriber], (err, results) => {
+        if (err) {
+            func(err);
+            return;
+        }
+
+        let groups = groupBy(results, (val) => val.username);
+        func(null, groups);
     });
 };
 
