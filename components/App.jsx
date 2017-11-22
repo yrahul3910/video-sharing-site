@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from "react";
 import PropTypes from "prop-types";
 import {Redirect} from "react-router-dom";
@@ -44,6 +45,8 @@ class App extends React.Component {
             you'll see how this works.
         */
         let rows = (!this.state.data) ? <div></div> : Object.keys(this.state.data).map((val, index) => {
+            if (index > 3) return null;
+
             let obj = this.state.data[val];
 
             return (
