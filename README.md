@@ -17,7 +17,6 @@ A simple video sharing website, based on Material design, built with React, Reac
   * [MySQL Style Guide](#mysql-style-guide)
   * [Documentation Guide](#documentation-guide)
 * [Video Directory Structure](#video-directory-structure)
-* [TODOs](#todos)
 
 # Setup
 ## Package Manager
