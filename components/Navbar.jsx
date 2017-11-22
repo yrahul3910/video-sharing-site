@@ -11,19 +11,22 @@ class Navbar extends React.Component {
     */
     constructor(props) {
         super(props);
-        this.state = {search: false};
+        this.state = {search: 0, q: ""};
         this.search = this.search.bind(this);
+        this.change = this.change.bind(this);
+    }
+
+    change() {
+        if ($("#search").val())
+            this.setState({q: $("#search").val()});
     }
 
     search() {
-        this.setState({search: true});
+        window.location = "/#/search/" + this.state.q;
+        window.location.reload();
     }
 
     render() {
-        if (this.state.search)
-            return (
-                <Redirect to={"/search/" + $("#search").val()} />
-            );
         return (
             <div style={{zIndex: 1000, position: "fixed", width: "100%", height: "64px"}} className="green lighten-1 row">
                 <div className="col s3">
@@ -34,7 +37,7 @@ class Navbar extends React.Component {
                 </div>
                 <div className="col s6">
                     <form id="search-bar" style={{position: "absolute", width: "600px", height: "70%"}}>
-                        <input id="search" placeholder="Search" type="text" className="no-material search-bar" />
+                        <input id="search" onChange={this.change} placeholder="Search" type="text" className="no-material search-bar" />
                         <i className="material-icons" onClick={this.search}
                             style={{position: "fixed", marginRight: "10px", paddingTop: "10px", color: "lightgray"}}>
                             search

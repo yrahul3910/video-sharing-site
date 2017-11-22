@@ -30,7 +30,7 @@ class SearchResults extends React.Component {
                 title={result._source.title}
                 user={result._source.username}
                 desc={result._source.description}
-                video_id={result._id} />;
+                video_id={Number(result._id)} />;
         }) : <div></div>;
 
         return (
