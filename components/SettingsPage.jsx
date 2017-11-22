@@ -12,7 +12,7 @@ import TrendingVideo from "./TrendingVideo.jsx";
 class SettingsPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {subscribers: 0, videos: [], redirect: false};
+        this.state = {subscribers: 0, videos: [], redirect: false, user: null};
         this.deleteVideo = this.deleteVideo.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
         this.setDp = this.setDp.bind(this);
@@ -26,8 +26,8 @@ class SettingsPage extends React.Component {
                 else {
                     this.setState({subscribers: data.data.user[0].subscribers});
 
-                    let {videos} = data.data;
-                    this.setState({videos});
+                    let {videos, user} = data.data;
+                    this.setState({videos, user: user[0]});
                 }
             }
         );
@@ -39,22 +39,27 @@ class SettingsPage extends React.Component {
 
     setDp() {
         // From https://stackoverflow.com/a/20285053
-        let file = $("#dpInput").files[0];
-        let reader = new FileReader();
-        reader.onloadend = () => {
-            $.post("http://localhost:8000/api/change_dp", {
-                token: localStorage.getItem("token"),
-                dp: reader.result
-            }, (data) => {
+        let file = $("#dpInput")[0].files[0];
+        let fd = new FormData();
+        fd.append("token", localStorage.getItem("token"));
+        fd.append("dp", file);
+
+        $.ajax({
+            url: "http://localhost:8000/api/change_dp",
+            method: "POST",
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            data: fd,
+            success: (data) => {
                 if (data.success) {
-                    $("#dp").attr("src", reader.result);
-                    Materialize.toast("DP was successfully updated. Please refresh.", 2000, "rounded");
+                    Materialize.toast("DP successfully changed!", 3000, "rounded");
+                    $("#dp").attr("src", file);
                 } else {
-                    Materialize.toast("There was an error updating your profile picture.", 2000, "rounded");
+                    Materialize.toast(data.message, 3000, "rounded");
                 }
-            });
-        };
-        reader.readAsDataURL(file);
+            }
+        });
     }
 
     deleteVideo(e) {
@@ -120,7 +125,7 @@ class SettingsPage extends React.Component {
                     <div style={{marginLeft: "50px", marginTop: "20px"}}>
                         <div className="row" style={{marginBottom: "0"}}>
                             <div className="col s1">
-                                <img id="dp" src={this.props.user.dp ? this.props.user.dp : "http://localhost:8000/account_circle.png"} className="profile-dp" />
+                                <img id="dp" src={this.state.user ? this.state.user.dp : "http://localhost:8000/account_circle.png"} className="profile-dp" />
                             </div>
                             <div className="col s6" style={{marginLeft: "20px"}}>
                                 <div className="row">

@@ -32,6 +32,7 @@ app.use(bodyParser({extended: true}));
 app.use(cors());
 app.use(express.static(__dirname + "/public"));
 app.use("/videos", express.static(__dirname + "/../videos"));
+app.use("/users", express.static(__dirname + "/../users"));
 
 // Use Webpack middleware
 app.use(require("webpack-dev-middleware")(compiler, {
@@ -528,22 +529,48 @@ app.post("/api/video/add_view", (req, res) => {
 app.post("/api/change_dp", (req, res) => {
     res.writeHead(200, {"Content-Type": "application/json"});
 
-    let {token, dp} = req.body;
-    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+    let form = new formidable.IncomingForm();
+    form.parse(req, (err, fields, files) => {
         if (err) {
-            res.end(JSON.stringify({success: false}));
+            res.end(JSON.stringify({success: false, message: "Unknown error occurred"}));
             return;
         }
 
-        let {username} = decoded;
-        dbUtils.init();
-        dbUtils.updateDp(username, dp, (e) => {
-            if (e) {
+        let {dp} = files;
+        let {token} = fields;
+        if (!dp.type.match(/image\/.*/)) {
+            res.end(JSON.stringify({success: false, message: "Thumbnail must be an image."}));
+            return;
+        }
+
+        jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+            if (err) {
                 res.end(JSON.stringify({success: false}));
                 return;
             }
+            let {username} = decoded;
 
-            res.end(JSON.stringify({success: true}));
+            if (!fs.existsSync("./users"))
+                fs.mkdirSync("./users");
+            if (!fs.existsSync(`./users/${username}`))
+                fs.mkdirSync(`./users/${username}`);
+
+            fs.rename(dp.path, `./users/${username}/${dp.name}`, (e) => {
+                if (e) {
+                    res.end(JSON.stringify({success: false, message: "Failed to upload video."}));
+                    return;
+                }
+
+                dbUtils.init();
+                dbUtils.updateDp(username, `./users/${username}/${dp.name}`, (e) => {
+                    if (e) {
+                        res.end(JSON.stringify({success: false, message: "Failed to save video."}));
+                        return;
+                    }
+
+                    res.end(JSON.stringify({success: true}));
+                });
+            });
         });
     });
 });

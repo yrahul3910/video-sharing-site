@@ -89,9 +89,9 @@ The style guide at [this link](http://www.sqlstyle.guide/) is used and followed 
 Functionality that is abstracted, such as in `search.js`, should have JSDoc comments for each function. Any React components used must be added in the `React Components` section above. Block-level comments are preferred, but not required if the code is trivial. For non-trivial logic, comments should be added briefly describing the working of the code.
 
 # Video Directory Structure
-All videos are uploaded to the `videos` folder. The database simply stores the paths to these videos and thumbnail images. To simplify implementation, the site only supports uploads by users, and users can subscribe to other users. This makes certain aspects of implementation easier.  
+All videos are uploaded to the `videos` folder. The database simply stores the paths to these videos and thumbnail images. As of now, the directory structure used is `videos/<username>/<video_title>/<files>`, where the files include the video file and the thumbnail image.  
 
-As of now, the directory structure used is `videos/<user_id>/<video_title>/<files>`, where the files include the video file and the thumbnail image.  
+All profile pictures are stored in the `users` folder. The database stores the paths to these image files, which are served statically. The directory structure is `users/<username>/<image file>`.
 
 # TODOs
 * `SearchResults.jsx:31`:
