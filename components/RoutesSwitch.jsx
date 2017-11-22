@@ -13,6 +13,7 @@ import SearchResults from "./SearchResults.jsx";
 import SettingsPage from "./SettingsPage.jsx";
 import ConfirmDelete from "./ConfirmDelete.jsx";
 import WatchPage from "./WatchPage.jsx";
+import Doge from "./Doge.jsx";
 
 class RoutesSwitch extends React.Component {
     constructor(props) {
@@ -76,6 +77,9 @@ class RoutesSwitch extends React.Component {
                 } />
                 <Route exact path="/watch/:id" render={(props) =>
                     <WatchPage user={this.state.user} {...props} />
+                } />
+                <Route exact path="/suchempty" render={() =>
+                    <Doge user={this.state.user} toggleLogin={this.toggleLogin} />
                 } />
             </Switch>
         );

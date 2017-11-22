@@ -70,6 +70,7 @@ The React components used are below:
 * `ConfirmDelete`: The page where the user confirms deletion of his account.
 * `WatchPage`: The page where the user can watch, rate, and comment on a video.
 * `Comments`: All comments and replies for a video.
+* `Doge`: Find out ;)
 
 # Style Guides
 

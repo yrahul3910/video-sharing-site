@@ -11,7 +11,7 @@ import ThumbnailRow from "./ThumbnailRow.jsx";
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {data: {}, redirect: false};
+        this.state = {data: {}, redirect: false, doge: false};
     }
 
     componentDidMount() {
@@ -22,11 +22,17 @@ class App extends React.Component {
                 this.setState({redirect: true});
             else {
                 this.setState({data: data.details});
+
+                if (Object.keys(this.state.data).length === 0)
+                    this.setState({doge: true});
             }
         });
     }
 
     render() {
+        if (this.state.doge)
+            return <Redirect to="/suchempty" />;
+
         if (this.state.redirect)
             return <Redirect to="/trending" />;
 
