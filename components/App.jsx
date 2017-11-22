@@ -29,6 +29,20 @@ class App extends React.Component {
         if (this.state.redirect)
             return <Redirect to="/trending" />;
 
+        /*
+            The server returns the data of the videos for the feed, grouped by username. Thus,
+            this.state.data is an object, whose keys are usernames that the user has subscribed
+            to.
+
+            Each value corresponding to the username keys in this.state.data is an array, which
+            is all the videos that that user (the one that the current user has subscribed *to*)
+            has uploaded. So we iterate over these keys, which gives us all these arrays, and
+            we gotta convert these arrays to ThumbnailRow components. We need to use
+            Array.prototype.map for this, which does a wonderful job for us.
+
+            If this is confusing to you, do a console.log for both obj and this.state.data and
+            you'll see how this works.
+        */
         let rows = (!this.state.data) ? <div></div> : Object.keys(this.state.data).map((val, index) => {
             let obj = this.state.data[val];
 
