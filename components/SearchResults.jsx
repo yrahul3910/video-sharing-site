@@ -29,8 +29,6 @@ class SearchResults extends React.Component {
                 thumbnail={"https://i.ytimg.com/vi/3tmd-ClpJxA/hqdefault.jpg?sqp=-oaymwEXCPYBEIoBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCh-ggcGnKyoQ-4f-pjnjfzDHqlSw"}
                 title={result._source.title}
                 user={result._source.username}
-                views={"0"} // TODO: Figure out a way to get this
-                age={0}
                 desc={result._source.description}
                 video_id={result._id} />;
         }) : <div></div>;

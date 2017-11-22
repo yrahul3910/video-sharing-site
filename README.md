@@ -92,9 +92,3 @@ Functionality that is abstracted, such as in `search.js`, should have JSDoc comm
 All videos are uploaded to the `videos` folder. The database simply stores the paths to these videos and thumbnail images. As of now, the directory structure used is `videos/<username>/<video_title>/<files>`, where the files include the video file and the thumbnail image.  
 
 All profile pictures are stored in the `users` folder. The database stores the paths to these image files, which are served statically. The directory structure is `users/<username>/<image file>`.
-
-# TODOs
-* `SearchResults.jsx:31`:
-> Figure out a way to get this  
-
-Currently, the views and age are statically shown as 0, but it should get this data from the server and show the right value. Also, the thumbnail must be changed to the value from the search. This is part of #8.
