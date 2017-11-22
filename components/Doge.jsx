@@ -11,7 +11,7 @@ class Doge extends React.Component {
             <div>
                 <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />
                 <Sidebar toggleLogin={this.props.toggleLogin} loggedIn={this.props.user ? true : false} />
-                <div style={{position: "absolute", marginLeft: "350px", top: "100px", width: "100%"}}>
+                <div style={{position: "absolute", marginLeft: "350px", top: "100px"}}>
                     <div>
                         <img src="/doge.jpg" style={{width: "400px", height: "225px"}} />
                     </div>
