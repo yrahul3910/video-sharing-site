@@ -575,6 +575,27 @@ app.post("/api/change_dp", (req, res) => {
     });
 });
 
+app.post("/api/feed", (req, res) => {
+    // Just use res.json instead in this
+    let {token} = req.body;
+
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err) {
+            res.json({success: false});
+            return;
+        }
+
+        let {username} = decoded;
+        dbUtils.init();
+        dbUtils.getSubscribedVideos(username, (e, results) => {
+            if (e)
+                throw e;
+
+            res.json({success: true, details: results});
+        });
+    });
+});
+
 app.listen(port, (err) => {
     if (err) throw err;
     open("http://localhost:" + port);

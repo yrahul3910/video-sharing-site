@@ -634,8 +634,8 @@ exports.updateDp = (username, dp, func) => {
 
 /**
  * Gets all the videos uploaded by users that the subscriber has subscribed to.
- * @param {string} subscriber
- * @param {Function} func
+ * @param {string} subscriber - The user whose feed must be fetched
+ * @param {Function} func - The callback function.
  */
 exports.getSubscribedVideos = (subscriber, func) => {
     let sql = "SELECT * \
@@ -644,8 +644,9 @@ exports.getSubscribedVideos = (subscriber, func) => {
                 WHERE username IN (SELECT username \
                                      FROM subscriptions \
                                     WHERE subscriber = ?) \
+                  AND username <> ? \
                 ORDER BY vv.views";
-    connection.query(sql, [subscriber], (err, results) => {
+    connection.query(sql, [subscriber, subscriber], (err, results) => {
         if (err) {
             func(err);
             return;

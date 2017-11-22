@@ -1,68 +1,67 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {Redirect} from "react-router-dom";
+import moment from "moment";
 
 import Navbar from "./Navbar.jsx";
 import Sidebar from "./Sidebar.jsx";
 import ThumbnailRow from "./ThumbnailRow.jsx";
 
 class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {data: {}, redirect: false};
+    }
+
+    componentDidMount() {
+        $.post("http://localhost:8000/api/feed", {
+            token: localStorage.getItem("token")
+        }, (data) => {
+            if (!data.success)
+                this.setState({redirect: true});
+            else {
+                this.setState({data: data.details});
+            }
+        });
+    }
+
     render() {
-        let d = {
-            title: "TaylorSwiftVEVO",
-            thumbnails: [
-                {
-                    url: "/",
-                    img: "https://i.ytimg.com/vi/wyK7YuwUWsU/hqdefault.jpg?sqp=-oaymwEXCPYBEIoBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCoIV0HkUg1rXW0L93DN2ChPgIBOA",
-                    title: "Taylor Swift - New Romantics",
-                    views: "69M",
-                    channel: {
-                        title: "TaylorSwiftVEVO",
-                        url: "/"
-                    },
-                    date: "1 year ago"
-                },
-                {
-                    url: "/1",
-                    img: "https://i.ytimg.com/vi/JLf9q36UsBk/hqdefault.jpg?sqp=-oaymwEXCPYBEIoBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAjSgDzjRalJLKk_UiOE4tw1Ue-jQ",
-                    title: "Taylor Swift - Out Of The Woods",
-                    views: "124M",
-                    channel: {
-                        title: "TaylorSwiftVEVO",
-                        url: "/"
-                    },
-                    date: "1 year ago"
-                },
-                {
-                    url: "/2",
-                    img: "https://i.ytimg.com/vi/AgFeZr5ptV8/hqdefault.jpg?sqp=-oaymwEXCPYBEIoBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLC4UZNPeXQWZaI3LpMZ5l_sstpfFQ",
-                    title: "Taylor Swift - 22",
-                    views: "445M",
-                    channel: {
-                        title: "TaylorSwiftVEVO",
-                        url: "/"
-                    },
-                    date: "4 years ago"
-                },
-                {
-                    url: "/3",
-                    img: "https://i.ytimg.com/vi/3tmd-ClpJxA/hqdefault.jpg?sqp=-oaymwEXCPYBEIoBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCh-ggcGnKyoQ-4f-pjnjfzDHqlSw",
-                    title: "Taylor Swift - Look What You Made Me Do",
-                    views: "537M",
-                    channel: {
-                        title: "TaylorSwiftVEVO",
-                        url: "/"
-                    },
-                    date: "1 month ago"
-                }
-            ]
-        };
+        if (this.state.redirect)
+            return <Redirect to="/trending" />;
+
+        let rows = (!this.state.data) ? <div></div> : Object.keys(this.state.data).map((val, index) => {
+            let obj = this.state.data[val];
+
+            return (
+                <ThumbnailRow key={index}
+                    data={
+                        {
+                            title: val,
+                            thumbnails: obj.map((video) => {
+                                return {
+                                    url: `/watch/${video.video_id}`,
+                                    img: video.thumbnail,
+                                    title: video.title,
+                                    views: video.views,
+                                    channel: {
+                                        title: video.username,
+                                        url: `/profile/${video.username}`
+                                    },
+                                    date: moment(new Date(video.upload_date)).fromNow()
+                                };
+                            })
+                        }
+                    }
+                />
+            );
+        });
 
         return (
             <div>
                 <Navbar dp={this.props.user ? this.props.user.dp : "http://localhost:8000/account_circle.png"} />
                 <Sidebar toggleLogin={this.props.toggleLogin} loggedIn={this.props.user ? true : false} />
-                <div style={{position: "absolute", marginLeft: "350px", top: "100px"}}>
-                    <ThumbnailRow data={d} />
+                <div style={{position: "absolute", marginLeft: "350px", top: "100px", width: "100%"}}>
+                    {rows}
                 </div>
             </div>
         );
