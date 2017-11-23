@@ -234,9 +234,10 @@ exports.details = (id, func) => {
  * @param {Function} func - The callback function
  */
 exports.userDetails = (username, func) => {
-    let sql = "SELECT u.name, u.username, u.dp, COUNT(subscriber) AS subscribers \
-         FROM users AS u, subscriptions AS s \
-        WHERE BINARY u.username = ?";
+    let sql = "SELECT u.name, u.username, u.dp, COUNT(*) AS subscribers \
+                 FROM users AS u \
+                      NATURAL JOIN subscriptions AS s \
+                WHERE BINARY u.username = ?";
     connection.query(sql, [username], (err, results) => {
         if (err) {
             func(err);
@@ -527,8 +528,8 @@ exports.removeVote = (video_id, username, func) => {
 
 /**
  * Toggles the subscription status of a user to another.
- * @param {string} username - The user who is subscribing or unsubscribing
- * @param {string} subscriber - The user to who the first argument user is subscribing
+ * @param {string} username - The user who is being subscribed to (profile)
+ * @param {string} subscriber - The user who is subscribing
  * @param {Function} func - The callback function. Only accepts one argument
  */
 exports.toggleSubscription = (username, subscriber, func) => {
@@ -536,7 +537,7 @@ exports.toggleSubscription = (username, subscriber, func) => {
                  FROM subscriptions \
                 WHERE username = ? \
                   AND subscriber = ?";
-    connection.query(sql, (err, results) => {
+    connection.query(sql, [username, subscriber], (err, results) => {
         if (err) {
             func(err);
             return;
@@ -549,7 +550,7 @@ exports.toggleSubscription = (username, subscriber, func) => {
                      FROM subscriptions \
                     WHERE username = ? \
                       AND subscriber = ?";
-            connection.query(sql, (e) => {
+            connection.query(sql, [username, subscriber], (e) => {
                 if (e) {
                     func(e);
                     return;
@@ -559,9 +560,9 @@ exports.toggleSubscription = (username, subscriber, func) => {
             });
         } else {
             // Subscribe the user
-            sql = "INSERT INTO subscriptions \
+            sql = "INSERT INTO subscriptions (username, subscriber) \
                    VALUES (?, ?)";
-            connection.query(sql, (e) => {
+            connection.query(sql, [username, subscriber], (e) => {
                 if (e) {
                     func(e);
                     return;

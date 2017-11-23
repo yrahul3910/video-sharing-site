@@ -26,7 +26,7 @@ class SearchResults extends React.Component {
         // Results div
         let div = this.state.results.results ? this.state.results.results.map((result, i) => {
             return <TrendingVideo key={i}
-                thumbnail={"https://i.ytimg.com/vi/3tmd-ClpJxA/hqdefault.jpg?sqp=-oaymwEXCPYBEIoBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCh-ggcGnKyoQ-4f-pjnjfzDHqlSw"}
+                thumbnail={result._source.thumbnail}
                 title={result._source.title}
                 user={result._source.username}
                 desc={result._source.description}

@@ -74,7 +74,7 @@ CREATE TABLE feedback (
 CREATE TABLE video_views (
     PRIMARY KEY (video_id),
     video_id INT,
-             FOREIGN KEY(video_id) REFERENCES videos(video_id),
+             FOREIGN KEY(video_id) REFERENCES videos(video_id) ON DELETE CASCADE,
     views    INT NOT NULL
 );
 

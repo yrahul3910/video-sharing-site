@@ -53,9 +53,7 @@ exports.deleteDoc = (index, type, id, func) => {
         index,
         type,
         id
-    }, (error) => {
-        if (error)
-            throw error;
+    }, () => {
         func();
     });
 };

@@ -135,7 +135,7 @@ app.post("/api/upload", (req, res) => {
                                     username,
                                     thumbnail: path + `/${thumbnail.name}`,
                                     description: desc,
-                                    video_id: id
+                                    video_id: id.toString()
                                 });
 
                                 res.end(JSON.stringify({success: true, message: "Successfully uploaded!"}));
@@ -331,7 +331,7 @@ app.delete("/api/video/:id", (req, res) => {
                     }));
                 else {
                     // Now delete the video from search index
-                    searchUtils.deleteDoc("qtube", "video", parseInt(req.params.id), (e) => {
+                    searchUtils.deleteDoc("qtube", "video", req.params.id, (e) => {
                         if (e) throw e;
                         res.end(JSON.stringify({success: true}));
                     });
@@ -480,11 +480,11 @@ app.post("/api/toggle_subscription", (req, res) => {
 
         let {username} = decoded;
         dbUtils.init();
-        dbUtils.toggleSubscription(username, profile, (e) => {
+        dbUtils.toggleSubscription(profile, username, (e) => {
             if (e) {
                 res.end(JSON.stringify({
                     success: false,
-                    message: err.message
+                    message: err
                 }));
                 return;
             } else
