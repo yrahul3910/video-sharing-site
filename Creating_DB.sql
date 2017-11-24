@@ -67,7 +67,7 @@ CREATE TABLE subscriptions (
 CREATE TABLE feedback (
     PRIMARY KEY (username),
     username VARCHAR(30),
-             FOREIGN KEY(username) REFERENCES users(username),
+             FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
     comment  VARCHAR(300) NOT NULL
 );
 
