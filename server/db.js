@@ -427,9 +427,9 @@ exports.comments = (video_id, func) => {
 
         sql = "SELECT u.name, u.username, u.dp, r.reply_date, r.reply_text, r.comment_id \
                  FROM users AS u \
-                      NATURAL JOIN comments AS c \
+                      NATURAL JOIN replies AS r \
                       \
-                      JOIN replies AS r \
+                      JOIN comments AS c \
                       ON r.comment_id = c.comment_id \
                 WHERE c.video_id = ?";
         connection.query(sql, [video_id], (e, r) => {
