@@ -104,6 +104,15 @@ app.post("/api/upload", (req, res) => {
                 }
                 let username = decoded.username;
 
+                // First check if a video with the same details has already been uploaded.
+                if (fs.exists(`./videos/${username}/${title}`)) {
+                    res.end(JSON.stringify({
+                        success: false,
+                        message: "You have uploaded another video with the same details."
+                    }));
+                    return;
+                }
+
                 if (!fs.existsSync("./videos")) {
                     fs.mkdirSync("./videos");
                     fs.mkdirSync(`./videos/${username}`);

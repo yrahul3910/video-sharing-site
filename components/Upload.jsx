@@ -25,9 +25,12 @@ class Upload extends React.Component {
             contentType: false,
             dataType: "json",
             data: this.state.form_data,
-            success: () => {
-                Materialize.toast("Video successfully uploaded!", 3000, "rounded");
-                this.setState({uploadComplete: true});
+            success: (data) => {
+                if (data.success) {
+                    Materialize.toast("Video successfully uploaded!", 3000, "rounded");
+                    this.setState({uploadComplete: true});
+                } else
+                    Materialize.toast(data.message, 3500, "rounded");
             }
         });
     }
