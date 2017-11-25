@@ -13,9 +13,14 @@ class Feedback extends React.Component {
     }
 
     click() {
+        let feedback = $("#feedback").val();
+        if (feedback.trim() == "") {
+            Materialize.toast("You may not submit empty feedback.", 2000, "rounded");
+            return;
+        }
         $.post("http://localhost:8000/api/feedback", {
             token: localStorage.getItem("token"),
-            feedback: $("#feedback").val()
+            feedback
         }, (res) => {
             Materialize.toast(res.message, 4000);
         });

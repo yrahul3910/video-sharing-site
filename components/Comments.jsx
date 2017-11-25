@@ -22,6 +22,12 @@ class Comments extends React.Component {
     submitReply(e) {
         let comment_id = e.currentTarget.id.split("addReply")[1];
         let text = $("#reply" + comment_id).val();
+
+        if (text.trim() == "") {
+            Materialize.toast("You may not submit empty replies.", 2000, "rounded");
+            return;
+        }
+
         $.post("http://localhost:8000/api/reply", {
             comment_id,
             text,
@@ -56,7 +62,14 @@ class Comments extends React.Component {
         let replies = this.state.data.replies;
 
         if (!comments) return <div></div>;
+
         let mainDivs = comments.map((val, i) => {
+            /*
+                First, take only the replies for the current comment, using
+                Array.prototype.filter. Then, map each of them to the
+                required HTML, and get this whole HTML for all the replies
+                *of the current comment* in one variable, called replyDiv.
+            */
             let replyDiv = replies.filter((rep) => {
                 return rep.comment_id == val.comment_id;
             }).map((reply, j) =>
@@ -76,6 +89,11 @@ class Comments extends React.Component {
                 </div>
             );
 
+            /*
+                Now, actually map each comment to HTML, and render the replies correctly
+                using the replyDiv that we got earlier. This gives us all the comments
+                with their replies, and we call that mainDiv.
+            */
             return (
                 <div style={{display: "flex"}} key={i}>
                     <img src={val.dp ? val.dp : "http://localhost:8000/account_circle.png"}

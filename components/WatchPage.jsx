@@ -181,9 +181,15 @@ class WatchPage extends React.Component {
     }
 
     submitComment() {
+        let comment = $("textarea").val();
+        if (comment.trim() == "") {
+            Materialize.toast("You may not submit empty comments.", 2000, "rounded");
+            return;
+        }
+
         $.post("http://localhost:8000/api/comment", {
             video_id: this.props.match.params.id,
-            comment: $("textarea").val(),
+            comment,
             token: localStorage.getItem("token")
         }, (data) => {
             if (!data.success)
