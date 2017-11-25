@@ -27,19 +27,24 @@ class Comments extends React.Component {
             text,
             token: localStorage.getItem("token")
         }, (data) => {
+            console.log(this.props.user);
             if (data.success) {
                 let reply = {
                     name: this.props.user.name,
                     username: this.props.user.username,
                     dp: this.props.user.dp,
-                    reply_date: moment(new Date()).fromNow(),
+                    reply_date: moment(new Date().toISOString()).fromNow(),
                     reply_text: text,
                     comment_id
                 };
+                console.log(reply);
 
                 let currentData = this.state.data.replies;
                 currentData.push(reply);
-                this.setState({data: currentData});
+                let newData = this.state.data;
+                newData.replies = currentData;
+
+                this.setState({data: newData});
                 Materialize.toast("Reply added!", 2000, "rounded");
                 $("#reply" + comment_id).val("");
             }

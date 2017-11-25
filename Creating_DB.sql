@@ -89,3 +89,12 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE increment_views(IN vid_id INT)
+BEGIN
+    UPDATE video_views
+       SET views = views + 1
+     WHERE video_id = vid_id;
+END //
+DELIMITER ;

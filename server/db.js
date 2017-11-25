@@ -593,9 +593,7 @@ exports.addReply = (comment_id, username, reply, func) => {
  * @param {Function} func - The callback function. Accepts only one argument
  */
 exports.incrementViews = (video_id, func) => {
-    let sql = "UPDATE video_views \
-                  SET views = views + 1 \
-                WHERE video_id = ?";
+    let sql = "CALL increment_views(?)";
     connection.query(sql, [video_id], (err) => {
         if (err) {
             func(err);
