@@ -88,9 +88,20 @@ BEGIN
     END IF;
 END //
 
-DELIMITER ;
+CREATE TRIGGER subscribe_user_to_self
+    AFTER INSERT ON users
+    FOR EACH ROW
+BEGIN
+    INSERT INTO subscriptions VALUES (NEW.username, NEW.username);
+END //
 
-DELIMITER //
+CREATE TRIGGER add_video_views_entry
+    AFTER INSERT ON videos
+    FOR EACH ROW
+BEGIN
+    INSERT INTO video_views VALUES (NEW.video_id, 0);
+END //
+
 CREATE PROCEDURE increment_views(IN vid_id INT)
 BEGIN
     UPDATE video_views

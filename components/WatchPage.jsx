@@ -37,6 +37,31 @@ class WatchPage extends React.Component {
                 });
             }
         });
+
+        /*
+            Use the Page Visibility API to pause the video when the tab is not being viewed.
+            This prevents abuse of video views, and ensures users don't need to manually
+            pause the video in legitimate cases. Code taken from:
+            https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
+        */
+        let hidden, visibilityChange;
+        let videoElement = document.getElementById("video");
+        if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
+            hidden = "hidden";
+            visibilityChange = "visibilitychange";
+        } else if (typeof document.msHidden !== "undefined") {
+            hidden = "msHidden";
+            visibilityChange = "msvisibilitychange";
+        } else if (typeof document.webkitHidden !== "undefined") {
+            hidden = "webkitHidden";
+            visibilityChange = "webkitvisibilitychange";
+        }
+        document.addEventListener(visibilityChange, () => {
+            if (document[hidden])
+                videoElement.pause();
+            else
+                videoElement.play();
+        }, false);
     }
 
     submitUpvote() {
@@ -206,7 +231,7 @@ class WatchPage extends React.Component {
                 <div style={{position: "absolute", top: "80px", width: "100%"}}>
                     <div style={{display: "flex"}}>
                         <div style={{display: "flex", flexDirection: "column", width: "62.5%", marginLeft: "3.75%"}}>
-                            <video controls="true" preload="metadata" poster={this.state.video.thumbnail}
+                            <video id="video" controls="true" preload="metadata" poster={this.state.video.thumbnail}
                                 className="responsive-video" src={this.state.video.video_path}
                                 style={{outline: "none"}} onEnded={this.addView}>
                             </video>

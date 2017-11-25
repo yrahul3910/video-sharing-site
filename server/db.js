@@ -109,20 +109,10 @@ exports.register = (username, pwd, name, func) => {
                 return;
             }
 
-            connection.query("INSERT INTO subscriptions VALUES (?, ?)", [username, username], (e) => {
-                if (e) {
-                    func(null, {
-                        success: false,
-                        message: "Unknown error occurred, try again."
-                    });
-                    return;
-                }
-                // No error, inserted successfully, so return true.
-                func(null, {
-                    success: true,
-                    message: "Successfully registered!",
-                    username
-                });
+            func(null, {
+                success: true,
+                message: "Successfully registered!",
+                username
             });
         });
     });
@@ -145,13 +135,7 @@ exports.upload = (username, title, path, thumbnail, date, desc, func) => {
         [username, title, path, thumbnail, date, desc], (err, results) => {
             if (err) throw err;
 
-            connection.query("INSERT INTO video_views VALUES (?, 0)", [results.insertId],
-                (err) => {
-                    if (err) throw err;
-
-                    func(null, results.insertId); // func takes no arguments, a call indicates success.
-                }
-            );
+            func(null, results.insertId); // func takes no arguments, a call indicates success.
         }
     );
 };
