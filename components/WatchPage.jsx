@@ -196,7 +196,6 @@ class WatchPage extends React.Component {
                 <TrendingVideo thumbnail={val.thumbnail}
                     title={val.title}
                     user={val.username}
-                    views={numeral(val.views).format("0a")}
                     video_id={val.video_id} />
             </div>
         ) : <div></div>;

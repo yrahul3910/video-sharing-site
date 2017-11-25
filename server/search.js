@@ -6,7 +6,7 @@ const esClient = new elasticsearch.Client({
 
 // Index new object to ElasticSearch
 exports.index = (index, type, data) => {
-    if(type == "user") {
+    /*if(type == "user") {
         esClient.index({
             index,
             type,
@@ -19,8 +19,8 @@ exports.index = (index, type, data) => {
             if (error)
                 throw error;
         });
-    }
-    else {
+    } */
+    if (type == "video") {
         esClient.index({
             index,
             type,

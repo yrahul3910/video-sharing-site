@@ -296,14 +296,7 @@ exports.deleteVideo = (username, id, func) => {
                     }
                 });
 
-                sql = "DELETE FROM video_views WHERE video_id = ?";
-                connection.query(sql, [id], (e) => {
-                    if (e) {
-                        func(e);
-                        return;
-                    }
-                    func();
-                });
+                func();
             });
         }
     });
@@ -317,7 +310,7 @@ exports.deleteVideo = (username, id, func) => {
 exports.deleteUser = (username, func) => {
     let sql = "SELECT video_id \
                  FROM videos \
-                 WHERE username = ?";
+                WHERE username = ?";
     connection.query(sql, [username], (err, results) => {
         if (err) {
             func(err);
@@ -427,9 +420,9 @@ exports.comments = (video_id, func) => {
 
         sql = "SELECT u.name, u.username, u.dp, r.reply_date, r.reply_text, r.comment_id \
                  FROM users AS u \
-                      NATURAL JOIN comments AS c \
+                      NATURAL JOIN replies AS r \
                       \
-                      JOIN replies AS r \
+                      JOIN comments AS c \
                       ON r.comment_id = c.comment_id \
                 WHERE c.video_id = ?";
         connection.query(sql, [video_id], (e, r) => {

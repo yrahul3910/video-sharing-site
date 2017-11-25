@@ -57,7 +57,7 @@ class Comments extends React.Component {
             }).map((reply, j) =>
                 <div key={j} style={{display: "flex", flexDirection: "column"}}>
                     <div style={{display: "flex"}}>
-                        <img style={{width: "30px", height: "30px", marginRight: "15px"}} src={reply.dp ? reply.dp : "http://localhost:8000/account_circle.png"} />
+                        <img className="round" style={{width: "30px", height: "30px", marginRight: "15px"}} src={reply.dp ? reply.dp : "http://localhost:8000/account_circle.png"} />
                         <div style={{display: "flex", flexDirection: "column"}}>
                             <Link style={{color: "black"}} to={"/profile/" + reply.username}>
                                 <b>{reply.name}</b>
