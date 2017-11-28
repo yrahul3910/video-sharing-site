@@ -36,8 +36,8 @@ class Navbar extends React.Component {
                     </Link>
                 </div>
                 <div className="col s6">
-                    <form id="search-bar" style={{position: "absolute", width: "600px", height: "70%"}}>
-                        <input id="search" onChange={this.change} placeholder="Search" type="text" className="no-material search-bar" />
+                    <form className="search-bar" style={{position: "absolute", width: "600px", height: "70%"}}>
+                        <input onChange={this.change} placeholder="Search" type="text" className="no-material search-input search" />
                         <i className="link material-icons" onClick={this.search}
                             style={{position: "fixed", marginRight: "10px", paddingTop: "10px", color: "lightgray"}}>
                             search

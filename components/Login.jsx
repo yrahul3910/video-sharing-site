@@ -74,6 +74,13 @@ class Login extends React.Component {
                                 </Link>
                             </div>
                         </div>
+                        <div className="row" style={{marginTop: "40px"}}>
+                            <div className="col-md-4 col-md-offset-4">
+                                <Link to="/login/new">
+                                    Try our new sign-in experience!
+                                </Link>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

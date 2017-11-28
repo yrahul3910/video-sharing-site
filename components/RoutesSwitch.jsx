@@ -4,6 +4,7 @@ import {Switch, Route} from "react-router-dom";
 
 import App from "./App.jsx";
 import Login from "./Login.jsx";
+import NewLogin from "./NewLogin.jsx";
 import Register from "./Register.jsx";
 import Upload from "./Upload.jsx";
 import Feedback from "./Feedback.jsx";
@@ -46,6 +47,9 @@ class RoutesSwitch extends React.Component {
                 } />
                 <Route exact path="/login" render={() =>
                     <Login user={this.state.user} toggleLogin={this.toggleLogin} />
+                } />
+                <Route exact path="/login/new" render={() =>
+                    <NewLogin user={this.state.user} toggleLogin={this.toggleLogin} />
                 } />
                 <Route exact path="/register" render={() =>
                     <Register user={this.state.user} toggleLogin={this.toggleLogin} />

@@ -16,7 +16,7 @@ A simple video sharing website, based on Material design, built with React, Reac
   * [ESLint Configuration](#eslint-configuration)
   * [MySQL Style Guide](#mysql-style-guide)
   * [Documentation Guide](#documentation-guide)
-* [Video Directory Structure](#video-directory-structure)
+* [Directory Structure](#directory-structure)
 
 # Setup
 ## Package Manager
@@ -71,6 +71,7 @@ The React components used are below:
 * `WatchPage`: The page where the user can watch, rate, and comment on a video.
 * `Comments`: All comments and replies for a video.
 * `Doge`: Find out ;)
+* `NewLogin`: A more modern login experience. Uses a background video taken from [Vimeo's Project Yosemite](https://vimeo.com/projectyose).
 
 # Style Guides
 
@@ -88,7 +89,7 @@ The style guide at [this link](http://www.sqlstyle.guide/) is used and followed 
 ## Documentation Guide
 Functionality that is abstracted, such as in `search.js`, should have JSDoc comments for each function. Any React components used must be added in the `React Components` section above. Block-level comments are preferred, but not required if the code is trivial. For non-trivial logic, comments should be added briefly describing the working of the code.
 
-# Video Directory Structure
+# Directory Structure
 All videos are uploaded to the `videos` folder. The database simply stores the paths to these videos and thumbnail images. As of now, the directory structure used is `videos/<username>/<video_title>/<files>`, where the files include the video file and the thumbnail image.  
 
 All profile pictures are stored in the `users` folder. The database stores the paths to these image files, which are served statically. The directory structure is `users/<username>/<image file>`.

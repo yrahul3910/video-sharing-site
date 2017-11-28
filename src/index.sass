@@ -14,7 +14,7 @@
     all: initial !important
     font-family: 'Roboto' !important
 
-.search-bar
+.search-input
     padding-left: 15px !important
     width: 90% !important
     height: 100% !important
@@ -81,7 +81,7 @@ body
 .link
     cursor: pointer
 
-#search-bar
+.search-bar
     margin-top: 10px
     background: rgba(0, 0, 0, 0.4) !important
     border-radius: 4px !important
@@ -93,7 +93,22 @@ body
         background: white !important
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24) !important
 
-    #search
+    .search, .search-login
         border: none !important
         outline: none !important
         background: transparent !important
+
+    .search-login
+        color: gray !important
+
+    .search-login:focus
+        color: black !important
+
+.background-video
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    min-height: 100%
+    min-width: 100%
+    position: fixed
