@@ -63,8 +63,9 @@ class SettingsPage extends React.Component {
     }
 
     deleteVideo(e) {
+        let id = e.currentTarget.id;
         $.ajax({
-            url: "http://localhost:8000/api/video/" + e.currentTarget.id,
+            url: "http://localhost:8000/api/video/" + id,
             type: "DELETE",
             contentType: "application/json",
             data: JSON.stringify({token: localStorage.getItem("token")}),
@@ -72,9 +73,12 @@ class SettingsPage extends React.Component {
                 if (data.success) {
                     Materialize.toast("Video deleted successfully!", 2500, "rounded");
 
-                    let newVideos = this.state.videos.filter((val) => {
-                        return val.video_id == e.currentTarget.id;
-                    });
+                    let newVideos = [];
+                    for (let video of this.state.videos) {
+                        if (video.video_id != id)
+                            newVideos.push(video);
+                    }
+
                     this.setState({videos: newVideos});
                 } else {
                     Materialize.toast("Couldn't delete video", 2000, "rounded");
@@ -99,7 +103,7 @@ class SettingsPage extends React.Component {
                         title={vid.title}
                         user={vid.username}
                         views={numeral(vid.views).format("0.0a")}
-                        age={parseInt(moment(vid.upload_date).fromNow().split(" ")[0])}
+                        age={moment(vid.upload_date).fromNow()}
                         desc={vid.description}
                         video_id={vid.video_id} />
                 </div>

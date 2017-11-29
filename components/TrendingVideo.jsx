@@ -23,7 +23,9 @@ class TrendingVideo extends React.Component {
                             <p style={{color: "#6d6d6d"}}>
                                 {this.props.user +
                                     (this.props.views ? (" • " + numeral(this.props.views).format("0.0a") + " views") : "") +
-                                    (this.props.age ? (" • " + this.props.age + " days ago") : "")}
+                                    (this.props.age ? ((typeof(this.props.age) == "number") ? (" • " + this.props.age + " days ago")
+                                        : (" • " + this.props.age))
+                                        : "") }
                             </p>
                         </Link>
                     </div>
@@ -43,7 +45,7 @@ TrendingVideo.propTypes = {
     title: PropTypes.string.isRequired,
     user: PropTypes.string.isRequired, // this is the username
     views: PropTypes.string,
-    age: PropTypes.number,
+    age: PropTypes.any,
     desc: PropTypes.string,
     video_id: PropTypes.number.isRequired
 };
