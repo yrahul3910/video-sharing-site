@@ -17,8 +17,8 @@ class Navbar extends React.Component {
     }
 
     change() {
-        if ($("#search").val())
-            this.setState({q: $("#search").val()});
+        if ($(".search-input").val())
+            this.setState({q: $(".search-input").val()});
     }
 
     search() {

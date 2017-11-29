@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import numeral from "numeral";
 import {Link} from "react-router-dom";
 
 class TrendingVideo extends React.Component {
@@ -21,7 +22,7 @@ class TrendingVideo extends React.Component {
                         <Link to={"/profile/" + this.props.user}>
                             <p style={{color: "#6d6d6d"}}>
                                 {this.props.user +
-                                    (this.props.views ? (" • " + this.props.views + " views") : "") +
+                                    (this.props.views ? (" • " + numeral(this.props.views).format("0.0a") + " views") : "") +
                                     (this.props.age ? (" • " + this.props.age + " days ago") : "")}
                             </p>
                         </Link>
