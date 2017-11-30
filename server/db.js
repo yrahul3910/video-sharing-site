@@ -181,8 +181,8 @@ exports.feedback = (username, feedback, func) => {
  */
 exports.trending = (func) => {
     let sql = "SELECT *, DATEDIFF(?, upload_date) AS age \
-         FROM videos \
-        WHERE DATEDIFF(?, upload_date) < 6";
+                 FROM videos \
+                WHERE DATEDIFF(?, upload_date) < 6";
     let date = new Date().toISOString();
     connection.query(sql, [date, date], (err, results) => {
         if (err) {
@@ -200,9 +200,9 @@ exports.trending = (func) => {
  */
 exports.details = (id, func) => {
     let sql = "SELECT COUNT(video_views.username) AS views, DATEDIFF(?, upload_date) AS age \
-         FROM videos, video_views \
-        WHERE videos.video_id = ? \
-          AND video_views.video_id = ?";
+                 FROM videos, video_views \
+                WHERE videos.video_id = ? \
+                  AND video_views.video_id = ?";
     connection.query(sql, [new Date().toISOString(), id, id], (err, results) => {
         if (err) {
             func(err);
@@ -232,8 +232,8 @@ exports.userDetails = (username, func) => {
             func(new Error("Username does not exist."));
 
         sql = "SELECT * \
-             FROM videos \
-            WHERE username = ?";
+                 FROM videos \
+                WHERE username = ?";
         connection.query(sql, [username], (e, r) => {
             if (err)
                 func(err);

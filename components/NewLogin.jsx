@@ -16,7 +16,7 @@ class NewLogin extends React.Component {
             password: $("#password").val()
         }, (data) => {
             if (!data.success)
-                Materialize.toast("Please check your details and try again.");
+                Materialize.toast("Please check your details and try again.", 3000, "rounded");
             else {
                 localStorage.setItem("token", data.token);
                 this.props.toggleLogin(data.user);
