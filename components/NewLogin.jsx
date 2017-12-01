@@ -38,9 +38,9 @@ class NewLogin extends React.Component {
         return (
             <div style={{width: "100vw", height: "100vh"}}>
                 <video className="background-video" loop="true">
-                    <source src="/0-vp9.webm" type="video/webm" />
-                    <source src="/3-vp9.webm" type="video/webm" />
-                    <source src="/3-vp8.webm" type="video/webm" />
+                    <source src="https://vimeo-hp-videos.global.ssl.fastly.net/0/0-vp9.webm" type="video/webm" />
+                    <source src="https://vimeo-hp-videos.global.ssl.fastly.net/3/3-vp9.webm" type="video/webm" />
+                    <source src="https://vimeo-hp-videos.global.ssl.fastly.net/3/3-vp8.webm" type="video/webm" />
                 </video>
                 <div style={{height: "64px", display: "flex", justifyContent: "flex-start"}}>
                     <Link to="/">
