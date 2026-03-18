@@ -19,7 +19,7 @@
     "jsonwebtoken": "^8.1.0",
     "lodash.chunk": "^4.2.0",
     "lodash.groupby": "^4.6.0",
-    "moment": "^2.19.2",
+    "moment": "^2.29.4",
     "numeral": "^2.0.6",
     "react-router-dom": "^4.2.2"
   },
